@@ -20,7 +20,7 @@ public class MyFrame extends JFrame implements ActionListener {
     private final int GAP_IN_BORDER_LAYOUT_SIZE =10;
     private Main main;
 
-    //Constructor
+    //Constructorl
     public MyFrame() {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Class Journal v1.0");
