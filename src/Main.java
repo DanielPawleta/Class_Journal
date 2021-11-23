@@ -5,13 +5,25 @@ public class Main {
     static Connection connection;
 
     public static void main(String[] args) {
-        //MyFrame myFrame = new MyFrame();
+        MyFrame myFrame = new MyFrame();
         //
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         Main main = new Main();
+        //main.showStudents();
+        //main.addStudent("Mateuszek","Kawulok", "Zory",474852154,"1990-04-11",845697412,"2a");
 
+
+    }
+
+
+
+    private void showStudents(){
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal","root","password");
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from students");
 
@@ -19,16 +31,17 @@ public class Main {
                 System.out.println(resultSet.getString("first_name"));
             }
 
-            main.addStudent("Mateuszek","Kawulok",
-                     "Zory",474852154,"1990-04-11",845697412,"2a");
+
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
-    private String addStudent(String first_name, String last_name, String city,
-                            int phone_number, String date_of_birth, int parents_phone_number, String class_attendand){
+    private String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number, String class_attendand){
+
+
         int result = 0;
         Date date_of_birth_as_Date = Date.valueOf(date_of_birth);
 
