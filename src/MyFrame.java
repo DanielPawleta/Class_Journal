@@ -20,23 +20,26 @@ public class MyFrame extends JFrame implements ActionListener {
     private final int GAP_IN_BORDER_LAYOUT_SIZE =10;
     private Main main;
 
-    //Constructorl
+    //Constructor
     public MyFrame() {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Class Journal v1.0");
         this.setLayout(new BorderLayout(GAP_IN_BORDER_LAYOUT_SIZE,GAP_IN_BORDER_LAYOUT_SIZE));
         this.getContentPane().setBackground(Color.BLACK);
         initializePanels();
+        initializeFrontLabel();
         this.setVisible(true);
         this.setSize(500,500);
+        //this.setResizable(false);
+
+
     }
 
     //Methods
     private void initializePanels(){
         upPanel = new JPanel();
-        //initializeUpPanel();
         downPanel = new JPanel();
-        initializeDownPanel();
+        //initializeDownPanel();
         leftPanel = new JPanel();
         rightPanel = new JPanel();
         centerPanel = new JPanel();
@@ -58,6 +61,41 @@ public class MyFrame extends JFrame implements ActionListener {
         this.add(rightPanel, BorderLayout.EAST);
         this.add(centerPanel,BorderLayout.CENTER);
     }
+
+    private void initializeFrontLabel(){
+        centerPanel.setLayout(new GridLayout(2,1));
+
+        JPanel welcomePanel = new JPanel();
+
+        JLabel frontLabelFirstPart = new JLabel("School   ");
+        frontLabelFirstPart.setFont(new Font("MV Boli", Font.PLAIN, 50));
+        welcomePanel.add(frontLabelFirstPart);
+
+        JLabel frontLabelSecondPart = new JLabel("   Journal ");
+        frontLabelSecondPart.setFont(new Font("MV Boli", Font.PLAIN, 50));
+        welcomePanel.add(frontLabelSecondPart);
+
+        centerPanel.add(welcomePanel);
+
+        JTabbedPane tabbedPane = new JTabbedPane();
+
+        JPanel studentsPanel = new JPanel();
+        tabbedPane.addTab("Students",studentsPanel);
+
+        JPanel teachersPanel = new JPanel();
+        tabbedPane.addTab("Teachers",teachersPanel);
+
+        JPanel classesPanel = new JPanel();
+        tabbedPane.addTab("Classes",classesPanel);
+
+        JPanel statisticsPanel = new JPanel();
+        tabbedPane.addTab("Statistics",statisticsPanel);
+
+        centerPanel.add(tabbedPane);
+
+    }
+
+
 
     public void initializeDownPanel() {
         downPanel.setLayout(new GridLayout(1,3,50,10) );

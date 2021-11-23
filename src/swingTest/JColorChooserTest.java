@@ -7,7 +7,8 @@ import java.awt.event.ActionListener;
 
 public class JColorChooserTest {
     public static void main(String[] args) {
-        MouseListenerDemo colorChooserDemo = new MouseListenerDemo();
+        JColorChooserDemo jColorChooserDemo = new JColorChooserDemo();
+        //MouseListenerDemo colorChooserDemo = new MouseListenerDemo();
     }
 }
 

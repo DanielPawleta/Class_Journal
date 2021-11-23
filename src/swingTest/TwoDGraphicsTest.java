@@ -5,16 +5,16 @@ import java.awt.*;
 
 public class TwoDGraphicsTest {
     public static void main(String[] args) {
-        MyFrame6 frame = new MyFrame6();
+        MyFrame5 frame = new MyFrame5();
     }
 }
 
 class MyFrame5 extends JFrame{
 
-    MyPanel2 panel;
+    MyPanel panel;
 
     public MyFrame5() {
-        panel = new MyPanel2();
+        panel = new MyPanel();
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
