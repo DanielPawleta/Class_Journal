@@ -6,10 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MyFrame extends JFrame implements ActionListener {
+    private JLabel loggedLabel;
     private JPanel upPanel;
     private JPanel downPanel;
-    private JButton returnButton;
-    private JButton pauseButton;
+    private JButton newStudentButton;
+    private JButton findStudentButton;
     private final String PAUSE_BUTTON_TEXT = "Pause";
     private JButton saveButton;
     private boolean areButtonsVisible=true;
@@ -39,7 +40,9 @@ public class MyFrame extends JFrame implements ActionListener {
     private void initializePanels(){
         upPanel = new JPanel();
         downPanel = new JPanel();
-        //initializeDownPanel();
+        downPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        loggedLabel = new JLabel("Please log in");
+        downPanel.add(loggedLabel);
         leftPanel = new JPanel();
         rightPanel = new JPanel();
         centerPanel = new JPanel();
@@ -79,7 +82,25 @@ public class MyFrame extends JFrame implements ActionListener {
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
+        JPanel loginPanel = new JPanel();
+        tabbedPane.addTab("Login",loginPanel);
+
         JPanel studentsPanel = new JPanel();
+        studentsPanel.setLayout(new BoxLayout(studentsPanel, BoxLayout.Y_AXIS));
+        studentsPanel.add(Box.createVerticalGlue());
+        newStudentButton = new JButton("New Student");
+        newStudentButton.addActionListener(this);
+        newStudentButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        newStudentButton.setFocusable(false);
+        studentsPanel.add(newStudentButton);
+        studentsPanel.add(Box.createVerticalGlue());
+
+        findStudentButton = new JButton("Find Student");
+        findStudentButton.addActionListener(this);
+        findStudentButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        studentsPanel.add(findStudentButton);
+        studentsPanel.add(Box.createVerticalGlue());
+
         tabbedPane.addTab("Students",studentsPanel);
 
         JPanel teachersPanel = new JPanel();
@@ -97,6 +118,7 @@ public class MyFrame extends JFrame implements ActionListener {
 
 
 
+    /*
     public void initializeDownPanel() {
         downPanel.setLayout(new GridLayout(1,3,50,10) );
 
@@ -136,44 +158,21 @@ public class MyFrame extends JFrame implements ActionListener {
         saveButton.setVisible(false);
     }
 
+     */
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource()==returnButton){
+        if (e.getSource()==newStudentButton){
+            System.out.println("new student");
 
         }
-        if (e.getSource()==pauseButton){
+        if (e.getSource()==findStudentButton){
+            System.out.println("find student");
+
 
         }
         if (e.getSource()== saveButton){
 
         }
-    }
-
-    public void changePauseButtonText(){
-        if (pauseButton.getText().equals(PAUSE_BUTTON_TEXT)) {
-            saveButton.setEnabled(true);
-            pauseButton.setText("Resume");
-        }
-        else {
-            saveButton.setEnabled(false);
-            pauseButton.setText(PAUSE_BUTTON_TEXT);
-        }
-    }
-
-    private void resetPauseButtonText(){
-        pauseButton.setText(PAUSE_BUTTON_TEXT);
-    }
-
-    //Getters and Setters
-    public void setMain(Main main) {
-
-    }
-
-    public JPanel getUpPanel() {
-        return upPanel;
-    }
-
-    public JPanel getCenterPanel() {
-        return centerPanel;
     }
 }
