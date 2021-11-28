@@ -11,6 +11,9 @@ public class MyFrame extends JFrame implements ActionListener {
     private JPanel downPanel;
     private JButton newStudentButton;
     private JButton findStudentButton;
+    private JButton logOutButton;
+    private String loginText = "Please log in";
+
     private final String PAUSE_BUTTON_TEXT = "Pause";
     private JButton saveButton;
     private boolean areButtonsVisible=true;
@@ -20,6 +23,7 @@ public class MyFrame extends JFrame implements ActionListener {
     private final int PANEL_SIZE =30;
     private final int GAP_IN_BORDER_LAYOUT_SIZE =10;
     private Main main;
+    private JTabbedPane tabbedPane;
 
     //Constructor
     public MyFrame() {
@@ -39,10 +43,17 @@ public class MyFrame extends JFrame implements ActionListener {
     //Methods
     private void initializePanels(){
         upPanel = new JPanel();
+
         downPanel = new JPanel();
-        downPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        loggedLabel = new JLabel("Please log in");
+        downPanel.setLayout(new GridLayout(1,2));
+        loggedLabel = new JLabel(loginText);
         downPanel.add(loggedLabel);
+        logOutButton = new JButton("Logout");
+        logOutButton.setFocusable(false);
+        logOutButton.addActionListener(this);
+        logOutButton.setVisible(false);
+        downPanel.add(logOutButton);
+
         leftPanel = new JPanel();
         rightPanel = new JPanel();
         centerPanel = new JPanel();
@@ -80,9 +91,9 @@ public class MyFrame extends JFrame implements ActionListener {
 
         centerPanel.add(welcomePanel);
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
 
-        JPanel loginPanel = new JPanel();
+        LoginPanel loginPanel = new LoginPanel(this);
         tabbedPane.addTab("Login",loginPanel);
 
         JPanel studentsPanel = new JPanel();
@@ -102,17 +113,40 @@ public class MyFrame extends JFrame implements ActionListener {
         studentsPanel.add(Box.createVerticalGlue());
 
         tabbedPane.addTab("Students",studentsPanel);
+        tabbedPane.setEnabledAt(1,false);
 
         JPanel teachersPanel = new JPanel();
         tabbedPane.addTab("Teachers",teachersPanel);
+        tabbedPane.setEnabledAt(2,false);
 
         JPanel classesPanel = new JPanel();
         tabbedPane.addTab("Classes",classesPanel);
+        tabbedPane.setEnabledAt(3,false);
 
         JPanel statisticsPanel = new JPanel();
         tabbedPane.addTab("Statistics",statisticsPanel);
 
         centerPanel.add(tabbedPane);
+
+    }
+
+    protected void setLoggedAs(int loggedNumber){
+        // 0 - logged out
+        // 1 - student
+        // 2 - teacher
+        // 3 - admin
+        if (loggedNumber == 0){
+            loggedLabel.setText(loginText);
+            logOutButton.setVisible(false);
+
+        }
+        else if (loggedNumber == 1){
+            loggedLabel.setText("You are logged as Student");
+            logOutButton.setVisible(true);
+            tabbedPane.setEnabledAt(1,true);
+        }
+
+
 
     }
 
@@ -171,8 +205,8 @@ public class MyFrame extends JFrame implements ActionListener {
 
 
         }
-        if (e.getSource()== saveButton){
-
+        if (e.getSource()== logOutButton){
+            setLoggedAs(0);
         }
     }
 }
