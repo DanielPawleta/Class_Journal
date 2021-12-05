@@ -9,6 +9,10 @@ public class MyFrame extends JFrame implements ActionListener {
     private JLabel loggedLabel;
     private JPanel upPanel;
     private JPanel downPanel;
+    private JPanel studentsTab;
+    private JPanel teachersTab;
+    private JPanel classesTab;
+    private LoginPanel loginPanel;
     private JButton newStudentButton;
     private JButton findStudentButton;
     private JButton logOutButton;
@@ -33,17 +37,16 @@ public class MyFrame extends JFrame implements ActionListener {
         this.getContentPane().setBackground(Color.BLACK);
         initializePanels();
         initializeFrontLabel();
+
+        this.ableAllTabs();
         this.setVisible(true);
         this.setSize(500,500);
-        //this.setResizable(false);
-
-
+        this.setResizable(false);
     }
 
     //Methods
     private void initializePanels(){
         upPanel = new JPanel();
-
         downPanel = new JPanel();
         downPanel.setLayout(new GridLayout(1,2));
         loggedLabel = new JLabel(loginText);
@@ -93,41 +96,52 @@ public class MyFrame extends JFrame implements ActionListener {
 
         tabbedPane = new JTabbedPane();
 
-        LoginPanel loginPanel = new LoginPanel(this);
+        loginPanel = new LoginPanel(this);
         tabbedPane.addTab("Login",loginPanel);
 
-        JPanel studentsPanel = new JPanel();
-        studentsPanel.setLayout(new BoxLayout(studentsPanel, BoxLayout.Y_AXIS));
-        studentsPanel.add(Box.createVerticalGlue());
+        studentsTab = new JPanel();
+        studentsTab.setLayout(new BoxLayout(studentsTab, BoxLayout.Y_AXIS));
+        studentsTab.add(Box.createVerticalGlue());
         newStudentButton = new JButton("New Student");
         newStudentButton.addActionListener(this);
         newStudentButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         newStudentButton.setFocusable(false);
-        studentsPanel.add(newStudentButton);
-        studentsPanel.add(Box.createVerticalGlue());
+        studentsTab.add(newStudentButton);
+        studentsTab.add(Box.createVerticalGlue());
 
         findStudentButton = new JButton("Find Student");
         findStudentButton.addActionListener(this);
         findStudentButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        studentsPanel.add(findStudentButton);
-        studentsPanel.add(Box.createVerticalGlue());
+        studentsTab.add(findStudentButton);
+        studentsTab.add(Box.createVerticalGlue());
 
-        tabbedPane.addTab("Students",studentsPanel);
+        tabbedPane.addTab("Students", studentsTab);
         tabbedPane.setEnabledAt(1,false);
 
-        JPanel teachersPanel = new JPanel();
-        tabbedPane.addTab("Teachers",teachersPanel);
+        teachersTab = new JPanel();
+        tabbedPane.addTab("Teachers", teachersTab);
         tabbedPane.setEnabledAt(2,false);
 
-        JPanel classesPanel = new JPanel();
-        tabbedPane.addTab("Classes",classesPanel);
+        classesTab = new JPanel();
+        tabbedPane.addTab("Classes", classesTab);
         tabbedPane.setEnabledAt(3,false);
 
-        JPanel statisticsPanel = new JPanel();
-        tabbedPane.addTab("Statistics",statisticsPanel);
+        JPanel statisticsTab = new JPanel();
+        tabbedPane.addTab("Statistics",statisticsTab);
 
         centerPanel.add(tabbedPane);
+    }
 
+    private void disableAllTabs(){
+        tabbedPane.setEnabledAt(1,false);
+        tabbedPane.setEnabledAt(2,false);
+        tabbedPane.setEnabledAt(3,false);
+    }
+
+    private void ableAllTabs(){
+        tabbedPane.setEnabledAt(1,true);
+        tabbedPane.setEnabledAt(2,true);
+        tabbedPane.setEnabledAt(3,true);
     }
 
     protected void setLoggedAs(int loggedNumber){
@@ -138,15 +152,17 @@ public class MyFrame extends JFrame implements ActionListener {
         if (loggedNumber == 0){
             loggedLabel.setText(loginText);
             logOutButton.setVisible(false);
-
+            disableAllTabs();
+            tabbedPane.setEnabledAt(0,true);
+            tabbedPane.setSelectedIndex(0);
         }
         else if (loggedNumber == 1){
             loggedLabel.setText("You are logged as Student");
             logOutButton.setVisible(true);
             tabbedPane.setEnabledAt(1,true);
+            tabbedPane.setEnabledAt(0,false);
+            tabbedPane.setSelectedIndex(1);
         }
-
-
 
     }
 
@@ -198,6 +214,10 @@ public class MyFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource()==newStudentButton){
             System.out.println("new student");
+            NewStudentFrame newStudentFrame = new NewStudentFrame();
+
+
+
 
         }
         if (e.getSource()==findStudentButton){
@@ -207,6 +227,8 @@ public class MyFrame extends JFrame implements ActionListener {
         }
         if (e.getSource()== logOutButton){
             setLoggedAs(0);
+            System.out.println("logout");
+
         }
     }
 }

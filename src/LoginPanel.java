@@ -38,7 +38,7 @@ public class LoginPanel extends JPanel implements ActionListener {
     }
 
     private void checkPassword(){
-        JTextField passwordField = new JTextField("password",5);
+        JTextField passwordField = new JTextField("student",5);
         JPanel jPanel = new JPanel();
         jPanel.add(new JLabel("Password: "));
         jPanel.add(passwordField);
@@ -51,6 +51,7 @@ public class LoginPanel extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(jPanel,"Login successful!","Welcome!", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println("password correct");
                 myFrame.setLoggedAs(1);
+                //disableButtons();
             }
             else {
                 JOptionPane.showMessageDialog(jPanel,"Invalid password","Warning", JOptionPane.WARNING_MESSAGE);
@@ -58,6 +59,18 @@ public class LoginPanel extends JPanel implements ActionListener {
         }
 
 
+    }
+
+    private void disableButtons(){
+        studentButton.setEnabled(false);
+        teacherButton.setEnabled(false);
+        adminButton.setEnabled(false);
+    }
+
+    protected void ableButtons(){
+        studentButton.setEnabled(true);
+        teacherButton.setEnabled(true);
+        adminButton.setEnabled(true);
     }
 
     @Override

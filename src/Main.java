@@ -13,8 +13,8 @@ public class Main {
             e.printStackTrace();
         }
 
-        //Main main = new Main();
-        //main.showStudents();
+        Main main = new Main();
+        main.showStudents();
         //main.addStudent("Mateuszek","Kawulok", "Zory",474852154,"1990-04-11",845697412,"2a");
 
 
