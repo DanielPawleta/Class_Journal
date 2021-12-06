@@ -214,7 +214,8 @@ public class MyFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource()==newStudentButton){
             System.out.println("new student");
-            NewStudentFrame newStudentFrame = new NewStudentFrame();
+            NewStudentFrame newStudentFrame = new NewStudentFrame(this);
+            this.setVisible(false);
 
 
 
@@ -231,4 +232,6 @@ public class MyFrame extends JFrame implements ActionListener {
 
         }
     }
+
+
 }
