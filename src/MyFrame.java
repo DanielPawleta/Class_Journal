@@ -17,6 +17,9 @@ public class MyFrame extends JFrame implements ActionListener {
     private JButton findStudentButton;
     private JButton logOutButton;
     private String loginText = "Please log in";
+    private String emptyText = "please update!";
+    private int emptyNumber = 000;
+    private String emptyDate = "1900-01-01";
 
     private final String PAUSE_BUTTON_TEXT = "Pause";
     private JButton saveButton;
@@ -30,9 +33,10 @@ public class MyFrame extends JFrame implements ActionListener {
     private JTabbedPane tabbedPane;
 
     //Constructor
-    public MyFrame() {
+    public MyFrame(Main main) {
+        this.main = main;
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setTitle("Class Journal v1.0");
+        this.setTitle("School Database v1.0");
         this.setLayout(new BorderLayout(GAP_IN_BORDER_LAYOUT_SIZE,GAP_IN_BORDER_LAYOUT_SIZE));
         this.getContentPane().setBackground(Color.BLACK);
         initializePanels();
@@ -88,7 +92,7 @@ public class MyFrame extends JFrame implements ActionListener {
         frontLabelFirstPart.setFont(new Font("MV Boli", Font.PLAIN, 50));
         welcomePanel.add(frontLabelFirstPart);
 
-        JLabel frontLabelSecondPart = new JLabel("   Journal ");
+        JLabel frontLabelSecondPart = new JLabel("   Database ");
         frontLabelSecondPart.setFont(new Font("MV Boli", Font.PLAIN, 50));
         welcomePanel.add(frontLabelSecondPart);
 
@@ -165,6 +169,18 @@ public class MyFrame extends JFrame implements ActionListener {
         }
 
     }
+
+    protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number, String class_attender){
+        return main.addStudent(first_name, last_name, city, phone_number, date_of_birth, parents_phone_number, class_attender);
+    }
+
+    protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number){
+        return main.addStudent(first_name, last_name, city, phone_number, date_of_birth, parents_phone_number, emptyText);
+    }
+
+
+
+
 
 
 
