@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 public class NewStudentFrame extends JFrame implements ActionListener {
@@ -21,6 +23,8 @@ public class NewStudentFrame extends JFrame implements ActionListener {
     private String city;
     private String phoneNumber;
     private String parentsPhoneNumber;
+    private JDatePickerImpl datePicker;
+    private String dateOfBirth;
 
     private JTextField firstNameField;
     private JTextField lastNameField;
@@ -49,7 +53,7 @@ public class NewStudentFrame extends JFrame implements ActionListener {
 
 
     private void initializeTitleLabel() {
-        JLabel titleLabel = new JLabel("Adding new student");
+        JLabel titleLabel = new JLabel("Add new student");
         titleLabel.setFont(new Font("MV Boli", Font.PLAIN, 30));
         GridBagConstraints b = new GridBagConstraints();
         b.insets = new Insets(50,50,50,50);
@@ -130,7 +134,7 @@ public class NewStudentFrame extends JFrame implements ActionListener {
             properties.put("text.month", "Month");
             properties.put("text.year", "Year");
             JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
-            JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateComponentFormatter());
+            datePicker = new JDatePickerImpl(datePanel, new DateComponentFormatter());
 
             GridBagConstraints l = new GridBagConstraints();
             l.insets = insets;
@@ -204,13 +208,11 @@ public class NewStudentFrame extends JFrame implements ActionListener {
             System.out.println("Add button");
 
             if (checkFields()) {
-                myFrame.addStudent(firstName,lastName,city,phoneNumberInt,"1900-05-05",parentsPhoneNumberInt);
+                myFrame.addStudent(firstName,lastName,city,phoneNumberInt,dateOfBirth,parentsPhoneNumberInt);
                 JOptionPane.showMessageDialog(this,"Student added!","New student", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             }
-
         }
-
     }
 
     private boolean checkFields(){
@@ -220,20 +222,29 @@ public class NewStudentFrame extends JFrame implements ActionListener {
         phoneNumber = phoneNumberField.getText();
         parentsPhoneNumber = parentsPhoneNumberField.getText();
 
-        try {
-            phoneNumberInt = Integer.parseInt(phoneNumber);
-            parentsPhoneNumberInt = Integer.parseInt(parentsPhoneNumber);
-        }
-        catch (NumberFormatException e){
-            JOptionPane.showMessageDialog(this,"Unsupported phone number value","Info", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
 
         if      (!firstName.equals("") &&
                 !lastName.equals("") &&
                 !city.equals("")
                 )
         {
+            try {
+                phoneNumberInt = Integer.parseInt(phoneNumber);
+                parentsPhoneNumberInt = Integer.parseInt(parentsPhoneNumber);
+
+                Date date = (Date) datePicker.getModel().getValue();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                dateOfBirth = simpleDateFormat.format(date);
+
+            }
+            catch (NumberFormatException e){
+                JOptionPane.showMessageDialog(this,"Unsupported phone number value","Info", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+            catch (NullPointerException e){
+                JOptionPane.showMessageDialog(this,"Please select date of birth","Info", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
             return true;
         }
         else {

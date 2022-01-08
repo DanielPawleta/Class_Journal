@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MyFrame extends JFrame implements ActionListener {
     private JLabel loggedLabel;
@@ -28,7 +29,7 @@ public class MyFrame extends JFrame implements ActionListener {
     private JPanel rightPanel;
     private JPanel centerPanel;
     private final int PANEL_SIZE =30;
-    private final int GAP_IN_BORDER_LAYOUT_SIZE =10;
+    private int GAP_IN_BORDER_LAYOUT_SIZE =10;
     private Main main;
     private JTabbedPane tabbedPane;
 
@@ -179,11 +180,6 @@ public class MyFrame extends JFrame implements ActionListener {
     }
 
 
-
-
-
-
-
     /*
     public void initializeDownPanel() {
         downPanel.setLayout(new GridLayout(1,3,50,10) );
@@ -233,13 +229,11 @@ public class MyFrame extends JFrame implements ActionListener {
             NewStudentFrame newStudentFrame = new NewStudentFrame(this);
             this.setVisible(false);
 
-
-
-
         }
         if (e.getSource()==findStudentButton){
             System.out.println("find student");
-
+            FindStudentFrame findStudentFrame = new FindStudentFrame(this);
+            this.setVisible(false);
 
         }
         if (e.getSource()== logOutButton){
@@ -250,4 +244,7 @@ public class MyFrame extends JFrame implements ActionListener {
     }
 
 
+    protected int findStudent(String firstName, String lastName) {
+        return main.findStudent(firstName,lastName);
+    }
 }
