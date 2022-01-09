@@ -1,16 +1,15 @@
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Vector;
 
 
 public class Main {
     static Connection connection;
+    private MyFrame myFrame;
+    private Vector<Vector<String>> dataRow;
 
     public static void main(String[] args) {
         Main main = new Main();
-        MyFrame myFrame = new MyFrame(main);
-        //
+
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
         } catch (SQLException e) {
@@ -23,7 +22,9 @@ public class Main {
 
     }
 
-
+    public Main() {
+        myFrame = new MyFrame(this);
+    }
 
     private void showStudents(){
         try {
@@ -89,7 +90,7 @@ public class Main {
 
             resultSet = preparedStatement.executeQuery();
 
-            Vector<Vector<String>> dataRow = new Vector<>();
+            dataRow = new Vector<>();
 
             while (resultSet.next()) {
                 count++;
@@ -105,9 +106,7 @@ public class Main {
                 dataRow.add(studentRow);
 
                 System.out.println(resultSet.getString("first_name"));
-                //list.add(Integer.parseInt(resultSet.getString("id")));
             }
-            //list.add(0,count);
 
             if (dataRow.size()==0){
                 result=0;
@@ -115,11 +114,13 @@ public class Main {
 
             else if (dataRow.size()==1){
                 //fire show student frame
+                int studentId = Integer.parseInt(dataRow.get(0).get(0));
+                showStudentFrame(studentId);
                 result=1;
             }
 
             else {
-                new ChooseStudentFrameTest(dataRow);
+                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(dataRow);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -127,4 +128,9 @@ public class Main {
         System.out.println("Found rows: " + count);
         return result;
     }
+
+    protected void showStudentFrame(int id){
+        StudentFrame studentFrame = new StudentFrame(myFrame,id);
+    }
+
 }

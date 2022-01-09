@@ -128,8 +128,7 @@ public class FindStudentFrame extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(this,"No results","Info", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-
-                    dispose();
+                super.dispose();
             }
         }
     }

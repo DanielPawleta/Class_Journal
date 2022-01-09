@@ -1,38 +1,22 @@
-import org.jdatepicker.impl.JDatePickerImpl;
-
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Vector;
 
 public class ChooseStudentFrame extends JFrame implements ActionListener {
+    private int selectedStudentId;
+
     private Vector<Vector<String>> dataRow;
     private Vector<String> columnNames;
+    private JTable jTable;
 
     private Insets insets = new Insets(10,10,10,10);
     private JButton backButton;
     private JButton selectButton;
-
-    private String firstName;
-    private String lastName;
-    private String city;
-    private String phoneNumber;
-    private String parentsPhoneNumber;
-    private JDatePickerImpl datePicker;
-    private String dateOfBirth;
-
-    private JTextField firstNameField;
-    private JTextField lastNameField;
-    private JTextField cityField;
-    private JTextField phoneNumberField;
-    private JTextField parentsPhoneNumberField;
-
-    private int phoneNumberInt;
-    private int parentsPhoneNumberInt;
-
 
     public ChooseStudentFrame(Vector<Vector<String>> dataRow){
         this.dataRow = dataRow;
@@ -45,8 +29,8 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
 
         this.setVisible(true);
         this.setSize(500,600);
-        this.setResizable(true);
-        //this.pack();
+        this.setResizable(false);
+        this.pack();
     }
 
     private void initializeTitleLabel() {
@@ -64,16 +48,42 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
     private void initializeTab() {
         initializeColumnNamesRow();
 
-        JTable jTable = new JTable(dataRow,columnNames);
+        jTable = new JTable();
+        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        DefaultTableModel defaultTableModel = new DefaultTableModel(dataRow,columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        jTable.setModel(defaultTableModel);
+        jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                System.out.println(jTable.getSelectedRow());
+                selectButton.setEnabled(true);
+            }
+        });
+
+        jTable.getColumnModel().getColumn(0).setPreferredWidth(40); //id
+        jTable.getColumnModel().getColumn(1).setPreferredWidth(100); //first name
+        jTable.getColumnModel().getColumn(2).setPreferredWidth(100); //last name
+        jTable.getColumnModel().getColumn(3).setPreferredWidth(100); //city
+        jTable.getColumnModel().getColumn(4).setPreferredWidth(120); //phone number
+        jTable.getColumnModel().getColumn(5).setPreferredWidth(150); //parents phone number
+        jTable.getColumnModel().getColumn(6).setPreferredWidth(40); //class
+
         JScrollPane scrollPane = new JScrollPane(jTable);
-        jTable.setFillsViewportHeight(true);
+        scrollPane.setPreferredSize(new Dimension(675,150));
 
         GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(10,10,10,10);
         c.gridwidth=2;
         c.gridheight=8;
-        c.insets = insets;
-        c.gridx = 0;
-        c.gridy = 2;
+        c.gridx=0;
+        c.gridy=1;
 
         this.add(scrollPane,c);
     }
@@ -90,21 +100,22 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
     }
 
     private void initializeButtons() {
-        backButton = new JButton("Back");
-        backButton.addActionListener(this);
-        GridBagConstraints g = new GridBagConstraints();
-        g.insets = new Insets(50,10,10,10);
-        g.gridx = 0;
-        g.gridy = 10;
-        this.add(backButton, g);
-
         selectButton = new JButton("Select");
         selectButton.addActionListener(this);
+        GridBagConstraints g = new GridBagConstraints();
+        g.insets = insets;
+        g.gridx = 1;
+        g.gridy = 10;
+        selectButton.setEnabled(false);
+        this.add(selectButton, g);
+
+        backButton = new JButton("Back");
+        backButton.addActionListener(this);
         GridBagConstraints h = new GridBagConstraints();
-        h.insets = new Insets(50,10,10,10);
+        h.insets = insets;
         h.gridx = 1;
-        h.gridy = 10;
-        this.add(selectButton, h);
+        h.gridy = 11;
+        this.add(backButton, h);
     }
 
     @Override
@@ -115,45 +126,22 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource()==backButton){
+        if (e.getSource() == backButton) {
             System.out.println("back button");
             dispose();
         }
 
-        if (e.getSource()== selectButton){
-            System.out.println("Find button");
+        if (e.getSource() == selectButton) {
+            System.out.println("Select button");
+            int selectedRow = jTable.getSelectedRow();
+            selectedStudentId = Integer.parseInt(String.valueOf(jTable.getValueAt(selectedRow, 0)));
+            System.out.println("Selected id: " + selectedStudentId);
 
-            if (checkFields()) {
-                ArrayList<Integer> list = new ArrayList<>();
-                if (list.size()==1) {
-                    JOptionPane.showMessageDialog(this,"No results","Info", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-                if (list.size()==2) {
-                    System.out.println("Found student at ID: " + list.get(1));
-                }
-                if (list.size()>2) {
-                    System.out.printf("Found %d students",list.get(0));
-
-
-                }
-
-                    dispose();
-            }
+            dispose();
         }
     }
 
-    private boolean checkFields(){
-        firstName = firstNameField.getText();
-        lastName = lastNameField.getText();
-
-        if      (!firstName.equals("") && !lastName.equals(""))
-        {
-            return true;
-        }
-        else {
-            JOptionPane.showMessageDialog(this,"Fields first name or last name are required","Info", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
+    public int getSelectedStudentId() {
+        return selectedStudentId;
     }
 }
