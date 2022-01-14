@@ -9,6 +9,7 @@ import java.util.Vector;
 
 public class ChooseStudentFrame extends JFrame implements ActionListener {
     private int selectedStudentId;
+    private MyFrame myFrame;
 
     private Vector<Vector<String>> dataRow;
     private Vector<String> columnNames;
@@ -18,7 +19,8 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
     private JButton backButton;
     private JButton selectButton;
 
-    public ChooseStudentFrame(Vector<Vector<String>> dataRow){
+    public ChooseStudentFrame(MyFrame myFrame,Vector<Vector<String>> dataRow){
+        this.myFrame = myFrame;
         this.dataRow = dataRow;
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setTitle("Choose Student");
@@ -136,6 +138,9 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
             int selectedRow = jTable.getSelectedRow();
             selectedStudentId = Integer.parseInt(String.valueOf(jTable.getValueAt(selectedRow, 0)));
             System.out.println("Selected id: " + selectedStudentId);
+
+            System.out.println("Show student frame from choose student frame");
+            StudentFrame studentFrame = new StudentFrame(myFrame, dataRow, selectedStudentId);
 
             dispose();
         }

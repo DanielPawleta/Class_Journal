@@ -4,20 +4,24 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Vector;
 
 public class StudentFrame extends JFrame implements ActionListener {
-    private int studentId;
+    private Vector<Vector<String>> dataRow;
     private MyFrame myFrame;
+    private int selectedStudentId;
     private Insets insets = new Insets(10,10,10,10);
 
     private JButton backButton;
     private JButton addButton;
+    private JButton updateNameButton;
 
     private String firstName;
     private String lastName;
@@ -27,7 +31,7 @@ public class StudentFrame extends JFrame implements ActionListener {
     private JDatePickerImpl datePicker;
     private String dateOfBirth;
 
-    private JTextField firstNameField;
+    private JLabel firstNameTextField;
     private JTextField lastNameField;
     private JTextField cityField;
     private JTextField phoneNumberField;
@@ -37,14 +41,16 @@ public class StudentFrame extends JFrame implements ActionListener {
     private int parentsPhoneNumberInt;
 
 
-    public StudentFrame(MyFrame myFrame, int studentId){
+    public StudentFrame(MyFrame myFrame, Vector<Vector<String>> dataRow){
         this.myFrame = myFrame;
-        this.studentId = studentId;
+        this.dataRow = dataRow;
+        this.selectedStudentId=0;
+
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setTitle("Student");
         this.setLayout(new GridBagLayout());
         this.initializeTitleLabel();
-        //this.initializeLabels();
+        this.initializeLabels();
         this.initializeButtons();
 
         this.setVisible(true);
@@ -52,19 +58,27 @@ public class StudentFrame extends JFrame implements ActionListener {
         this.setResizable(false);
     }
 
+    public StudentFrame(MyFrame myFrame, Vector<Vector<String>> dataRow,int selectedStudentId) {
+        this(myFrame, dataRow);
+        this.selectedStudentId = selectedStudentId;
+    }
 
     private void initializeTitleLabel() {
         JLabel titleLabel = new JLabel("Student");
         titleLabel.setFont(new Font("MV Boli", Font.PLAIN, 30));
         GridBagConstraints b = new GridBagConstraints();
         b.insets = new Insets(50,50,50,50);
-        b.gridwidth=2;
+        b.gridwidth=3;
         b.gridx=0;
         b.gridy=0;
         this.add(titleLabel,b);
     }
 
     private void initializeLabels() {
+            //border for all text fields
+            Border blackline = BorderFactory.createLineBorder(Color.black);
+
+
             //first name
             JLabel firstNameLabel = new JLabel("First Name: ");
             GridBagConstraints c = new GridBagConstraints();
@@ -72,13 +86,25 @@ public class StudentFrame extends JFrame implements ActionListener {
             c.gridx = 0;
             c.gridy = 1;
             this.add(firstNameLabel, c);
-            firstNameField = new JTextField(15);
+            String firstName = dataRow.get(selectedStudentId).get(1);
+            firstNameTextField = new JLabel(firstName);
+            firstNameTextField.setBorder(blackline);
+            firstNameTextField.setPreferredSize(new Dimension(150,20));
             GridBagConstraints d = new GridBagConstraints();
             d.insets = insets;
             d.gridx = 1;
             d.gridy = 1;
-            this.add(firstNameField, d);
+            this.add(firstNameTextField, d);
+            updateNameButton = new JButton("update");
+            GridBagConstraints e = new GridBagConstraints();
+            e.insets = insets;
+            e.gridx = 2;
+            e.gridy = 1;
+            this.add(updateNameButton, e);
 
+
+
+/*
             //last name
             JLabel lastNameLabel = new JLabel("Last Name: ");
             GridBagConstraints e = new GridBagConstraints();
@@ -92,6 +118,8 @@ public class StudentFrame extends JFrame implements ActionListener {
             f.gridx = 1;
             f.gridy = 2;
             this.add(lastNameField, f);
+
+ */
 
             //city
             JLabel cityLabel = new JLabel("City: ");
@@ -217,7 +245,7 @@ public class StudentFrame extends JFrame implements ActionListener {
     }
 
     private boolean checkFields(){
-        firstName = firstNameField.getText();
+        //firstName = firstNameField.getText();
         lastName = lastNameField.getText();
         city = cityField.getText();
         phoneNumber = phoneNumberField.getText();

@@ -114,13 +114,13 @@ public class Main {
 
             else if (dataRow.size()==1){
                 //fire show student frame
-                int studentId = Integer.parseInt(dataRow.get(0).get(0));
-                showStudentFrame(studentId);
+                //int studentId = Integer.parseInt(dataRow.get(0).get(0));
+                showStudentFrame();
                 result=1;
             }
 
             else {
-                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(dataRow);
+                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(myFrame,dataRow);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -129,8 +129,9 @@ public class Main {
         return result;
     }
 
-    protected void showStudentFrame(int id){
-        StudentFrame studentFrame = new StudentFrame(myFrame,id);
+    protected void showStudentFrame(){
+        System.out.println("Show student frame from main");
+        StudentFrame studentFrame = new StudentFrame(myFrame,dataRow);
     }
 
 }
