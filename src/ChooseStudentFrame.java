@@ -140,6 +140,12 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
             System.out.println("Selected id: " + selectedStudentId);
 
             System.out.println("Show student frame from choose student frame");
+
+            for (String st : dataRow.get(selectedRow)){
+                System.out.println(st);
+            }
+
+
             StudentFrame studentFrame = new StudentFrame(myFrame, dataRow, selectedStudentId);
 
             dispose();
