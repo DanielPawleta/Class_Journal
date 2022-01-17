@@ -43,7 +43,7 @@ public class MyFrame extends JFrame implements ActionListener {
         initializePanels();
         initializeFrontLabel();
 
-        this.ableAllTabs();
+        //this.ableAllTabs();
         this.setVisible(true);
         this.setSize(500,500);
         this.setResizable(false);

@@ -22,6 +22,11 @@ public class StudentFrame extends JFrame implements ActionListener {
     private JButton backButton;
     private JButton updateNameButton;
     private JButton updateLastNameButton;
+    private JButton updateCityButton;
+    private JButton updatePhoneNumberButton;
+    private JButton updateDateOfBirthButton;
+    private JButton updateParentsPhoneNumberButton;
+    private JButton updateClassButton;
 
     private String firstName;
     private String lastName;
@@ -53,6 +58,8 @@ public class StudentFrame extends JFrame implements ActionListener {
         this.setLayout(new GridBagLayout());
         this.initializeTitleLabel();
         this.initializeLabels();
+        this.initializeTextFields();
+        this.initializeUpdateButtons();
         this.initializeButtons();
 
         this.setVisible(true);
@@ -77,10 +84,6 @@ public class StudentFrame extends JFrame implements ActionListener {
     }
 
     private void initializeLabels() {
-            //border for all text fields
-            Border blackline = BorderFactory.createLineBorder(Color.black);
-
-
             //first name
             JLabel firstNameLabel = new JLabel("First Name: ");
             GridBagConstraints b = new GridBagConstraints();
@@ -88,24 +91,6 @@ public class StudentFrame extends JFrame implements ActionListener {
             b.gridx = 0;
             b.gridy = 1;
             this.add(firstNameLabel, b);
-            String firstName = dataRow.get(selectedStudentId).get(1);
-            firstNameTextField = new JLabel(firstName);
-            firstNameTextField.setBorder(blackline);
-            firstNameTextField.setPreferredSize(new Dimension(150,20));
-            GridBagConstraints c = new GridBagConstraints();
-            c.insets = insets;
-            c.gridx = 1;
-            c.gridy = 1;
-            this.add(firstNameTextField, c);
-            updateNameButton = new JButton("update");
-            GridBagConstraints d = new GridBagConstraints();
-            d.insets = insets;
-            d.gridx = 2;
-            d.gridy = 1;
-            this.add(updateNameButton, d);
-
-
-
 
             //last name
             JLabel lastNameLabel = new JLabel("Last Name: ");
@@ -114,17 +99,6 @@ public class StudentFrame extends JFrame implements ActionListener {
             e.gridx = 0;
             e.gridy = 2;
             this.add(lastNameLabel, e);
-            String lastName = dataRow.get(selectedStudentId).get(2);
-            lastNameTextField = new JLabel(lastName);
-            lastNameTextField.setBorder(blackline);
-            lastNameTextField.setPreferredSize(new Dimension(150,20));
-            GridBagConstraints f = new GridBagConstraints();
-            f.insets = insets;
-            f.gridx = 1;
-            f.gridy = 2;
-            this.add(lastNameTextField, f);
-
-
 
             //city
             JLabel cityLabel = new JLabel("City: ");
@@ -133,16 +107,6 @@ public class StudentFrame extends JFrame implements ActionListener {
             g.gridx = 0;
             g.gridy = 3;
             this.add(cityLabel, g);
-            String city = dataRow.get(selectedStudentId).get(3);
-            cityTextField = new JLabel(city);
-            cityTextField.setBorder(blackline);
-            cityTextField.setBorder(blackline);
-            cityTextField.setPreferredSize(new Dimension(150,20));
-            GridBagConstraints h = new GridBagConstraints();
-            h.insets = insets;
-            h.gridx = 1;
-            h.gridy = 3;
-            this.add(cityTextField, h);
 
             //phone number
             JLabel phoneNumberLabel = new JLabel("Phone number: ");
@@ -151,15 +115,6 @@ public class StudentFrame extends JFrame implements ActionListener {
             i.gridx = 0;
             i.gridy = 4;
             this.add(phoneNumberLabel, i);
-            String phoneNumber = dataRow.get(selectedStudentId).get(4);
-            phoneNumberTextField = new JLabel(phoneNumber);
-            phoneNumberTextField.setBorder(blackline);
-            phoneNumberTextField.setPreferredSize(new Dimension(150,20));
-            GridBagConstraints j = new GridBagConstraints();
-            j.insets = insets;
-            j.gridx = 1;
-            j.gridy = 4;
-            this.add(phoneNumberTextField, j);
 
             //Date of birth
             JLabel dateOfBirthLabel = new JLabel("Date of birth: ");
@@ -168,16 +123,6 @@ public class StudentFrame extends JFrame implements ActionListener {
             k.gridx = 0;
             k.gridy = 5;
             this.add(dateOfBirthLabel, k);
-            String dateOfBirth = dataRow.get(selectedStudentId).get(5);
-            dateOfBirthTextField = new JLabel(dateOfBirth);
-            dateOfBirthTextField.setBorder(blackline);
-            dateOfBirthTextField.setPreferredSize(new Dimension(150,20));
-            GridBagConstraints l = new GridBagConstraints();
-            l.insets = insets;
-            l.gridx = 1;
-            l.gridy = 5;
-            this.add(dateOfBirthTextField, l);
-
 
             //parents phone number
             JLabel parentsPhoneNumberLabel = new JLabel("Parents phone number: ");
@@ -186,15 +131,6 @@ public class StudentFrame extends JFrame implements ActionListener {
             m.gridx = 0;
             m.gridy = 6;
             this.add(parentsPhoneNumberLabel, m);
-            String parentsPhoneNumber = dataRow.get(selectedStudentId).get(6);
-            parentsPhoneNumberTextField = new JLabel(parentsPhoneNumber);
-            parentsPhoneNumberTextField.setBorder(blackline);
-            parentsPhoneNumberTextField.setPreferredSize(new Dimension(150,20));
-            GridBagConstraints n = new GridBagConstraints();
-            n.insets = insets;
-            n.gridx = 1;
-            n.gridy = 6;
-            this.add(parentsPhoneNumberTextField, n);
 
             //class
             JLabel classLabel = new JLabel("Class: ");
@@ -203,16 +139,141 @@ public class StudentFrame extends JFrame implements ActionListener {
             o.gridx = 0;
             o.gridy = 7;
             this.add(classLabel, o);
-            String className = dataRow.get(selectedStudentId).get(7);
-            classTextField = new JLabel(className);
-            classTextField.setBorder(blackline);
-            classTextField.setPreferredSize(new Dimension(150,20));
-            GridBagConstraints p = new GridBagConstraints();
-            p.insets = insets;
-            p.gridx = 1;
-            p.gridy = 7;
-            this.add(classTextField, p);
         }
+
+    private void initializeTextFields(){
+        //border for all text fields
+        Border blackline = BorderFactory.createLineBorder(Color.black);
+
+        String firstName = dataRow.get(selectedStudentId).get(1);
+        firstNameTextField = new JLabel(firstName);
+        firstNameTextField.setBorder(blackline);
+        firstNameTextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = insets;
+        c.gridx = 1;
+        c.gridy = 1;
+        this.add(firstNameTextField, c);
+
+        String lastName = dataRow.get(selectedStudentId).get(2);
+        lastNameTextField = new JLabel(lastName);
+        lastNameTextField.setBorder(blackline);
+        lastNameTextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints f = new GridBagConstraints();
+        f.insets = insets;
+        f.gridx = 1;
+        f.gridy = 2;
+        this.add(lastNameTextField, f);
+
+        String city = dataRow.get(selectedStudentId).get(3);
+        cityTextField = new JLabel(city);
+        cityTextField.setBorder(blackline);
+        cityTextField.setBorder(blackline);
+        cityTextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints h = new GridBagConstraints();
+        h.insets = insets;
+        h.gridx = 1;
+        h.gridy = 3;
+        this.add(cityTextField, h);
+
+        String phoneNumber = dataRow.get(selectedStudentId).get(4);
+        phoneNumberTextField = new JLabel(phoneNumber);
+        phoneNumberTextField.setBorder(blackline);
+        phoneNumberTextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints j = new GridBagConstraints();
+        j.insets = insets;
+        j.gridx = 1;
+        j.gridy = 4;
+        this.add(phoneNumberTextField, j);
+
+        String dateOfBirth = dataRow.get(selectedStudentId).get(5);
+        dateOfBirthTextField = new JLabel(dateOfBirth);
+        dateOfBirthTextField.setBorder(blackline);
+        dateOfBirthTextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints l = new GridBagConstraints();
+        l.insets = insets;
+        l.gridx = 1;
+        l.gridy = 5;
+        this.add(dateOfBirthTextField, l);
+
+        String parentsPhoneNumber = dataRow.get(selectedStudentId).get(6);
+        parentsPhoneNumberTextField = new JLabel(parentsPhoneNumber);
+        parentsPhoneNumberTextField.setBorder(blackline);
+        parentsPhoneNumberTextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints n = new GridBagConstraints();
+        n.insets = insets;
+        n.gridx = 1;
+        n.gridy = 6;
+        this.add(parentsPhoneNumberTextField, n);
+
+        String className = dataRow.get(selectedStudentId).get(7);
+        classTextField = new JLabel(className);
+        classTextField.setBorder(blackline);
+        classTextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints p = new GridBagConstraints();
+        p.insets = insets;
+        p.gridx = 1;
+        p.gridy = 7;
+        this.add(classTextField, p);
+    }
+
+    private void initializeUpdateButtons(){
+        updateNameButton = new JButton("update");
+        updateNameButton.addActionListener(this);
+        GridBagConstraints a = new GridBagConstraints();
+        a.insets = insets;
+        a.gridx = 2;
+        a.gridy = 1;
+        this.add(updateNameButton, a);
+
+        updateLastNameButton = new JButton("update");
+        updateLastNameButton.addActionListener(this);
+        GridBagConstraints b = new GridBagConstraints();
+        b.insets = insets;
+        b.gridx = 2;
+        b.gridy = 2;
+        this.add(updateLastNameButton, b);
+
+        updateCityButton = new JButton("update");
+        updateCityButton.addActionListener(this);
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = insets;
+        c.gridx = 2;
+        c.gridy = 3;
+        this.add(updateCityButton, c);
+
+        updatePhoneNumberButton = new JButton("update");
+        updatePhoneNumberButton.addActionListener(this);
+        GridBagConstraints d = new GridBagConstraints();
+        d.insets = insets;
+        d.gridx = 2;
+        d.gridy = 4;
+        this.add(updatePhoneNumberButton, d);
+
+        updateDateOfBirthButton = new JButton("update");
+        updateDateOfBirthButton.addActionListener(this);
+        GridBagConstraints e = new GridBagConstraints();
+        e.insets = insets;
+        e.gridx = 2;
+        e.gridy = 5;
+        this.add(updateDateOfBirthButton, e);
+
+        updateParentsPhoneNumberButton = new JButton("update");
+        updateParentsPhoneNumberButton.addActionListener(this);
+        GridBagConstraints f = new GridBagConstraints();
+        f.insets = insets;
+        f.gridx = 2;
+        f.gridy = 6;
+        this.add(updateParentsPhoneNumberButton, f);
+
+        updateClassButton = new JButton("update");
+        updateClassButton.addActionListener(this);
+        GridBagConstraints g = new GridBagConstraints();
+        g.insets = insets;
+        g.gridx = 2;
+        g.gridy = 7;
+        this.add(updateClassButton, g);
+    }
 
     private void initializeButtons() {
         backButton = new JButton("Back");
@@ -236,5 +297,10 @@ public class StudentFrame extends JFrame implements ActionListener {
             System.out.println("back button");
             dispose();
         }
+
+        if (e.getSource()==updateNameButton){
+
+        }
+
     }
 }

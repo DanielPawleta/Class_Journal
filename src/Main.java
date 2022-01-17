@@ -10,6 +10,7 @@ public class Main {
     public static void main(String[] args) {
         Main main = new Main();
 
+
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
         } catch (SQLException e) {
@@ -19,6 +20,8 @@ public class Main {
         //main.showStudents();
         main.findStudent("Daniell","Pawleta");
         //main.addStudent("Mateuszek","Kawulok", "Zory",474852154,"1990-04-11",845697412,"2a");
+
+
 
     }
 
