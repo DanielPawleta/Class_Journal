@@ -10,6 +10,7 @@ public class Main {
     public static void main(String[] args) {
         Main main = new Main();
 
+        /*
 
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
@@ -17,8 +18,10 @@ public class Main {
             e.printStackTrace();
         }
 
+         */
+
         //main.showStudents();
-        main.findStudent("Daniell","Pawleta");
+        //main.findStudent("Daniell","Pawleta");
         //main.addStudent("Mateuszek","Kawulok", "Zory",474852154,"1990-04-11",845697412,"2a");
 
 
@@ -75,6 +78,8 @@ public class Main {
         return query;
     }
 
+
+    /*
     protected int findStudent(String firstName, String lastName) {
         ResultSet resultSet;
         int result = 9;
@@ -132,9 +137,58 @@ public class Main {
         return result;
     }
 
+     */
+
+
+    //for no-database connection purpose and testing
+    protected int findStudent(String firstName, String lastName) {
+        dataRow = new Vector<>();
+        Vector<String> studentRow = new Vector<>();
+        studentRow.add("74");//id
+        studentRow.add("Daniel");
+        studentRow.add("Pawleta");
+        studentRow.add("Rybnik");
+        studentRow.add("578412012");
+        studentRow.add("1900-01-01");
+        studentRow.add("541478523");
+        studentRow.add("1d");
+        dataRow.add(studentRow);
+
+        showStudentFrame();
+        return 1;
+    }
+
     protected void showStudentFrame(){
         System.out.println("Show student frame from main");
         StudentFrame studentFrame = new StudentFrame(myFrame,dataRow);
     }
 
+    public void updateStudent(int i, int selectedStudentId, String newVaule) {
+        String columnName="";
+        switch (i) {
+            case 0:
+                columnName = "`first_name`";
+                break;
+            case 1:
+                columnName = "`last_name`";
+                break;
+        }
+
+        int result = 0;
+        String query = "UPDATE `class_journal`.`students` SET" +
+                "? = ?" +
+                "WHERE id= ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, columnName);
+            preparedStatement.setString(2, newVaule);
+            preparedStatement.setString(3, String.valueOf(selectedStudentId));
+
+            result = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("affected rows: " + result);
+
+    }
 }

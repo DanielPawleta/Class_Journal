@@ -43,7 +43,7 @@ public class MyFrame extends JFrame implements ActionListener {
         initializePanels();
         initializeFrontLabel();
 
-        //this.ableAllTabs();
+        this.ableAllTabs();
         this.setVisible(true);
         this.setSize(500,500);
         this.setResizable(false);
@@ -246,5 +246,9 @@ public class MyFrame extends JFrame implements ActionListener {
 
     protected int findStudent(String firstName, String lastName) {
         return main.findStudent(firstName,lastName);
+    }
+
+    public void updateStudent(int i, int selectedStudentId, String newVaule) {
+        main.updateStudent(i,selectedStudentId,newVaule);
     }
 }
