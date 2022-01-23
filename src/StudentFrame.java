@@ -147,7 +147,7 @@ public class StudentFrame extends JFrame implements ActionListener {
         Border blackline = BorderFactory.createLineBorder(Color.black);
 
         selectedStudentId = Integer.parseInt(dataRow.get(selectedStudentIdInDataRow).get(0));
-        String firstName = dataRow.get(selectedStudentIdInDataRow).get(1);
+        firstName = dataRow.get(selectedStudentIdInDataRow).get(1);
         firstNameTextField = new JLabel(firstName);
         firstNameTextField.setBorder(blackline);
         firstNameTextField.setPreferredSize(new Dimension(150,20));
@@ -157,7 +157,7 @@ public class StudentFrame extends JFrame implements ActionListener {
         c.gridy = 1;
         this.add(firstNameTextField, c);
 
-        String lastName = dataRow.get(selectedStudentIdInDataRow).get(2);
+        lastName = dataRow.get(selectedStudentIdInDataRow).get(2);
         lastNameTextField = new JLabel(lastName);
         lastNameTextField.setBorder(blackline);
         lastNameTextField.setPreferredSize(new Dimension(150,20));
@@ -345,9 +345,13 @@ public class StudentFrame extends JFrame implements ActionListener {
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
                 String newVaule = textField.getText();
-                myFrame.updateStudent(i, selectedStudentId, newVaule);
-                JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println("student updated");
+                if (myFrame.updateStudent(i, selectedStudentId, newVaule)==1){
+                    JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
+                    super.dispose();
+                    myFrame.findStudent(selectedStudentId);
+                    System.out.println("student updated");
+                }
+                else System.out.println("Something went wrong when updating student");
             }
         }
 

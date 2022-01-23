@@ -248,7 +248,11 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.findStudent(firstName,lastName);
     }
 
-    public void updateStudent(int i, int selectedStudentId, String newVaule) {
-        main.updateStudent(i,selectedStudentId,newVaule);
+    protected int findStudent(int selectedStudentId) {
+        return main.findStudent(selectedStudentId);
+    }
+
+    public int updateStudent(int i, int selectedStudentId, String newValue) {
+        return main.updateStudent(i,selectedStudentId,newValue);
     }
 }

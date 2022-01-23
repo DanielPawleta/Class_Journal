@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         Main main = new Main();
 
-        /*
+
 
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
@@ -18,9 +18,9 @@ public class Main {
             e.printStackTrace();
         }
 
-         */
 
-        //main.showStudents();
+
+        main.showStudents();
         //main.findStudent("Daniell","Pawleta");
         //main.addStudent("Mateuszek","Kawulok", "Zory",474852154,"1990-04-11",845697412,"2a");
 
@@ -79,8 +79,9 @@ public class Main {
     }
 
 
-    /*
+
     protected int findStudent(String firstName, String lastName) {
+        System.out.println("find student in main with first name = " + firstName + " and last name = " + lastName);
         ResultSet resultSet;
         int result = 9;
         int count=0;
@@ -137,11 +138,66 @@ public class Main {
         return result;
     }
 
-     */
+    protected int findStudent(int selectedStudentId) {
+        System.out.println("find student in main with id = " + selectedStudentId);
+        ResultSet resultSet;
+        int result = 9;
+        int count=0;
+
+        String query = "SELECT * FROM students " +
+                "WHERE id = ?;";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, String.valueOf(selectedStudentId));
+
+            resultSet = preparedStatement.executeQuery();
+
+            dataRow = new Vector<>();
+
+            while (resultSet.next()) {
+                count++;
+                Vector<String> studentRow = new Vector<>();
+                studentRow.add(resultSet.getString("id"));
+                studentRow.add(resultSet.getString("first_name"));
+                studentRow.add(resultSet.getString("last_name"));
+                studentRow.add(resultSet.getString("city"));
+                studentRow.add(resultSet.getString("phone_number"));
+                studentRow.add(resultSet.getString("date_of_birth"));
+                studentRow.add(resultSet.getString("parents_phone_number"));
+                studentRow.add(resultSet.getString("class"));
+                dataRow.add(studentRow);
+
+                System.out.println(resultSet.getString("first_name"));
+            }
+
+            if (dataRow.size()==0){
+                result=0;
+            }
+
+            else if (dataRow.size()==1){
+                //fire show student frame
+                //int studentId = Integer.parseInt(dataRow.get(0).get(0));
+                showStudentFrame();
+                result=1;
+            }
+
+            else {
+                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(myFrame,dataRow);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Found rows: " + count);
+        return result;
+    }
+
+
 
 
     //for no-database connection purpose and testing
-    protected int findStudent(String firstName, String lastName) {
+    /*
+    //protected int findStudent(String firstName, String lastName) {
         dataRow = new Vector<>();
         Vector<String> studentRow = new Vector<>();
         studentRow.add("74");//id
@@ -158,12 +214,14 @@ public class Main {
         return 1;
     }
 
+     */
+
     protected void showStudentFrame(){
         System.out.println("Show student frame from main");
         StudentFrame studentFrame = new StudentFrame(myFrame,dataRow);
     }
 
-    public void updateStudent(int i, int selectedStudentId, String newVaule) {
+    public int updateStudent(int i, int selectedStudentId, String newVaule) {
         String columnName="";
         switch (i) {
             case 0:
@@ -175,20 +233,26 @@ public class Main {
         }
 
         int result = 0;
-        String query = "UPDATE `class_journal`.`students` SET" +
-                "? = ?" +
-                "WHERE id= ?;";
+        String query = "UPDATE `class_journal`.`students` SET " + columnName +
+                " = ? " +
+                "WHERE id = ?;";
         try {
+            System.out.println(columnName + query + newVaule + selectedStudentId);
+
             PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, columnName);
-            preparedStatement.setString(2, newVaule);
-            preparedStatement.setString(3, String.valueOf(selectedStudentId));
+            preparedStatement.setString(1, newVaule);
+            preparedStatement.setString(2, String.valueOf(selectedStudentId));
 
             result = preparedStatement.executeUpdate();
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         System.out.println("affected rows: " + result);
+        return result;
 
     }
+
+
 }
