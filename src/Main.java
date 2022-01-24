@@ -11,7 +11,7 @@ public class Main {
         Main main = new Main();
 
 
-
+/*
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
         } catch (SQLException e) {
@@ -20,9 +20,13 @@ public class Main {
 
 
 
-        main.showStudents();
+
+
+        //main.showStudents();
         //main.findStudent("Daniell","Pawleta");
         //main.addStudent("Mateuszek","Kawulok", "Zory",474852154,"1990-04-11",845697412,"2a");
+
+ */
 
 
 
@@ -79,7 +83,7 @@ public class Main {
     }
 
 
-
+/*
     protected int findStudent(String firstName, String lastName) {
         System.out.println("find student in main with first name = " + firstName + " and last name = " + lastName);
         ResultSet resultSet;
@@ -138,6 +142,7 @@ public class Main {
         return result;
     }
 
+
     protected int findStudent(int selectedStudentId) {
         System.out.println("find student in main with id = " + selectedStudentId);
         ResultSet resultSet;
@@ -192,12 +197,14 @@ public class Main {
         return result;
     }
 
+     */
+
 
 
 
     //for no-database connection purpose and testing
-    /*
-    //protected int findStudent(String firstName, String lastName) {
+
+    protected int findStudent(String firstName, String lastName) {
         dataRow = new Vector<>();
         Vector<String> studentRow = new Vector<>();
         studentRow.add("74");//id
@@ -214,7 +221,23 @@ public class Main {
         return 1;
     }
 
-     */
+    protected int findStudent(int selectedStudentId) {
+        dataRow = new Vector<>();
+        Vector<String> studentRow = new Vector<>();
+        studentRow.add("74");//id
+        studentRow.add("Daniel");
+        studentRow.add("Pawleta");
+        studentRow.add("Rybnik");
+        studentRow.add("578412012");
+        studentRow.add("1900-01-01");
+        studentRow.add("541478523");
+        studentRow.add("1d");
+        dataRow.add(studentRow);
+
+        showStudentFrame();
+        return 1;
+    }
+
 
     protected void showStudentFrame(){
         System.out.println("Show student frame from main");
@@ -222,6 +245,15 @@ public class Main {
     }
 
     public int updateStudent(int i, int selectedStudentId, String newVaule) {
+        //i stands for column name of value to be updated
+        //0 - first name
+        //1 - last name
+        //2 - city
+        //3 - phone number
+        //4 - date of birth
+        //5 - parents phone number
+        //6 - class
+
         String columnName="";
         switch (i) {
             case 0:
@@ -229,6 +261,21 @@ public class Main {
                 break;
             case 1:
                 columnName = "`last_name`";
+                break;
+            case 2:
+                columnName = "`city`";
+                break;
+            case 3:
+                columnName = "`phone_number";
+                break;
+            case 4:
+                columnName = "`date_of_birth`";
+                break;
+            case 5:
+                columnName = "`parents_phone_number`";
+                break;
+            case 6:
+                columnName = "`class`";
                 break;
         }
 

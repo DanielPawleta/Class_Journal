@@ -333,6 +333,13 @@ public class StudentFrame extends JFrame implements ActionListener {
 
     private void showUpdateDialog(String text, int i){
         //i stands for column name to be updated
+        //0 - first name
+        //1 - last name
+        //2 - city
+        //3 - phone number
+        //4 - date of birth
+        //5 - parents phone number
+        //6 - class
 
         if (i!=4) { //if it's not date of birth update
             JTextField textField = new JTextField(5);
@@ -377,14 +384,12 @@ public class StudentFrame extends JFrame implements ActionListener {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String newValue = simpleDateFormat.format(date);
                 System.out.println("new date as string: " + newValue);
-                myFrame.updateStudent(i, selectedStudentId, newValue);
-                JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println("student updated");
+                if(myFrame.updateStudent(i, selectedStudentId, newValue)==1) {
+                    JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
+                    System.out.println("student updated");
+                }
+                else System.out.println("Something went wrong when updating student");
             }
         }
-
-
-
-
     }
 }
