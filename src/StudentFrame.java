@@ -362,7 +362,7 @@ public class StudentFrame extends JFrame implements ActionListener {
             }
         }
 
-        else {
+        else { //it is date of birth update
             JPanel jPanel = new JPanel();
             jPanel.add(new JLabel(text));
 
@@ -380,12 +380,15 @@ public class StudentFrame extends JFrame implements ActionListener {
 
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
+                if (datePicker.getModel().getValue()==null) return;
                 Date date = (Date) datePicker.getModel().getValue();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String newValue = simpleDateFormat.format(date);
                 System.out.println("new date as string: " + newValue);
                 if(myFrame.updateStudent(i, selectedStudentId, newValue)==1) {
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
+                    super.dispose();
+                    myFrame.findStudent(selectedStudentId);
                     System.out.println("student updated");
                 }
                 else System.out.println("Something went wrong when updating student");

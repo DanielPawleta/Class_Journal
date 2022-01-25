@@ -11,7 +11,7 @@ public class Main {
         Main main = new Main();
 
 
-/*
+
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
         } catch (SQLException e) {
@@ -22,11 +22,11 @@ public class Main {
 
 
 
-        //main.showStudents();
+        main.showStudents();
         //main.findStudent("Daniell","Pawleta");
         //main.addStudent("Mateuszek","Kawulok", "Zory",474852154,"1990-04-11",845697412,"2a");
 
- */
+
 
 
 
@@ -82,8 +82,6 @@ public class Main {
         return query;
     }
 
-
-/*
     protected int findStudent(String firstName, String lastName) {
         System.out.println("find student in main with first name = " + firstName + " and last name = " + lastName);
         ResultSet resultSet;
@@ -142,7 +140,6 @@ public class Main {
         return result;
     }
 
-
     protected int findStudent(int selectedStudentId) {
         System.out.println("find student in main with id = " + selectedStudentId);
         ResultSet resultSet;
@@ -197,12 +194,12 @@ public class Main {
         return result;
     }
 
-     */
-
 
 
 
     //for no-database connection purpose and testing
+
+    /*
 
     protected int findStudent(String firstName, String lastName) {
         dataRow = new Vector<>();
@@ -238,6 +235,8 @@ public class Main {
         return 1;
     }
 
+     */
+
 
     protected void showStudentFrame(){
         System.out.println("Show student frame from main");
@@ -266,7 +265,7 @@ public class Main {
                 columnName = "`city`";
                 break;
             case 3:
-                columnName = "`phone_number";
+                columnName = "`phone_number`";
                 break;
             case 4:
                 columnName = "`date_of_birth`";
