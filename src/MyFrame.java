@@ -14,9 +14,17 @@ public class MyFrame extends JFrame implements ActionListener {
     private JPanel teachersTab;
     private JPanel classesTab;
     private LoginPanel loginPanel;
+
     private JButton newStudentButton;
     private JButton findStudentButton;
+
+    private JButton newClassButton;
+    private JButton findClassButton;
+
     private JButton logOutButton;
+
+
+
     private String loginText = "Please log in";
     private String emptyText = "please update!";
     private int emptyNumber = 000;
@@ -128,6 +136,20 @@ public class MyFrame extends JFrame implements ActionListener {
         tabbedPane.setEnabledAt(2,false);
 
         classesTab = new JPanel();
+        classesTab.setLayout(new BoxLayout(classesTab, BoxLayout.Y_AXIS));
+        classesTab.add(Box.createVerticalGlue());
+        newClassButton = new JButton("New Class");
+        newClassButton.addActionListener(this);
+        newClassButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        newClassButton.setFocusable(false);
+        classesTab.add(newClassButton);
+        classesTab.add(Box.createVerticalGlue());
+
+        findClassButton = new JButton("Find Class");
+        findClassButton.addActionListener(this);
+        findClassButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        classesTab.add(findClassButton);
+        classesTab.add(Box.createVerticalGlue());
         tabbedPane.addTab("Classes", classesTab);
         tabbedPane.setEnabledAt(3,false);
 
@@ -178,6 +200,8 @@ public class MyFrame extends JFrame implements ActionListener {
     protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number){
         return main.addStudent(first_name, last_name, city, phone_number, date_of_birth, parents_phone_number, emptyText);
     }
+
+
 
 
     /*
@@ -236,6 +260,15 @@ public class MyFrame extends JFrame implements ActionListener {
             this.setVisible(false);
 
         }
+        if (e.getSource()==newClassButton){
+            System.out.println("new class");
+            NewClassFrame newClassFrame = new NewClassFrame(this);
+            this.setVisible(false);
+
+        }
+
+
+
         if (e.getSource()== logOutButton){
             setLoggedAs(0);
             System.out.println("logout");
