@@ -11,14 +11,14 @@ public class Main {
         Main main = new Main();
 
 
-/*
+
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
- */
+
 
 
 
@@ -85,7 +85,7 @@ public class Main {
     }
 
 
-    /*
+
     protected int findStudent(String firstName, String lastName) {
         System.out.println("find student in main with first name = " + firstName + " and last name = " + lastName);
         ResultSet resultSet;
@@ -198,12 +198,52 @@ public class Main {
         return result;
     }
 
+    protected Vector<Vector<String>> findStudentsWithoutClass () {
+        System.out.println("find student with no class value selectd");
+        ResultSet resultSet;
+        int count=0;
 
- */
+        String query = "SELECT * FROM students " +
+                "WHERE class is null;";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+
+            resultSet = preparedStatement.executeQuery();
+
+            dataRow = new Vector<>();
+
+            while (resultSet.next()) {
+                count++;
+                Vector<String> studentRow = new Vector<>();
+                studentRow.add(resultSet.getString("id"));
+                studentRow.add(resultSet.getString("first_name"));
+                studentRow.add(resultSet.getString("last_name"));
+                /*
+                studentRow.add(resultSet.getString("city"));
+                studentRow.add(resultSet.getString("phone_number"));
+                studentRow.add(resultSet.getString("date_of_birth"));
+                studentRow.add(resultSet.getString("parents_phone_number"));
+                studentRow.add(resultSet.getString("class"));
+                 */
+                dataRow.add(studentRow);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Found " + count +" students with no class definied");
+        return dataRow;
+    }
+
+
+
 
 
 
     //for no-database connection purpose and testing
+    /*
     protected int findStudent(String firstName, String lastName) {
         dataRow = new Vector<>();
         Vector<String> studentRow = new Vector<>();
@@ -237,6 +277,8 @@ public class Main {
         showStudentFrame();
         return 1;
     }
+
+     */
 
 
 
@@ -303,5 +345,39 @@ public class Main {
 
     }
 
+    protected String addClass(String className,String supervisingTeacher,int student1, int student2,int student3,int student4){
+        int result = 0;
 
+        String query = "INSERT INTO `class_journal`.`class`" +
+                "(`class_name`" +
+                ",`supervising_teacher`" +
+                ",`student_1`" +
+                ",`student_2`" +
+                ",`student_3`" +
+                ",`student_4`)" +
+                "VALUES (?,?,?,?,?,?);";
+
+
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,className);
+            preparedStatement.setString(2,supervisingTeacher);
+
+
+            for (int j=0;j<4;j++){
+
+            }
+
+            preparedStatement.setInt(3,student1);
+            preparedStatement.setNull(4, Types.INTEGER);
+            preparedStatement.setInt(5,student3);
+            preparedStatement.setInt(6,student4);
+            result = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("affected rows: " + result);
+        return query;
+    }
 }

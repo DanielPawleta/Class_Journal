@@ -1,11 +1,8 @@
-import org.jdatepicker.impl.JDatePickerImpl;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 public class NewClassFrame extends JFrame implements ActionListener {
     private MyFrame myFrame;
@@ -16,17 +13,20 @@ public class NewClassFrame extends JFrame implements ActionListener {
 
     private String className;
     private String supervisingTeacher;
-    private String student1;
-    private String student2;
-    private String student3;
-    private String student4;
+    private int student1;
+    private int student2;
+    private int student3;
+    private int student4;
+    private int maxNumberOfStudents=25;
 
     private JTextField classNameField;
     private JTextField supervisingTeacherField;
-    private JTextField student1Field;
-    private JTextField student2Field;
-    private JTextField student3Field;
-    private JTextField student4Field;
+    private JComboBox<String> student1ComboBox;
+    private JComboBox<String> student2ComboBox;
+    private JComboBox<String> student3ComboBox;
+    private JComboBox<String> student4ComboBox;
+
+    private Vector<String> studentsWithoutClass;
 
     public NewClassFrame(MyFrame myFrame){
         this.myFrame = myFrame;
@@ -34,12 +34,14 @@ public class NewClassFrame extends JFrame implements ActionListener {
         this.setTitle("New Class");
         this.setLayout(new GridBagLayout());
         this.initializeTitleLabel();
+        this.initializeStudentsWithoutClassVector();
         this.initializeLabels();
         this.initializeButtons();
 
         this.setVisible(true);
         this.setSize(500,600);
         this.setResizable(false);
+
     }
 
 
@@ -91,12 +93,13 @@ public class NewClassFrame extends JFrame implements ActionListener {
             f.gridx = 0;
             f.gridy = 3;
             this.add(student1Label, f);
-            student1Field = new JTextField(15);
+            student1ComboBox = new JComboBox<>(studentsWithoutClass);
+            student1ComboBox.setSelectedIndex(-1);
             GridBagConstraints g = new GridBagConstraints();
             g.insets = insets;
             g.gridx = 1;
             g.gridy = 3;
-            this.add(student1Field, g);
+            this.add(student1ComboBox, g);
 
             //student 2
             JLabel student2Label = new JLabel("Student 2: ");
@@ -105,12 +108,13 @@ public class NewClassFrame extends JFrame implements ActionListener {
             h.gridx = 0;
             h.gridy = 4;
             this.add(student2Label, h);
-            student2Field = new JTextField(15);
+            student2ComboBox = new JComboBox<>(studentsWithoutClass);
+            student2ComboBox.setSelectedIndex(-1);
             GridBagConstraints i = new GridBagConstraints();
             i.insets = insets;
             i.gridx = 1;
             i.gridy = 4;
-            this.add(student2Field, i);
+            this.add(student2ComboBox, i);
 
             //student 3
             JLabel student3Label = new JLabel("Student 3: ");
@@ -119,12 +123,13 @@ public class NewClassFrame extends JFrame implements ActionListener {
             j.gridx = 0;
             j.gridy = 6;
             this.add(student3Label, j);
-            student3Field = new JTextField(15);
+            student3ComboBox = new JComboBox<>(studentsWithoutClass);
+            student3ComboBox.setSelectedIndex(-1);
             GridBagConstraints k = new GridBagConstraints();
             k.insets = insets;
             k.gridx = 1;
             k.gridy = 6;
-            this.add(student3Field, k);
+            this.add(student3ComboBox, k);
 
             //student 4
             JLabel student4Label = new JLabel("Student 4:  ");
@@ -133,13 +138,13 @@ public class NewClassFrame extends JFrame implements ActionListener {
             l.gridx = 0;
             l.gridy = 7;
             this.add(student4Label, l);
-            student4Field = new JTextField(15);
+            student4ComboBox = new JComboBox<>(studentsWithoutClass);
+            student4ComboBox.setSelectedIndex(-1);
             GridBagConstraints m = new GridBagConstraints();
             m.insets = insets;
             m.gridx = 1;
             m.gridy = 7;
-            this.add(student4Field, m);
-
+            this.add(student4ComboBox, m);
         }
 
     private void initializeButtons() {
@@ -151,7 +156,7 @@ public class NewClassFrame extends JFrame implements ActionListener {
         r.gridy = 8;
         this.add(backButton, r);
 
-        addButton = new JButton("Add student");
+        addButton = new JButton("Add class");
         addButton.addActionListener(this);
         GridBagConstraints s = new GridBagConstraints();
         s.insets = new Insets(50,10,10,10);
@@ -168,29 +173,61 @@ public class NewClassFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource()==backButton){
+        if (e.getSource() == backButton) {
             System.out.println("back button");
             dispose();
         }
 
-        if (e.getSource()==addButton){
+        if (e.getSource() == addButton) {
             System.out.println("Add button");
 
             if (checkFields()) {
-                //myFrame.addClass(className, supervisingTeacher, student1,student2,student3,student4);
-                JOptionPane.showMessageDialog(this,"Class added!","New class", JOptionPane.INFORMATION_MESSAGE);
+                myFrame.addClass(className, supervisingTeacher, student1, student2, student3, student4);
+                JOptionPane.showMessageDialog(this, "Class added!", "New class", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             }
         }
     }
 
+    /*
+    private HashMap<Integer,Integer> initialieStudentsMap(){
+        HashMap<Integer, Integer> studentsMap = new HashMap<>();
+        //studentsMap.put(st)
+
+
+
+    }
+
+     */
+
     private boolean checkFields(){
         className = classNameField.getText();
         supervisingTeacher = supervisingTeacherField.getText();
-        student1 = student1Field.getText();
-        student2 = student2Field.getText();
-        student3 = student3Field.getText();
-        student4 = student4Field.getText();
+        ArrayList<Integer> studentsId = new ArrayList<>();
+
+        if (student1ComboBox.getSelectedIndex()!=-1) {
+            student1 = Integer.parseInt(student1ComboBox.getItemAt(student1ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student1);
+        }
+        if (student2ComboBox.getSelectedIndex()!=-1) {
+            student2 = Integer.parseInt(student2ComboBox.getItemAt(student2ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student2);
+        }
+        if (student3ComboBox.getSelectedIndex()!=-1) {
+            student3 = Integer.parseInt(student3ComboBox.getItemAt(student3ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student3);
+        }
+        if (student4ComboBox.getSelectedIndex()!=-1) {
+            student4 = Integer.parseInt(student4ComboBox.getItemAt(student4ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student4);
+        }
+
+        if (studentsId.size()!= new HashSet<>(studentsId).size()){
+            JOptionPane.showMessageDialog(this,"Each student can be selected only once","Info", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+
 
         if      (!className.equals(""))
         {
@@ -200,5 +237,24 @@ public class NewClassFrame extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this,"Class name is required","Info", JOptionPane.WARNING_MESSAGE);
             return false;
         }
+    }
+
+
+
+    private void initializeStudentsWithoutClassVector(){
+        studentsWithoutClass = new Vector<>();
+
+        Vector<Vector<String>> studentsWithoutClassVectorOfVectors = myFrame.findStudentsWithoutClass();
+        if (studentsWithoutClassVectorOfVectors.size()!=0){
+            for (Vector<String> vector : studentsWithoutClassVectorOfVectors){
+                int id = Integer.parseInt(vector.get(0));
+                String firstName = vector.get(1);
+                String lastName = vector.get(2);
+                studentsWithoutClass.add(firstName + " " + lastName + " id : " + id);
+            }
+        }
+
+
+
     }
 }

@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class MyFrame extends JFrame implements ActionListener {
     private JLabel loggedLabel;
@@ -276,7 +277,6 @@ public class MyFrame extends JFrame implements ActionListener {
         }
     }
 
-
     protected int findStudent(String firstName, String lastName) {
         return main.findStudent(firstName,lastName);
     }
@@ -285,7 +285,21 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.findStudent(selectedStudentId);
     }
 
-    public int updateStudent(int i, int selectedStudentId, String newValue) {
+    protected int updateStudent(int i, int selectedStudentId, String newValue) {
         return main.updateStudent(i,selectedStudentId,newValue);
     }
+
+    protected Vector<Vector<String>> findStudentsWithoutClass () {
+        return main.findStudentsWithoutClass();
+    }
+
+    protected String addClass(String className,String supervisingTeacher,int student1, int student2,int student3,int student4){
+        return main.addClass(className, supervisingTeacher, student1, student2, student3, student4);
+    }
+
+
+
+
+
+
 }
