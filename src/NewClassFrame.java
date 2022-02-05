@@ -27,6 +27,7 @@ public class NewClassFrame extends JFrame implements ActionListener {
     private JComboBox<String> student4ComboBox;
 
     private Vector<String> studentsWithoutClass;
+    private ArrayList<Integer> studentsId; //list with all students (-1 for null)
 
     public NewClassFrame(MyFrame myFrame){
         this.myFrame = myFrame;
@@ -182,52 +183,52 @@ public class NewClassFrame extends JFrame implements ActionListener {
             System.out.println("Add button");
 
             if (checkFields()) {
-                myFrame.addClass(className, supervisingTeacher, student1, student2, student3, student4);
+                myFrame.addClass(className, supervisingTeacher, studentsId);
                 JOptionPane.showMessageDialog(this, "Class added!", "New class", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             }
         }
     }
 
-    /*
-    private HashMap<Integer,Integer> initialieStudentsMap(){
-        HashMap<Integer, Integer> studentsMap = new HashMap<>();
-        //studentsMap.put(st)
-
-
-
-    }
-
-     */
 
     private boolean checkFields(){
         className = classNameField.getText();
         supervisingTeacher = supervisingTeacherField.getText();
-        ArrayList<Integer> studentsId = new ArrayList<>();
+        studentsId = new ArrayList<>(); //list with all students (-1 for null)
 
-        if (student1ComboBox.getSelectedIndex()!=-1) {
+        if (student1ComboBox.getItemAt(student1ComboBox.getSelectedIndex())!=null) {
             student1 = Integer.parseInt(student1ComboBox.getItemAt(student1ComboBox.getSelectedIndex()).split(" id : ")[1]);
             studentsId.add(student1);
         }
-        if (student2ComboBox.getSelectedIndex()!=-1) {
+        else studentsId.add(-1);
+
+        if (student2ComboBox.getItemAt(student2ComboBox.getSelectedIndex())!=null) {
             student2 = Integer.parseInt(student2ComboBox.getItemAt(student2ComboBox.getSelectedIndex()).split(" id : ")[1]);
             studentsId.add(student2);
         }
-        if (student3ComboBox.getSelectedIndex()!=-1) {
+        else studentsId.add(-1);
+
+        if (student3ComboBox.getItemAt(student3ComboBox.getSelectedIndex())!=null) {
             student3 = Integer.parseInt(student3ComboBox.getItemAt(student3ComboBox.getSelectedIndex()).split(" id : ")[1]);
             studentsId.add(student3);
         }
-        if (student4ComboBox.getSelectedIndex()!=-1) {
+        else studentsId.add(-1);
+
+        if (student4ComboBox.getItemAt(student4ComboBox.getSelectedIndex())!=null) {
             student4 = Integer.parseInt(student4ComboBox.getItemAt(student4ComboBox.getSelectedIndex()).split(" id : ")[1]);
             studentsId.add(student4);
         }
+        else studentsId.add(-1);
 
-        if (studentsId.size()!= new HashSet<>(studentsId).size()){
+        ArrayList<Integer> studentsNotnull = new ArrayList<>();
+        for (Integer studentId : studentsId){
+            if (studentId!=-1) studentsNotnull.add(studentId);
+        }
+
+        if (studentsNotnull.size()!= new HashSet<>(studentsNotnull).size()){
             JOptionPane.showMessageDialog(this,"Each student can be selected only once","Info", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-
-
 
         if      (!className.equals(""))
         {

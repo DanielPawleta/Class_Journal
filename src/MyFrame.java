@@ -293,8 +293,8 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.findStudentsWithoutClass();
     }
 
-    protected String addClass(String className,String supervisingTeacher,int student1, int student2,int student3,int student4){
-        return main.addClass(className, supervisingTeacher, student1, student2, student3, student4);
+    protected String addClass(String className,String supervisingTeacher, ArrayList<Integer> studentsId){
+        return main.addClass(className, supervisingTeacher, studentsId);
     }
 
 

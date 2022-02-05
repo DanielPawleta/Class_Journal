@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Vector;
 
 
@@ -345,8 +346,12 @@ public class Main {
 
     }
 
-    protected String addClass(String className,String supervisingTeacher,int student1, int student2,int student3,int student4){
+    protected String addClass(String className, String supervisingTeacher, ArrayList<Integer> studentsId){
         int result = 0;
+
+        int student1;
+        int student2;
+
 
         String query = "INSERT INTO `class_journal`.`class`" +
                 "(`class_name`" +
@@ -365,14 +370,13 @@ public class Main {
             preparedStatement.setString(2,supervisingTeacher);
 
 
-            for (int j=0;j<4;j++){
-
+            for (int j=0; j<studentsId.size();j++){
+                if (studentsId.get(j) != -1){
+                    preparedStatement.setInt(j+3,studentsId.get(j));
+                }
+                else preparedStatement.setNull(j+3,Types.INTEGER);
             }
 
-            preparedStatement.setInt(3,student1);
-            preparedStatement.setNull(4, Types.INTEGER);
-            preparedStatement.setInt(5,student3);
-            preparedStatement.setInt(6,student4);
             result = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
