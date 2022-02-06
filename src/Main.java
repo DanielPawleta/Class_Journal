@@ -6,12 +6,11 @@ import java.util.Vector;
 public class Main {
     static Connection connection;
     private MyFrame myFrame;
-    private Vector<Vector<String>> dataRow;
+    private Vector<Vector<String>> dataRowStudent;
+    private Vector<Vector<String>> dataRowClass;
 
     public static void main(String[] args) {
         Main main = new Main();
-
-
 
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
@@ -19,20 +18,10 @@ public class Main {
             e.printStackTrace();
         }
 
-
-
-
-
-
-
         //main.showStudents();
+        main.showClasses();
         //main.findStudent("Daniell","Pawleta");
         //main.addStudent("Mateuszek","Kawulok", "Zory",474852154,"1990-04-11",845697412,"2a");
-
-
-
-
-
     }
 
     public Main() {
@@ -51,6 +40,39 @@ public class Main {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showClasses(){
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from class");
+
+            while (resultSet.next()){
+                System.out.println(resultSet.getString("class_name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected boolean checkClassName(String className){
+        boolean isThisClassNameNotTaken = false;
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from class");
+
+            ArrayList<String> classNames = new ArrayList<>();
+            while (resultSet.next()){
+                classNames.add(resultSet.getString("class_name"));
+            }
+            isThisClassNameNotTaken = !classNames.contains(className);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isThisClassNameNotTaken;
     }
 
     protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number, String class_attendand){
@@ -85,8 +107,6 @@ public class Main {
         return query;
     }
 
-
-
     protected int findStudent(String firstName, String lastName) {
         System.out.println("find student in main with first name = " + firstName + " and last name = " + lastName);
         ResultSet resultSet;
@@ -106,7 +126,7 @@ public class Main {
 
             resultSet = preparedStatement.executeQuery();
 
-            dataRow = new Vector<>();
+            dataRowStudent = new Vector<>();
 
             while (resultSet.next()) {
                 count++;
@@ -119,16 +139,16 @@ public class Main {
                 studentRow.add(resultSet.getString("date_of_birth"));
                 studentRow.add(resultSet.getString("parents_phone_number"));
                 studentRow.add(resultSet.getString("class"));
-                dataRow.add(studentRow);
+                dataRowStudent.add(studentRow);
 
                 System.out.println(resultSet.getString("first_name"));
             }
 
-            if (dataRow.size()==0){
+            if (dataRowStudent.size()==0){
                 result=0;
             }
 
-            else if (dataRow.size()==1){
+            else if (dataRowStudent.size()==1){
                 //fire show student frame
                 //int studentId = Integer.parseInt(dataRow.get(0).get(0));
                 showStudentFrame();
@@ -136,7 +156,7 @@ public class Main {
             }
 
             else {
-                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(myFrame,dataRow);
+                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(myFrame, dataRowStudent);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -160,7 +180,7 @@ public class Main {
 
             resultSet = preparedStatement.executeQuery();
 
-            dataRow = new Vector<>();
+            dataRowStudent = new Vector<>();
 
             while (resultSet.next()) {
                 count++;
@@ -173,16 +193,16 @@ public class Main {
                 studentRow.add(resultSet.getString("date_of_birth"));
                 studentRow.add(resultSet.getString("parents_phone_number"));
                 studentRow.add(resultSet.getString("class"));
-                dataRow.add(studentRow);
+                dataRowStudent.add(studentRow);
 
                 System.out.println(resultSet.getString("first_name"));
             }
 
-            if (dataRow.size()==0){
+            if (dataRowStudent.size()==0){
                 result=0;
             }
 
-            else if (dataRow.size()==1){
+            else if (dataRowStudent.size()==1){
                 //fire show student frame
                 //int studentId = Integer.parseInt(dataRow.get(0).get(0));
                 showStudentFrame();
@@ -190,7 +210,7 @@ public class Main {
             }
 
             else {
-                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(myFrame,dataRow);
+                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(myFrame, dataRowStudent);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -212,7 +232,7 @@ public class Main {
 
             resultSet = preparedStatement.executeQuery();
 
-            dataRow = new Vector<>();
+            dataRowStudent = new Vector<>();
 
             while (resultSet.next()) {
                 count++;
@@ -227,7 +247,7 @@ public class Main {
                 studentRow.add(resultSet.getString("parents_phone_number"));
                 studentRow.add(resultSet.getString("class"));
                  */
-                dataRow.add(studentRow);
+                dataRowStudent.add(studentRow);
 
             }
 
@@ -235,13 +255,8 @@ public class Main {
             e.printStackTrace();
         }
         System.out.println("Found " + count +" students with no class definied");
-        return dataRow;
+        return dataRowStudent;
     }
-
-
-
-
-
 
     //for no-database connection purpose and testing
     /*
@@ -278,15 +293,16 @@ public class Main {
         showStudentFrame();
         return 1;
     }
-
      */
-
-
-
 
     protected void showStudentFrame(){
         System.out.println("Show student frame from main");
-        StudentFrame studentFrame = new StudentFrame(myFrame,dataRow);
+        StudentFrame studentFrame = new StudentFrame(myFrame, dataRowStudent);
+    }
+
+    protected void showClassFrame(){
+        System.out.println("Show class frame from main");
+        ClassFrame classFrame = new ClassFrame(myFrame, dataRowClass);
     }
 
     public int updateStudent(int i, int selectedStudentId, String newVaule) {
@@ -383,5 +399,147 @@ public class Main {
         }
         System.out.println("affected rows: " + result);
         return query;
+    }
+
+    protected int findClass(String className) {
+        System.out.println("find class in main with class name = " + className);
+        ResultSet resultSet;
+        int result = 9;
+        int count=0;
+
+        String query = "SELECT * FROM class " +
+                "WHERE class_name = "+
+                "?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,className);
+
+            resultSet = preparedStatement.executeQuery();
+
+            dataRowClass = new Vector<>();
+
+            while (resultSet.next()) {
+                count++;
+                Vector<String> classRow = new Vector<>();
+                classRow.add(resultSet.getString("id"));
+                classRow.add(resultSet.getString("class_name"));
+                classRow.add(resultSet.getString("supervising_teacher"));
+                classRow.add(resultSet.getString("student_1"));
+                classRow.add(resultSet.getString("student_2"));
+                classRow.add(resultSet.getString("student_3"));
+                classRow.add(resultSet.getString("student_4"));
+                classRow.add(resultSet.getString("student_5"));
+                classRow.add(resultSet.getString("student_6"));
+                classRow.add(resultSet.getString("student_7"));
+                classRow.add(resultSet.getString("student_8"));
+                classRow.add(resultSet.getString("student_9"));
+                classRow.add(resultSet.getString("student_10"));
+
+                dataRowClass.add(classRow);
+
+                System.out.println(resultSet.getString("class_name"));
+            }
+
+            if (dataRowClass.size()==0){
+                result=0;
+            }
+
+            else if (dataRowClass.size()==1){
+                showClassFrame();
+                result=1;
+            }
+
+            else {
+                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(myFrame, dataRowClass);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Found rows: " + count);
+        return result;
+    }
+
+    protected int findClass(boolean classNameKnown, String supervisingTeacher) {
+        System.out.println("find class in main without class name and with supervising teacher = " + supervisingTeacher);
+        ResultSet resultSet;
+        int result = 9;
+        int count=0;
+
+        String query = "SELECT * FROM class " +
+                "WHERE supervising_teacher = "+
+                "?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,supervisingTeacher);
+
+            resultSet = preparedStatement.executeQuery();
+
+            dataRowClass = new Vector<>();
+
+            while (resultSet.next()) {
+                count++;
+                Vector<String> classRow = new Vector<>();
+                classRow.add(resultSet.getString("id"));
+                classRow.add(resultSet.getString("class_name"));
+                classRow.add(resultSet.getString("supervising_teacher"));
+                classRow.add(resultSet.getString("student_1"));
+                classRow.add(resultSet.getString("student_2"));
+                classRow.add(resultSet.getString("student_3"));
+                classRow.add(resultSet.getString("student_4"));
+                classRow.add(resultSet.getString("student_5"));
+                classRow.add(resultSet.getString("student_6"));
+                classRow.add(resultSet.getString("student_7"));
+                classRow.add(resultSet.getString("student_8"));
+                classRow.add(resultSet.getString("student_9"));
+                classRow.add(resultSet.getString("student_10"));
+
+                dataRowClass.add(classRow);
+
+                System.out.println(resultSet.getString("class_name"));
+            }
+
+            if (dataRowClass.size()==0){
+                result=0;
+            }
+
+            else if (dataRowClass.size()==1){
+                showClassFrame();
+                result=1;
+            }
+
+            else {
+                ChooseClassFrame chooseClassFrame = new ChooseClassFrame(myFrame, dataRowClass);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Found rows: " + count);
+        return result;
+    }
+
+    public String getStudentNameAndLastName(int studentId) {
+        System.out.println("get student name and last name for id: " + studentId);
+        ResultSet resultSet;
+        String nameAndLastName = "no results";
+
+        String query = "SELECT first_name, last_name FROM students " +
+                "WHERE id = "+
+                "?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, String.valueOf(studentId));
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                nameAndLastName = resultSet.getString("first_name") + " " + resultSet.getString("last_name");
+
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nameAndLastName;
     }
 }

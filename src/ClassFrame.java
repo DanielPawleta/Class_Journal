@@ -1,23 +1,15 @@
-import org.jdatepicker.impl.DateComponentFormatter;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Properties;
 import java.util.Vector;
 
-public class StudentFrame extends JFrame implements ActionListener {
-    private Vector<Vector<String>> dataRowStudent;
+public class ClassFrame extends JFrame implements ActionListener {
+    private Vector<Vector<String>> dataRowClass;
     private MyFrame myFrame;
-    private int selectedStudentId;
-    private int selectedStudentIdInDataRow;
+    private int selectedClassId;
+    private int selectedClassIdInDataRow;
     private Insets insets = new Insets(10,10,10,10);
 
     private JButton backButton;
@@ -29,33 +21,29 @@ public class StudentFrame extends JFrame implements ActionListener {
     private JButton updateParentsPhoneNumberButton;
     private JButton updateClassButton;
 
-    private String firstName;
-    private String lastName;
-    private String city;
-    private String phoneNumber;
-    private String parentsPhoneNumber;
-    private JDatePickerImpl datePicker;
-    private String dateOfBirth;
+    private String className;
+    private String supervisingTeacher;
+    private String student1;
+    private String student2;
+    private String student3;
+    private String student4;
+    private String student5;
 
-    private JLabel firstNameTextField;
-    private JLabel lastNameTextField;
-    private JLabel cityTextField;
-    private JLabel phoneNumberTextField;
-    private JLabel dateOfBirthTextField;
-    private JLabel parentsPhoneNumberTextField;
-    private JLabel classTextField;
+    private JLabel classNameTextField;
+    private JLabel supervisingTeacherTextField;
+    private JLabel student1TextField;
+    private JLabel student2TextField;
+    private JLabel student3TextField;
+    private JLabel student4TextField;
+    private JLabel student5TextField;
 
-    private int phoneNumberInt;
-    private int parentsPhoneNumberInt;
-
-
-    public StudentFrame(MyFrame myFrame, Vector<Vector<String>> dataRowStudent){
+    public ClassFrame(MyFrame myFrame, Vector<Vector<String>> dataRowClass){
         this.myFrame = myFrame;
-        this.dataRowStudent = dataRowStudent;
-        this.selectedStudentIdInDataRow =0;
+        this.dataRowClass = dataRowClass;
+        this.selectedClassIdInDataRow =0;
 
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.setTitle("Student");
+        this.setTitle("Class");
         this.setLayout(new GridBagLayout());
         this.initializeTitleLabel();
         this.initializeLabels();
@@ -68,13 +56,13 @@ public class StudentFrame extends JFrame implements ActionListener {
         this.setResizable(false);
     }
 
-    public StudentFrame(MyFrame myFrame, Vector<Vector<String>> dataRowStudent, int selectedStudentIdInDataRow) {
-        this(myFrame, dataRowStudent);
-        this.selectedStudentIdInDataRow = selectedStudentIdInDataRow;
+    public ClassFrame(MyFrame myFrame, Vector<Vector<String>> dataRowClass, int selectedClassIdInDataRow) {
+        this(myFrame, dataRowClass);
+        this.selectedClassIdInDataRow = selectedClassIdInDataRow;
     }
 
     private void initializeTitleLabel() {
-        JLabel titleLabel = new JLabel("Student");
+        JLabel titleLabel = new JLabel("Class");
         titleLabel.setFont(new Font("MV Boli", Font.PLAIN, 30));
         GridBagConstraints a = new GridBagConstraints();
         a.insets = new Insets(50,50,50,50);
@@ -85,138 +73,140 @@ public class StudentFrame extends JFrame implements ActionListener {
     }
 
     private void initializeLabels() {
-            //first name
-            JLabel firstNameLabel = new JLabel("First Name: ");
+            //class name
+            JLabel classNameLabel = new JLabel("Class Name: ");
             GridBagConstraints b = new GridBagConstraints();
             b.insets = insets;
             b.gridx = 0;
             b.gridy = 1;
-            this.add(firstNameLabel, b);
+            this.add(classNameLabel, b);
 
-            //last name
-            JLabel lastNameLabel = new JLabel("Last Name: ");
+            //supervising teacher
+            JLabel supervisingTeacherLabel = new JLabel("Supervising Teacher: ");
             GridBagConstraints e = new GridBagConstraints();
             e.insets = insets;
             e.gridx = 0;
             e.gridy = 2;
-            this.add(lastNameLabel, e);
+            this.add(supervisingTeacherLabel, e);
 
-            //city
-            JLabel cityLabel = new JLabel("City: ");
+            //student1
+            JLabel student1Label = new JLabel("Student 1: ");
             GridBagConstraints g = new GridBagConstraints();
             g.insets = insets;
             g.gridx = 0;
             g.gridy = 3;
-            this.add(cityLabel, g);
+            this.add(student1Label, g);
 
-            //phone number
-            JLabel phoneNumberLabel = new JLabel("Phone number: ");
+            //student2
+            JLabel student2Label = new JLabel("Student 2: ");
             GridBagConstraints i = new GridBagConstraints();
             i.insets = insets;
             i.gridx = 0;
             i.gridy = 4;
-            this.add(phoneNumberLabel, i);
+            this.add(student2Label, i);
 
-            //Date of birth
-            JLabel dateOfBirthLabel = new JLabel("Date of birth: ");
+            //student3
+            JLabel student3Label = new JLabel("Student 3: ");
             GridBagConstraints k = new GridBagConstraints();
             k.insets = insets;
             k.gridx = 0;
             k.gridy = 5;
-            this.add(dateOfBirthLabel, k);
+            this.add(student3Label, k);
 
-            //parents phone number
-            JLabel parentsPhoneNumberLabel = new JLabel("Parents phone number: ");
+            //student4
+            JLabel student4Label = new JLabel("Student 4: ");
             GridBagConstraints m = new GridBagConstraints();
             m.insets = insets;
             m.gridx = 0;
             m.gridy = 6;
-            this.add(parentsPhoneNumberLabel, m);
+            this.add(student4Label, m);
 
-            //class
-            JLabel classLabel = new JLabel("Class: ");
+            //student5
+            JLabel student5Label = new JLabel("Student 5: ");
             GridBagConstraints o = new GridBagConstraints();
             o.insets = insets;
             o.gridx = 0;
             o.gridy = 7;
-            this.add(classLabel, o);
+            this.add(student5Label, o);
         }
 
     private void initializeTextFields(){
         //border for all text fields
         Border blackline = BorderFactory.createLineBorder(Color.black);
 
-        selectedStudentId = Integer.parseInt(dataRowStudent.get(selectedStudentIdInDataRow).get(0));
-        firstName = dataRowStudent.get(selectedStudentIdInDataRow).get(1);
-        firstNameTextField = new JLabel(firstName);
-        firstNameTextField.setBorder(blackline);
-        firstNameTextField.setPreferredSize(new Dimension(150,20));
+        selectedClassId = Integer.parseInt(dataRowClass.get(selectedClassIdInDataRow).get(0));
+
+        className = dataRowClass.get(selectedClassIdInDataRow).get(1);
+        classNameTextField = new JLabel(className);
+        classNameTextField.setBorder(blackline);
+        classNameTextField.setPreferredSize(new Dimension(150,20));
         GridBagConstraints c = new GridBagConstraints();
         c.insets = insets;
         c.gridx = 1;
         c.gridy = 1;
-        this.add(firstNameTextField, c);
+        this.add(classNameTextField, c);
 
-        lastName = dataRowStudent.get(selectedStudentIdInDataRow).get(2);
-        lastNameTextField = new JLabel(lastName);
-        lastNameTextField.setBorder(blackline);
-        lastNameTextField.setPreferredSize(new Dimension(150,20));
+        supervisingTeacher = dataRowClass.get(selectedClassIdInDataRow).get(2);
+        supervisingTeacherTextField = new JLabel(supervisingTeacher);
+        supervisingTeacherTextField.setBorder(blackline);
+        supervisingTeacherTextField.setPreferredSize(new Dimension(150,20));
         GridBagConstraints f = new GridBagConstraints();
         f.insets = insets;
         f.gridx = 1;
         f.gridy = 2;
-        this.add(lastNameTextField, f);
+        this.add(supervisingTeacherTextField, f);
 
-        String city = dataRowStudent.get(selectedStudentIdInDataRow).get(3);
-        cityTextField = new JLabel(city);
-        cityTextField.setBorder(blackline);
-        cityTextField.setBorder(blackline);
-        cityTextField.setPreferredSize(new Dimension(150,20));
+        int student1Id = Integer.parseInt(dataRowClass.get(selectedClassIdInDataRow).get(3));
+        student1 = myFrame.getStudentNameAndLastName(student1Id);
+        student1TextField = new JLabel(student1);
+        student1TextField.setBorder(blackline);
+        student1TextField.setBorder(blackline);
+        student1TextField.setPreferredSize(new Dimension(150,20));
         GridBagConstraints h = new GridBagConstraints();
         h.insets = insets;
         h.gridx = 1;
         h.gridy = 3;
-        this.add(cityTextField, h);
+        this.add(student1TextField, h);
 
-        String phoneNumber = dataRowStudent.get(selectedStudentIdInDataRow).get(4);
-        phoneNumberTextField = new JLabel(phoneNumber);
-        phoneNumberTextField.setBorder(blackline);
-        phoneNumberTextField.setPreferredSize(new Dimension(150,20));
+        student2 = dataRowClass.get(selectedClassIdInDataRow).get(4);
+        student2TextField = new JLabel(student2);
+        student2TextField.setBorder(blackline);
+        student2TextField.setPreferredSize(new Dimension(150,20));
         GridBagConstraints j = new GridBagConstraints();
         j.insets = insets;
         j.gridx = 1;
         j.gridy = 4;
-        this.add(phoneNumberTextField, j);
+        this.add(student2TextField, j);
 
-        String dateOfBirth = dataRowStudent.get(selectedStudentIdInDataRow).get(5);
-        dateOfBirthTextField = new JLabel(dateOfBirth);
-        dateOfBirthTextField.setBorder(blackline);
-        dateOfBirthTextField.setPreferredSize(new Dimension(150,20));
+        student3 = dataRowClass.get(selectedClassIdInDataRow).get(5);
+        student3TextField = new JLabel(student3);
+        student3TextField.setBorder(blackline);
+        student3TextField.setPreferredSize(new Dimension(150,20));
         GridBagConstraints l = new GridBagConstraints();
         l.insets = insets;
         l.gridx = 1;
         l.gridy = 5;
-        this.add(dateOfBirthTextField, l);
+        this.add(student3TextField, l);
 
-        String parentsPhoneNumber = dataRowStudent.get(selectedStudentIdInDataRow).get(6);
-        parentsPhoneNumberTextField = new JLabel(parentsPhoneNumber);
-        parentsPhoneNumberTextField.setBorder(blackline);
-        parentsPhoneNumberTextField.setPreferredSize(new Dimension(150,20));
+        student4 = dataRowClass.get(selectedClassIdInDataRow).get(6);
+        student4TextField = new JLabel(student4);
+        student4TextField.setBorder(blackline);
+        student4TextField.setPreferredSize(new Dimension(150,20));
         GridBagConstraints n = new GridBagConstraints();
         n.insets = insets;
         n.gridx = 1;
         n.gridy = 6;
-        this.add(parentsPhoneNumberTextField, n);
+        this.add(student4TextField, n);
 
-        String className = dataRowStudent.get(selectedStudentIdInDataRow).get(7);
-        classTextField = new JLabel(className);
-        classTextField.setBorder(blackline);
-        classTextField.setPreferredSize(new Dimension(150,20));
+        student5 = dataRowClass.get(selectedClassIdInDataRow).get(7);
+        student5TextField = new JLabel(student5);
+        student5TextField.setBorder(blackline);
+        student5TextField.setPreferredSize(new Dimension(150,20));
         GridBagConstraints p = new GridBagConstraints();
         p.insets = insets;
         p.gridx = 1;
         p.gridy = 7;
-        this.add(classTextField, p);
+        this.add(student5TextField, p);
     }
 
     private void initializeUpdateButtons(){
@@ -331,7 +321,7 @@ public class StudentFrame extends JFrame implements ActionListener {
 
     }
 
-    private void showUpdateDialog(String text, int i){
+    private void showUpdateDialog(String text, int i) {
         //i stands for column name to be updated
         //0 - first name
         //1 - last name
@@ -341,58 +331,25 @@ public class StudentFrame extends JFrame implements ActionListener {
         //5 - parents phone number
         //6 - class
 
-        if (i!=4) { //if it's not date of birth update
-            JTextField textField = new JTextField(5);
-            JPanel jPanel = new JPanel();
-            jPanel.add(new JLabel(text));
-            jPanel.add(textField);
+        JTextField textField = new JTextField(5);
+        JPanel jPanel = new JPanel();
+        jPanel.add(new JLabel(text));
+        jPanel.add(textField);
 
-            int result = JOptionPane.showConfirmDialog(null, jPanel, "Please enter new value", JOptionPane.OK_CANCEL_OPTION);
 
-            if (result == JOptionPane.CANCEL_OPTION) return;
-            else {
-                String newVaule = textField.getText();
-                if (myFrame.updateStudent(i, selectedStudentId, newVaule)==1){
-                    JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
-                    super.dispose();
-                    myFrame.findStudent(selectedStudentId);
-                    System.out.println("student updated");
-                }
-                else System.out.println("Something went wrong when updating student");
-            }
-        }
+        int result = JOptionPane.showConfirmDialog(null, jPanel, "Please enter new value", JOptionPane.OK_CANCEL_OPTION);
 
-        else { //it is date of birth update
-            JPanel jPanel = new JPanel();
-            jPanel.add(new JLabel(text));
 
-            UtilDateModel model = new UtilDateModel();
-            Properties properties = new Properties();
-            properties.put("text.today", "Today");
-            properties.put("text.month", "Month");
-            properties.put("text.year", "Year");
-            JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
-            datePicker = new JDatePickerImpl(datePanel, new DateComponentFormatter());
-
-            jPanel.add(datePicker);
-
-            int result = JOptionPane.showConfirmDialog(null, jPanel, "Please enter new value", JOptionPane.OK_CANCEL_OPTION);
-
-            if (result == JOptionPane.CANCEL_OPTION) return;
-            else {
-                if (datePicker.getModel().getValue()==null) return;
-                Date date = (Date) datePicker.getModel().getValue();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String newValue = simpleDateFormat.format(date);
-                System.out.println("new date as string: " + newValue);
-                if(myFrame.updateStudent(i, selectedStudentId, newValue)==1) {
-                    JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
-                    super.dispose();
-                    myFrame.findStudent(selectedStudentId);
-                    System.out.println("student updated");
-                }
-                else System.out.println("Something went wrong when updating student");
-            }
+        if (result == JOptionPane.CANCEL_OPTION) return;
+        else {
+            String newVaule = textField.getText();
+            if (myFrame.updateStudent(i, selectedClassId, newVaule) == 1) {
+                JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
+                super.dispose();
+                myFrame.findStudent(selectedClassId);
+                System.out.println("student updated");
+            } else System.out.println("Something went wrong when updating student");
         }
     }
+
 }

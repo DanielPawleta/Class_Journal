@@ -232,7 +232,13 @@ public class NewClassFrame extends JFrame implements ActionListener {
 
         if      (!className.equals(""))
         {
-            return true;
+            if (myFrame.checkClassName(className)) {
+                return true;
+            }
+            else {
+                JOptionPane.showMessageDialog(this,"This class name is already in usage","Info", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
         }
         else {
             JOptionPane.showMessageDialog(this,"Class name is required","Info", JOptionPane.WARNING_MESSAGE);

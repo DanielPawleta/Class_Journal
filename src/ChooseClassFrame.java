@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
-public class ChooseStudentFrame extends JFrame implements ActionListener {
+public class ChooseClassFrame extends JFrame implements ActionListener {
     private int selectedStudentId;
     private MyFrame myFrame;
 
@@ -19,7 +19,7 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
     private JButton backButton;
     private JButton selectButton;
 
-    public ChooseStudentFrame(MyFrame myFrame,Vector<Vector<String>> dataRow){
+    public ChooseClassFrame(MyFrame myFrame, Vector<Vector<String>> dataRow){
         this.myFrame = myFrame;
         this.dataRow = dataRow;
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -130,7 +130,6 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             System.out.println("back button");
-            myFrame.setVisible(true);
             dispose();
         }
 

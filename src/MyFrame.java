@@ -265,7 +265,11 @@ public class MyFrame extends JFrame implements ActionListener {
             System.out.println("new class");
             NewClassFrame newClassFrame = new NewClassFrame(this);
             this.setVisible(false);
-
+        }
+        if (e.getSource()==findClassButton){
+            System.out.println("find class");
+            FindClassFrame findClassFrame = new FindClassFrame(this);
+            this.setVisible(false);
         }
 
 
@@ -297,9 +301,20 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.addClass(className, supervisingTeacher, studentsId);
     }
 
+    protected boolean checkClassName(String className){
+        return main.checkClassName(className);
+    }
+
+    protected int findClass(boolean classNameKnown, String supervisingTeacher) {
+        return main.findClass(classNameKnown,supervisingTeacher);
+    }
+
+    protected int findClass(String className) {
+        return main.findClass(className);
+    }
 
 
-
-
-
+    public String getStudentNameAndLastName(int studentId) {
+        return main.getStudentNameAndLastName(studentId);
+    }
 }
