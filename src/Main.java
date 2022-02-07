@@ -6,8 +6,8 @@ import java.util.Vector;
 public class Main {
     static Connection connection;
     private MyFrame myFrame;
-    private Vector<Vector<String>> dataRowStudent;
-    private Vector<Vector<String>> dataRowClass;
+    private Vector<Vector<String>> dataRowStudent; //in case of multi results from SQL it's vector of vectors of students
+    private Vector<Vector<String>> dataRowClass;//in case of multi results from SQL it's vector of vectors of classes
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -515,6 +515,63 @@ public class Main {
         }
         System.out.println("Found rows: " + count);
         return result;
+    }
+
+    public int updateClass(int i, int selectedClassId, String newValue) {
+        //i stands for column name to be updated
+        //0 - class name
+        //1 - supervising teacher
+        //2 - student 1
+        //3 - student 2
+        //4 - student 3
+        //5 - student 4
+        //6 - student 5
+
+        String columnName="";
+        switch (i) {
+            case 0:
+                columnName = "`class_name`";
+                break;
+            case 1:
+                columnName = "`supervising_teacher`";
+                break;
+            case 2:
+                columnName = "`student_1`";
+                break;
+            case 3:
+                columnName = "`student_2`";
+                break;
+            case 4:
+                columnName = "`student_3`";
+                break;
+            case 5:
+                columnName = "`student_4`";
+                break;
+            case 6:
+                columnName = "`student_5`";
+                break;
+        }
+
+        int result = 0;
+        String query = "UPDATE `class_journal`.`class` SET " + columnName +
+                " = ? " +
+                "WHERE id = ?;";
+        try {
+            System.out.println(columnName + query + newValue + selectedClassId);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, newValue);
+            preparedStatement.setString(2, String.valueOf(selectedClassId));
+
+            result = preparedStatement.executeUpdate();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("affected rows: " + result);
+        return result;
+
     }
 
     public String getStudentNameAndLastName(int studentId) {

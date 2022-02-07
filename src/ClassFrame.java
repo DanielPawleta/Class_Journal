@@ -6,15 +6,16 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 public class ClassFrame extends JFrame implements ActionListener {
-    private Vector<Vector<String>> dataRowClass;
+    private Vector<Vector<String>> dataRowClass; //in case of multi results from SQL it's vector of vectors of classes
+    private Vector<String> studentsWithoutClass;
     private MyFrame myFrame;
     private int selectedClassId;
     private int selectedClassIdInDataRow;
     private Insets insets = new Insets(10,10,10,10);
 
     private JButton backButton;
-    private JButton updateFirstNameButton;
-    private JButton updateLastNameButton;
+    private JButton updateClassNameButton;
+    private JButton updateSupervisingTeacherButton;
     private JButton updateCityButton;
     private JButton updatePhoneNumberButton;
     private JButton updateDateOfBirthButton;
@@ -38,6 +39,7 @@ public class ClassFrame extends JFrame implements ActionListener {
     private JLabel student5TextField;
 
     public ClassFrame(MyFrame myFrame, Vector<Vector<String>> dataRowClass){
+        //fired from main when there is only one search result
         this.myFrame = myFrame;
         this.dataRowClass = dataRowClass;
         this.selectedClassIdInDataRow =0;
@@ -57,6 +59,7 @@ public class ClassFrame extends JFrame implements ActionListener {
     }
 
     public ClassFrame(MyFrame myFrame, Vector<Vector<String>> dataRowClass, int selectedClassIdInDataRow) {
+        //fired from choose student frame when there are multi search results
         this(myFrame, dataRowClass);
         this.selectedClassIdInDataRow = selectedClassIdInDataRow;
     }
@@ -168,7 +171,8 @@ public class ClassFrame extends JFrame implements ActionListener {
         h.gridy = 3;
         this.add(student1TextField, h);
 
-        student2 = dataRowClass.get(selectedClassIdInDataRow).get(4);
+        int student2Id = Integer.parseInt(dataRowClass.get(selectedClassIdInDataRow).get(4));
+        student2 = myFrame.getStudentNameAndLastName(student2Id);
         student2TextField = new JLabel(student2);
         student2TextField.setBorder(blackline);
         student2TextField.setPreferredSize(new Dimension(150,20));
@@ -178,7 +182,8 @@ public class ClassFrame extends JFrame implements ActionListener {
         j.gridy = 4;
         this.add(student2TextField, j);
 
-        student3 = dataRowClass.get(selectedClassIdInDataRow).get(5);
+        int student3Id = Integer.parseInt(dataRowClass.get(selectedClassIdInDataRow).get(5));
+        student3 = myFrame.getStudentNameAndLastName(student3Id);
         student3TextField = new JLabel(student3);
         student3TextField.setBorder(blackline);
         student3TextField.setPreferredSize(new Dimension(150,20));
@@ -188,7 +193,8 @@ public class ClassFrame extends JFrame implements ActionListener {
         l.gridy = 5;
         this.add(student3TextField, l);
 
-        student4 = dataRowClass.get(selectedClassIdInDataRow).get(6);
+        int student4Id = Integer.parseInt(dataRowClass.get(selectedClassIdInDataRow).get(6));
+        student4 = myFrame.getStudentNameAndLastName(student4Id);
         student4TextField = new JLabel(student4);
         student4TextField.setBorder(blackline);
         student4TextField.setPreferredSize(new Dimension(150,20));
@@ -198,7 +204,8 @@ public class ClassFrame extends JFrame implements ActionListener {
         n.gridy = 6;
         this.add(student4TextField, n);
 
-        student5 = dataRowClass.get(selectedClassIdInDataRow).get(7);
+        int student5Id = Integer.parseInt(dataRowClass.get(selectedClassIdInDataRow).get(7));
+        student5 = myFrame.getStudentNameAndLastName(student5Id);
         student5TextField = new JLabel(student5);
         student5TextField.setBorder(blackline);
         student5TextField.setPreferredSize(new Dimension(150,20));
@@ -210,21 +217,21 @@ public class ClassFrame extends JFrame implements ActionListener {
     }
 
     private void initializeUpdateButtons(){
-        updateFirstNameButton = new JButton("update");
-        updateFirstNameButton.addActionListener(this);
+        updateClassNameButton = new JButton("update");
+        updateClassNameButton.addActionListener(this);
         GridBagConstraints a = new GridBagConstraints();
         a.insets = insets;
         a.gridx = 2;
         a.gridy = 1;
-        this.add(updateFirstNameButton, a);
+        this.add(updateClassNameButton, a);
 
-        updateLastNameButton = new JButton("update");
-        updateLastNameButton.addActionListener(this);
+        updateSupervisingTeacherButton = new JButton("update");
+        updateSupervisingTeacherButton.addActionListener(this);
         GridBagConstraints b = new GridBagConstraints();
         b.insets = insets;
         b.gridx = 2;
         b.gridy = 2;
-        this.add(updateLastNameButton, b);
+        this.add(updateSupervisingTeacherButton, b);
 
         updateCityButton = new JButton("update");
         updateCityButton.addActionListener(this);
@@ -289,33 +296,33 @@ public class ClassFrame extends JFrame implements ActionListener {
             System.out.println("back button");
             dispose();
         }
-        if (e.getSource()== updateFirstNameButton){
-            System.out.println("update first name button in student frame");
-            showUpdateDialog("New first name: ",0);
+        if (e.getSource()== updateClassNameButton){
+            System.out.println("update class name button in class frame");
+            showUpdateDialog("New class name: ",0);
         }
-        if (e.getSource()==updateLastNameButton){
-            System.out.println("update last name button in student frame");
-            showUpdateDialog("New last name: ",1);
+        if (e.getSource()== updateSupervisingTeacherButton){
+            System.out.println("update supervising teacher button in class frame");
+            showUpdateDialog("New supervising teacher name: ",1);
         }
         if (e.getSource()==updateCityButton){
-            System.out.println("update city button in student frame");
-            showUpdateDialog("New city: ",2);
+            System.out.println("update student 1 button in class frame");
+            showUpdateDialog("Student 1: ",2);
         }
         if (e.getSource()==updatePhoneNumberButton){
-            System.out.println("update phone number button in student frame");
-            showUpdateDialog("New phone number: ",3);
+            System.out.println("update student 2 button in class frame");
+            showUpdateDialog("Student 2: ",3);
         }
         if (e.getSource()==updateDateOfBirthButton){
-            System.out.println("update date of birth button in student frame");
-            showUpdateDialog("New date of birth: ",4);
+            System.out.println("update student 3 button in class frame");
+            showUpdateDialog("Student 3: ",4);
         }
         if (e.getSource()==updateParentsPhoneNumberButton){
-            System.out.println("update parents phone number button in student frame");
-            showUpdateDialog("New parents phone number: ",5);
+            System.out.println("update student 4 button in class frame");
+            showUpdateDialog("Student 4: ",5);
         }
         if (e.getSource()==updateClassButton){
-            System.out.println("update class button in student frame");
-            showUpdateDialog("Choose class ",6);
+            System.out.println("update student 5 button in class frame");
+            showUpdateDialog("Student 5: ",6);
         }
 
 
@@ -323,32 +330,70 @@ public class ClassFrame extends JFrame implements ActionListener {
 
     private void showUpdateDialog(String text, int i) {
         //i stands for column name to be updated
-        //0 - first name
-        //1 - last name
-        //2 - city
-        //3 - phone number
-        //4 - date of birth
-        //5 - parents phone number
-        //6 - class
+        //0 - class name
+        //1 - supervising teacher
+        //2 - student 1
+        //3 - student 2
+        //4 - student 3
+        //5 - student 4
+        //6 - student 5
 
-        JTextField textField = new JTextField(5);
+
         JPanel jPanel = new JPanel();
         jPanel.add(new JLabel(text));
-        jPanel.add(textField);
 
+        if (i == 0 || i == 1) {
+            // if there's string field to be updated
+            JTextField textField = new JTextField(5);
+            jPanel.add(textField);
+            int result = JOptionPane.showConfirmDialog(null, jPanel, "Please enter new value", JOptionPane.OK_CANCEL_OPTION);
 
-        int result = JOptionPane.showConfirmDialog(null, jPanel, "Please enter new value", JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.CANCEL_OPTION) return;
+            else {
+                String newVaule = textField.getText();
+                if (myFrame.updateClass(i, selectedClassId, newVaule) == 1) {
+                    JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
+                    super.dispose();
+                    myFrame.findClass(selectedClassId);
+                    System.out.println("class updated");
+                } else System.out.println("Something went wrong when updating class");
+            }
+        } else {
+            //if it's combobox with students names
+            initializeStudentsWithoutClassVector();
+            JComboBox<String> studentComboBox = new JComboBox<>(studentsWithoutClass);
+            studentComboBox.setSelectedIndex(-1);
+            jPanel.add(studentComboBox);
+            int result = JOptionPane.showConfirmDialog(null, jPanel, "Please choose new student", JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.CANCEL_OPTION) return;
+            else {
+                String studentId;
+                if (studentComboBox.getItemAt(studentComboBox.getSelectedIndex()) != null) {
+                    studentId = studentComboBox.getItemAt(studentComboBox.getSelectedIndex()).split(" id : ")[1];
+                    if (myFrame.updateClass(i, selectedClassId, studentId) == 1) {
+                        JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
+                        super.dispose();
+                        myFrame.findClass(selectedClassId);
+                        System.out.println("class updated");
 
+                    } else System.out.println("Something went wrong when updating class");
 
-        if (result == JOptionPane.CANCEL_OPTION) return;
-        else {
-            String newVaule = textField.getText();
-            if (myFrame.updateStudent(i, selectedClassId, newVaule) == 1) {
-                JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
-                super.dispose();
-                myFrame.findStudent(selectedClassId);
-                System.out.println("student updated");
-            } else System.out.println("Something went wrong when updating student");
+                }
+            }
+        }
+    }
+
+    private void initializeStudentsWithoutClassVector(){
+        studentsWithoutClass = new Vector<>();
+
+        Vector<Vector<String>> studentsWithoutClassVectorOfVectors = myFrame.findStudentsWithoutClass();
+        if (studentsWithoutClassVectorOfVectors.size()!=0){
+            for (Vector<String> vector : studentsWithoutClassVectorOfVectors){
+                int id = Integer.parseInt(vector.get(0));
+                String firstName = vector.get(1);
+                String lastName = vector.get(2);
+                studentsWithoutClass.add(firstName + " " + lastName + " id : " + id);
+            }
         }
     }
 

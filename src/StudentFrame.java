@@ -50,6 +50,7 @@ public class StudentFrame extends JFrame implements ActionListener {
 
 
     public StudentFrame(MyFrame myFrame, Vector<Vector<String>> dataRowStudent){
+        //fired from main when there is only one search result
         this.myFrame = myFrame;
         this.dataRowStudent = dataRowStudent;
         this.selectedStudentIdInDataRow =0;
@@ -69,6 +70,7 @@ public class StudentFrame extends JFrame implements ActionListener {
     }
 
     public StudentFrame(MyFrame myFrame, Vector<Vector<String>> dataRowStudent, int selectedStudentIdInDataRow) {
+        //fired from choose student frame when there are multi search results
         this(myFrame, dataRowStudent);
         this.selectedStudentIdInDataRow = selectedStudentIdInDataRow;
     }

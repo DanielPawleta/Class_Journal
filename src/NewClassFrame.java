@@ -260,8 +260,7 @@ public class NewClassFrame extends JFrame implements ActionListener {
                 studentsWithoutClass.add(firstName + " " + lastName + " id : " + id);
             }
         }
-
-
-
     }
+
+
 }

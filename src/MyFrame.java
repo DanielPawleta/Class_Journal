@@ -313,8 +313,11 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.findClass(className);
     }
 
-
     public String getStudentNameAndLastName(int studentId) {
         return main.getStudentNameAndLastName(studentId);
+    }
+
+    protected int updateClass(int i, int selectedClassId, String newValue) {
+        return main.updateStudent(i,selectedClassId,newValue);
     }
 }
