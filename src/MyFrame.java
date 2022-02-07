@@ -194,8 +194,8 @@ public class MyFrame extends JFrame implements ActionListener {
 
     }
 
-    protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number, String class_attender){
-        return main.addStudent(first_name, last_name, city, phone_number, date_of_birth, parents_phone_number, class_attender);
+    protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number, String class_attending){
+        return main.addStudent(first_name, last_name, city, phone_number, date_of_birth, parents_phone_number, class_attending);
     }
 
     protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number){
@@ -313,11 +313,23 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.findClass(className);
     }
 
+    protected void findClass(int classId) {
+        main.findClass(classId);
+    }
+
+    protected Vector<Vector<String>> findClassWithEmptyStudentPlaces () {
+        return main.findClassWithEmptyStudentPlaces();
+    }
+
     public String getStudentNameAndLastName(int studentId) {
         return main.getStudentNameAndLastName(studentId);
     }
 
     protected int updateClass(int i, int selectedClassId, String newValue) {
-        return main.updateStudent(i,selectedClassId,newValue);
+        return main.updateClass(i,selectedClassId,newValue);
+    }
+
+    public String getClassIdByClassName(String classAttendingName) {
+        return main.getClassIdByClassName(classAttendingName);
     }
 }

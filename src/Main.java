@@ -75,7 +75,7 @@ public class Main {
         return isThisClassNameNotTaken;
     }
 
-    protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number, String class_attendand){
+    protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number, String class_attending){
 
         int result = 0;
         Date date_of_birth_as_Date = Date.valueOf(date_of_birth);
@@ -98,7 +98,7 @@ public class Main {
             preparedStatement.setInt(4,phone_number);
             preparedStatement.setDate(5,date_of_birth_as_Date);
             preparedStatement.setInt(6,parents_phone_number);
-            preparedStatement.setString(7,class_attendand);
+            preparedStatement.setString(7,class_attending);
             result = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -256,6 +256,59 @@ public class Main {
         }
         System.out.println("Found " + count +" students with no class definied");
         return dataRowStudent;
+    }
+
+    protected Vector<Vector<String>> findClassWithEmptyStudentPlaces () {
+        System.out.println("find class with free student slots");
+        ResultSet resultSet;
+        int count=0;
+
+        String query = "SELECT * FROM class " +
+                "WHERE student_1 is null " +
+                "OR student_2 is null " +
+                "OR student_3 is null " +
+                "OR student_4 is null " +
+                "OR student_5 is null " +
+                "OR student_6 is null " +
+                "OR student_7 is null " +
+                "OR student_8 is null " +
+                "OR student_9 is null " +
+                "OR student_10 is null;";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+
+            resultSet = preparedStatement.executeQuery();
+
+            dataRowClass = new Vector<>();
+
+            while (resultSet.next()) {
+                count++;
+                Vector<String> classRow = new Vector<>();
+                classRow.add(resultSet.getString("id"));
+                classRow.add(resultSet.getString("class_name"));
+                classRow.add(resultSet.getString("supervising_teacher"));
+                classRow.add(resultSet.getString("student_1"));
+                classRow.add(resultSet.getString("student_2"));
+                classRow.add(resultSet.getString("student_3"));
+                classRow.add(resultSet.getString("student_4"));
+                classRow.add(resultSet.getString("student_5"));
+                classRow.add(resultSet.getString("student_6"));
+                classRow.add(resultSet.getString("student_7"));
+                classRow.add(resultSet.getString("student_8"));
+                classRow.add(resultSet.getString("student_9"));
+                classRow.add(resultSet.getString("student_10"));
+
+                dataRowClass.add(classRow);
+
+                System.out.println(resultSet.getString("class_name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Found " + count +" classes with free slots");
+        return dataRowClass;
     }
 
     //for no-database connection purpose and testing
@@ -459,6 +512,46 @@ public class Main {
         return result;
     }
 
+    protected void findClass(int classId) {
+        System.out.println("find class in main with class Id = " + classId);
+        ResultSet resultSet;
+
+        String query = "SELECT * FROM class " +
+                "WHERE id = "+
+                "?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, String.valueOf(classId));
+
+            resultSet = preparedStatement.executeQuery();
+
+            dataRowClass = new Vector<>();
+
+            while (resultSet.next()) {
+                Vector<String> classRow = new Vector<>();
+                classRow.add(resultSet.getString("id"));
+                classRow.add(resultSet.getString("class_name"));
+                classRow.add(resultSet.getString("supervising_teacher"));
+                classRow.add(resultSet.getString("student_1"));
+                classRow.add(resultSet.getString("student_2"));
+                classRow.add(resultSet.getString("student_3"));
+                classRow.add(resultSet.getString("student_4"));
+                classRow.add(resultSet.getString("student_5"));
+                classRow.add(resultSet.getString("student_6"));
+                classRow.add(resultSet.getString("student_7"));
+                classRow.add(resultSet.getString("student_8"));
+                classRow.add(resultSet.getString("student_9"));
+                classRow.add(resultSet.getString("student_10"));
+                dataRowClass.add(classRow);
+
+                System.out.println(resultSet.getString("class_name"));
+            }
+            showClassFrame();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     protected int findClass(boolean classNameKnown, String supervisingTeacher) {
         System.out.println("find class in main without class name and with supervising teacher = " + supervisingTeacher);
         ResultSet resultSet;
@@ -598,5 +691,29 @@ public class Main {
             e.printStackTrace();
         }
         return nameAndLastName;
+    }
+
+    protected String getClassIdByClassName(String classAttendingName) {
+        System.out.println("get class id by class name in main with class name = " + classAttendingName);
+        ResultSet resultSet;
+        String classId="";
+
+        String query = "SELECT id FROM class " +
+                "WHERE class_name = "+
+                "?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,classAttendingName);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                classId = resultSet.getString("id");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return classId;
     }
 }

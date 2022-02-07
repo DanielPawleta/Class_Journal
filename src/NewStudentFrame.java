@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Vector;
 
 public class NewStudentFrame extends JFrame implements ActionListener {
     private MyFrame myFrame;
@@ -25,6 +26,8 @@ public class NewStudentFrame extends JFrame implements ActionListener {
     private String parentsPhoneNumber;
     private JDatePickerImpl datePicker;
     private String dateOfBirth;
+    private String classAttendingName ="";
+    private String classAttendingId;
 
     private JTextField firstNameField;
     private JTextField lastNameField;
@@ -34,6 +37,8 @@ public class NewStudentFrame extends JFrame implements ActionListener {
 
     private int phoneNumberInt;
     private int parentsPhoneNumberInt;
+    private Vector<String> classWithFreeSlots;
+    private JComboBox<String> classComboBox;
 
 
     public NewStudentFrame(MyFrame myFrame){
@@ -41,6 +46,7 @@ public class NewStudentFrame extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setTitle("New Student");
         this.setLayout(new GridBagLayout());
+        this.initializeClassWithFreeSlotsVector();
         this.initializeTitleLabel();
         this.initializeLabels();
         this.initializeButtons();
@@ -164,13 +170,13 @@ public class NewStudentFrame extends JFrame implements ActionListener {
             o.gridx = 0;
             o.gridy = 7;
             this.add(classLabel, o);
-            JTextField classField = new JTextField(15);
+            classComboBox = new JComboBox<>(classWithFreeSlots);
+            classComboBox.setSelectedIndex(-1);
             GridBagConstraints p = new GridBagConstraints();
             p.insets = insets;
             p.gridx = 1;
             p.gridy = 7;
-            this.add(classField, p);
-
+            this.add(classComboBox, p);
         }
 
     private void initializeButtons() {
@@ -208,7 +214,7 @@ public class NewStudentFrame extends JFrame implements ActionListener {
             System.out.println("Add button");
 
             if (checkFields()) {
-                myFrame.addStudent(firstName,lastName,city,phoneNumberInt,dateOfBirth,parentsPhoneNumberInt);
+                myFrame.addStudent(firstName,lastName,city,phoneNumberInt,dateOfBirth,parentsPhoneNumberInt, classAttendingId);
                 JOptionPane.showMessageDialog(this,"Student added!","New student", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             }
@@ -222,6 +228,10 @@ public class NewStudentFrame extends JFrame implements ActionListener {
         phoneNumber = phoneNumberField.getText();
         parentsPhoneNumber = parentsPhoneNumberField.getText();
 
+        if (classComboBox.getItemAt(classComboBox.getSelectedIndex())!=null) {
+            classAttendingName = classComboBox.getItemAt(classComboBox.getSelectedIndex());
+            classAttendingId = myFrame.getClassIdByClassName(classAttendingName);
+        }
 
         if      (!firstName.equals("") &&
                 !lastName.equals("") &&
@@ -250,6 +260,17 @@ public class NewStudentFrame extends JFrame implements ActionListener {
         else {
             JOptionPane.showMessageDialog(this,"Fields first name, last name and city are required","Info", JOptionPane.WARNING_MESSAGE);
             return false;
+        }
+    }
+
+    private void initializeClassWithFreeSlotsVector(){
+        classWithFreeSlots = new Vector<>();
+
+        Vector<Vector<String>> classWithFreeSlotsVectorOfVectors = myFrame.findClassWithEmptyStudentPlaces();
+        if (classWithFreeSlotsVectorOfVectors.size()!=0){
+            for (Vector<String> vector : classWithFreeSlotsVectorOfVectors){
+                classWithFreeSlots.add(vector.get(1));
+            }
         }
     }
 

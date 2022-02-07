@@ -159,8 +159,11 @@ public class ClassFrame extends JFrame implements ActionListener {
         f.gridy = 2;
         this.add(supervisingTeacherTextField, f);
 
-        int student1Id = Integer.parseInt(dataRowClass.get(selectedClassIdInDataRow).get(3));
-        student1 = myFrame.getStudentNameAndLastName(student1Id);
+        String student1Id;
+        if ((student1Id = dataRowClass.get(selectedClassIdInDataRow).get(3))!=null){
+            student1 = myFrame.getStudentNameAndLastName(Integer.parseInt(student1Id));
+        }
+        else student1 = "";
         student1TextField = new JLabel(student1);
         student1TextField.setBorder(blackline);
         student1TextField.setBorder(blackline);
@@ -171,8 +174,12 @@ public class ClassFrame extends JFrame implements ActionListener {
         h.gridy = 3;
         this.add(student1TextField, h);
 
-        int student2Id = Integer.parseInt(dataRowClass.get(selectedClassIdInDataRow).get(4));
-        student2 = myFrame.getStudentNameAndLastName(student2Id);
+        String student2Id;
+        if ((student2Id = dataRowClass.get(selectedClassIdInDataRow).get(4))!=null){
+            System.out.println("here");
+            student2 = myFrame.getStudentNameAndLastName(Integer.parseInt(student2Id));
+        }
+        else student2 = "";
         student2TextField = new JLabel(student2);
         student2TextField.setBorder(blackline);
         student2TextField.setPreferredSize(new Dimension(150,20));
@@ -182,8 +189,11 @@ public class ClassFrame extends JFrame implements ActionListener {
         j.gridy = 4;
         this.add(student2TextField, j);
 
-        int student3Id = Integer.parseInt(dataRowClass.get(selectedClassIdInDataRow).get(5));
-        student3 = myFrame.getStudentNameAndLastName(student3Id);
+        String student3Id;
+        if ((student3Id = dataRowClass.get(selectedClassIdInDataRow).get(5))!=null){
+            student3 = myFrame.getStudentNameAndLastName(Integer.parseInt(student3Id));
+        }
+        else student3 = "";
         student3TextField = new JLabel(student3);
         student3TextField.setBorder(blackline);
         student3TextField.setPreferredSize(new Dimension(150,20));
@@ -193,8 +203,11 @@ public class ClassFrame extends JFrame implements ActionListener {
         l.gridy = 5;
         this.add(student3TextField, l);
 
-        int student4Id = Integer.parseInt(dataRowClass.get(selectedClassIdInDataRow).get(6));
-        student4 = myFrame.getStudentNameAndLastName(student4Id);
+        String student4Id;
+        if ((student4Id = dataRowClass.get(selectedClassIdInDataRow).get(6))!=null){
+            student4 = myFrame.getStudentNameAndLastName(Integer.parseInt(student4Id));
+        }
+        else student4 = "";
         student4TextField = new JLabel(student4);
         student4TextField.setBorder(blackline);
         student4TextField.setPreferredSize(new Dimension(150,20));
@@ -204,8 +217,11 @@ public class ClassFrame extends JFrame implements ActionListener {
         n.gridy = 6;
         this.add(student4TextField, n);
 
-        int student5Id = Integer.parseInt(dataRowClass.get(selectedClassIdInDataRow).get(7));
-        student5 = myFrame.getStudentNameAndLastName(student5Id);
+        String student5Id;
+        if ((student5Id = dataRowClass.get(selectedClassIdInDataRow).get(7))!=null){
+            student5 = myFrame.getStudentNameAndLastName(Integer.parseInt(student5Id));
+        }
+        else student5 = "";
         student5TextField = new JLabel(student5);
         student5TextField.setBorder(blackline);
         student5TextField.setPreferredSize(new Dimension(150,20));
@@ -375,9 +391,7 @@ public class ClassFrame extends JFrame implements ActionListener {
                         super.dispose();
                         myFrame.findClass(selectedClassId);
                         System.out.println("class updated");
-
                     } else System.out.println("Something went wrong when updating class");
-
                 }
             }
         }
