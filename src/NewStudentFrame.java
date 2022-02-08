@@ -58,6 +58,8 @@ public class NewStudentFrame extends JFrame implements ActionListener {
 
 
 
+
+
     private void initializeTitleLabel() {
         JLabel titleLabel = new JLabel("Add new student");
         titleLabel.setFont(new Font("MV Boli", Font.PLAIN, 30));
@@ -200,6 +202,7 @@ public class NewStudentFrame extends JFrame implements ActionListener {
     @Override
     public void dispose() {
         myFrame.setVisible(true);
+        initializeClassWithFreeSlotsVector();
         super.dispose();
     }
 

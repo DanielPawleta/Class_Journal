@@ -104,7 +104,41 @@ public class Main {
             e.printStackTrace();
         }
         System.out.println("affected rows: " + result);
+        addNewStudentToClassOnFirstFreeSlot(class_attending);
         return query;
+    }
+
+    private void addNewStudentToClassOnFirstFreeSlot(String class_attending){
+        String latestStudentAdded = null;
+
+        String query = "SELECT MAX(Id) FROM students;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                latestStudentAdded = resultSet.getString("id");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String firstFreeSlotNumber = this.findFirstFreeSlotInClass(class_attending);
+
+        query = "UPDATE `class_journal`.`class` SET ?"  +
+                " = ? " +
+                "WHERE id = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, firstFreeSlotNumber);
+            preparedStatement.setString(2, latestStudentAdded);
+            preparedStatement.setString(3, class_attending);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     protected int findStudent(String firstName, String lastName) {
@@ -309,6 +343,47 @@ public class Main {
         }
         System.out.println("Found " + count +" classes with free slots");
         return dataRowClass;
+    }
+
+    private String findFirstFreeSlotInClass (String classId) {
+        String firstFreeSlotFullName = null;
+        System.out.println("find first free slot in given class");
+        ResultSet resultSet;
+
+        String query = "SELECT * FROM class " +
+                "WHERE id = ?;";
+        Vector<String> classRow = new Vector<>();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,classId);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                classRow.add(resultSet.getString("student_1"));
+                classRow.add(resultSet.getString("student_2"));
+                classRow.add(resultSet.getString("student_3"));
+                classRow.add(resultSet.getString("student_4"));
+                classRow.add(resultSet.getString("student_5"));
+                classRow.add(resultSet.getString("student_6"));
+                classRow.add(resultSet.getString("student_7"));
+                classRow.add(resultSet.getString("student_8"));
+                classRow.add(resultSet.getString("student_9"));
+                classRow.add(resultSet.getString("student_10"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        for (int i=0;i<classRow.size();i++){
+            if (classRow.get(i)==null){
+                firstFreeSlotFullName = "student_" + i+1;
+            }
+        }
+        System.out.println("Found first free slot at: " + firstFreeSlotFullName);
+        return firstFreeSlotFullName;
     }
 
     //for no-database connection purpose and testing
@@ -658,12 +733,20 @@ public class Main {
 
             result = preparedStatement.executeUpdate();
 
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+        //setting selected class for this student
+        if (i>=2){
+            updateStudent(6,Integer.parseInt(newValue), String.valueOf(selectedClassId));
+        }
+
+
         System.out.println("affected rows: " + result);
         return result;
+
 
     }
 
