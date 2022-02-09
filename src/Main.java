@@ -7,19 +7,20 @@ public class Main {
     static Connection connection;
     private MyFrame myFrame;
     private Vector<Vector<String>> dataRowStudent; //in case of multi results from SQL it's vector of vectors of students
+    private Vector<Vector<String>> dataRowTeacher; //in case of multi results from SQL it's vector of vectors of teachers
     private Vector<Vector<String>> dataRowClass;//in case of multi results from SQL it's vector of vectors of classes
 
     public static void main(String[] args) {
         Main main = new Main();
 
-        /*
+
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-         */
+
 
         //main.showStudents();
         //main.showClasses();
@@ -295,6 +296,38 @@ public class Main {
         return dataRowStudent;
     }
 
+    protected Vector<Vector<String>> findTeachersWithoutSupervisingClass () {
+        System.out.println("find teachers with no supervising class selected");
+        ResultSet resultSet;
+        int count=0;
+
+        String query = "SELECT * FROM teachers " +
+                "WHERE class_supervising is null;";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+
+            resultSet = preparedStatement.executeQuery();
+
+            dataRowTeacher = new Vector<>();
+
+            while (resultSet.next()) {
+                count++;
+                Vector<String> teacherRow = new Vector<>();
+                teacherRow.add(resultSet.getString("id"));
+                teacherRow.add(resultSet.getString("first_name"));
+                teacherRow.add(resultSet.getString("last_name"));
+                dataRowStudent.add(teacherRow);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Found " + count +" teachers with no class supervising definied");
+        return dataRowTeacher;
+    }
+
     protected Vector<Vector<String>> findClassWithEmptyStudentPlaces () {
         System.out.println("find class with free student slots");
         ResultSet resultSet;
@@ -493,7 +526,7 @@ public class Main {
 
     }
 
-    protected String addClass(String className, String supervisingTeacher, ArrayList<Integer> studentsId){
+    protected String addClass(String className, int supervisingTeacherId, ArrayList<Integer> studentsId){
         int result = 0;
 
         int student1;
@@ -514,7 +547,12 @@ public class Main {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1,className);
-            preparedStatement.setString(2,supervisingTeacher);
+
+
+            if (supervisingTeacherId!=-1){
+                preparedStatement.setInt(2, supervisingTeacherId);
+            }
+            else preparedStatement.setNull(2,Types.INTEGER);
 
 
             for (int j=0; j<studentsId.size();j++){
@@ -779,6 +817,32 @@ public class Main {
         return nameAndLastName;
     }
 
+    public String getTeacherNameAndLastName(int teacherId) {
+        System.out.println("get teacher name and last name for id: " + teacherId);
+        ResultSet resultSet;
+        String nameAndLastName = "no results";
+
+        String query = "SELECT first_name, last_name FROM teachers " +
+                "WHERE id = "+
+                "?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, String.valueOf(teacherId));
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                nameAndLastName = resultSet.getString("first_name") + " " + resultSet.getString("last_name");
+
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nameAndLastName;
+    }
+
     protected String getClassIdByClassName(String classAttendingName) {
         System.out.println("get class id by class name in main with class name = " + classAttendingName);
         ResultSet resultSet;
@@ -819,7 +883,7 @@ public class Main {
                 tableName = "`class`";
                 break;
             case 2:
-                tableName = "`teacher`";
+                tableName = "`teachers`";
                 break;
         }
 

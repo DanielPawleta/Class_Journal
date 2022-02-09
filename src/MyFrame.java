@@ -297,8 +297,12 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.findStudentsWithoutClass();
     }
 
-    protected String addClass(String className,String supervisingTeacher, ArrayList<Integer> studentsId){
-        return main.addClass(className, supervisingTeacher, studentsId);
+    protected Vector<Vector<String>> findTeachersWithoutSupervisingClass () {
+        return main.findTeachersWithoutSupervisingClass();
+    }
+
+    protected String addClass(String className,int supervisingTeacherId, ArrayList<Integer> studentsId){
+        return main.addClass(className, supervisingTeacherId, studentsId);
     }
 
     protected boolean checkClassName(String className){
@@ -323,6 +327,10 @@ public class MyFrame extends JFrame implements ActionListener {
 
     public String getStudentNameAndLastName(int studentId) {
         return main.getStudentNameAndLastName(studentId);
+    }
+
+    public String getTeacherNameAndLastName(int teacherId) {
+        return main.getTeacherNameAndLastName(teacherId);
     }
 
     protected int updateClass(int i, int selectedClassId, String newValue) {

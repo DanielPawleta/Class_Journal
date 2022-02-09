@@ -12,21 +12,22 @@ public class NewClassFrame extends JFrame implements ActionListener {
     private JButton addButton;
 
     private String className;
-    private String supervisingTeacher;
-    private int student1;
-    private int student2;
-    private int student3;
-    private int student4;
-    private int maxNumberOfStudents=25;
+    private int supervisingTeacherId;
+    private int student1Id;
+    private int student2Id;
+    private int student3Id;
+    private int student4Id;
+    private int maxNumberOfStudents=10;
 
     private JTextField classNameField;
-    private JTextField supervisingTeacherField;
+    private JComboBox<String> supervisingTeacherComboBox;
     private JComboBox<String> student1ComboBox;
     private JComboBox<String> student2ComboBox;
     private JComboBox<String> student3ComboBox;
     private JComboBox<String> student4ComboBox;
 
     private Vector<String> studentsWithoutClass;
+    private Vector<String> teachersWithoutSupervisingClass;
     private ArrayList<Integer> studentsId; //list with all students (-1 for null)
 
     public NewClassFrame(MyFrame myFrame){
@@ -36,6 +37,7 @@ public class NewClassFrame extends JFrame implements ActionListener {
         this.setLayout(new GridBagLayout());
         this.initializeTitleLabel();
         this.initializeStudentsWithoutClassVector();
+        this.initializeTeachersWithoutClassSupervisingVector();
         this.initializeLabels();
         this.initializeButtons();
 
@@ -80,12 +82,13 @@ public class NewClassFrame extends JFrame implements ActionListener {
             d.gridx = 0;
             d.gridy = 2;
             this.add(supervisingTeacherLabel, d);
-            supervisingTeacherField = new JTextField(15);
+            supervisingTeacherComboBox = new JComboBox<>(teachersWithoutSupervisingClass);
+            supervisingTeacherComboBox.setSelectedIndex(-1);
             GridBagConstraints e = new GridBagConstraints();
             e.insets = insets;
             e.gridx = 1;
             e.gridy = 2;
-            this.add(supervisingTeacherField, e);
+            this.add(supervisingTeacherComboBox, e);
 
             //student 1
             JLabel student1Label = new JLabel("Student 1: ");
@@ -183,40 +186,44 @@ public class NewClassFrame extends JFrame implements ActionListener {
             System.out.println("Add button");
 
             if (checkFields()) {
-                myFrame.addClass(className, supervisingTeacher, studentsId);
+                myFrame.addClass(className, supervisingTeacherId, studentsId);
                 JOptionPane.showMessageDialog(this, "Class added!", "New class", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             }
         }
     }
 
-
     private boolean checkFields(){
         className = classNameField.getText();
-        supervisingTeacher = supervisingTeacherField.getText();
+
+        if (supervisingTeacherComboBox.getItemAt(supervisingTeacherComboBox.getSelectedIndex())!=null) {
+            supervisingTeacherId = Integer.parseInt(supervisingTeacherComboBox.getItemAt(supervisingTeacherComboBox.getSelectedIndex()).split(" id : ")[1]);
+        }
+        else supervisingTeacherId=-1;
+
         studentsId = new ArrayList<>(); //list with all students (-1 for null)
 
         if (student1ComboBox.getItemAt(student1ComboBox.getSelectedIndex())!=null) {
-            student1 = Integer.parseInt(student1ComboBox.getItemAt(student1ComboBox.getSelectedIndex()).split(" id : ")[1]);
-            studentsId.add(student1);
+            student1Id = Integer.parseInt(student1ComboBox.getItemAt(student1ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student1Id);
         }
         else studentsId.add(-1);
 
         if (student2ComboBox.getItemAt(student2ComboBox.getSelectedIndex())!=null) {
-            student2 = Integer.parseInt(student2ComboBox.getItemAt(student2ComboBox.getSelectedIndex()).split(" id : ")[1]);
-            studentsId.add(student2);
+            student2Id = Integer.parseInt(student2ComboBox.getItemAt(student2ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student2Id);
         }
         else studentsId.add(-1);
 
         if (student3ComboBox.getItemAt(student3ComboBox.getSelectedIndex())!=null) {
-            student3 = Integer.parseInt(student3ComboBox.getItemAt(student3ComboBox.getSelectedIndex()).split(" id : ")[1]);
-            studentsId.add(student3);
+            student3Id = Integer.parseInt(student3ComboBox.getItemAt(student3ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student3Id);
         }
         else studentsId.add(-1);
 
         if (student4ComboBox.getItemAt(student4ComboBox.getSelectedIndex())!=null) {
-            student4 = Integer.parseInt(student4ComboBox.getItemAt(student4ComboBox.getSelectedIndex()).split(" id : ")[1]);
-            studentsId.add(student4);
+            student4Id = Integer.parseInt(student4ComboBox.getItemAt(student4ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student4Id);
         }
         else studentsId.add(-1);
 
@@ -246,8 +253,6 @@ public class NewClassFrame extends JFrame implements ActionListener {
         }
     }
 
-
-
     private void initializeStudentsWithoutClassVector(){
         studentsWithoutClass = new Vector<>();
 
@@ -262,5 +267,17 @@ public class NewClassFrame extends JFrame implements ActionListener {
         }
     }
 
+    private void initializeTeachersWithoutClassSupervisingVector(){
+        teachersWithoutSupervisingClass = new Vector<>();
 
+        Vector<Vector<String>> teachersWithoutSupervisingClassVectorOfVectors = myFrame.findTeachersWithoutSupervisingClass();
+        if (teachersWithoutSupervisingClassVectorOfVectors.size()!=0){
+            for (Vector<String> vector : teachersWithoutSupervisingClassVectorOfVectors){
+                int id = Integer.parseInt(vector.get(0));
+                String firstName = vector.get(1);
+                String lastName = vector.get(2);
+                teachersWithoutSupervisingClass.add(firstName + " " + lastName + " id : " + id);
+            }
+        }
+    }
 }

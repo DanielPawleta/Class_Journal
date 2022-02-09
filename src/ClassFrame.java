@@ -149,7 +149,11 @@ public class ClassFrame extends JFrame implements ActionListener {
         c.gridy = 1;
         this.add(classNameTextField, c);
 
-        supervisingTeacher = dataRowClass.get(selectedClassIdInDataRow).get(2);
+        String supervisingTeacherId;
+        if ((supervisingTeacherId = dataRowClass.get(selectedClassIdInDataRow).get(2))!=null){
+            supervisingTeacher = myFrame.getTeacherNameAndLastName(Integer.parseInt(supervisingTeacherId));
+        }
+        else supervisingTeacher = "";
         supervisingTeacherTextField = new JLabel(supervisingTeacher);
         supervisingTeacherTextField.setBorder(blackline);
         supervisingTeacherTextField.setPreferredSize(new Dimension(150,20));
