@@ -332,4 +332,8 @@ public class MyFrame extends JFrame implements ActionListener {
     public String getClassIdByClassName(String classAttendingName) {
         return main.getClassIdByClassName(classAttendingName);
     }
+
+    protected void deleteRow(int i, String rowId){
+        main.deleteRow(i, rowId);
+    }
 }

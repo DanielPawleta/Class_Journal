@@ -28,6 +28,7 @@ public class StudentFrame extends JFrame implements ActionListener {
     private JButton updateDateOfBirthButton;
     private JButton updateParentsPhoneNumberButton;
     private JButton updateClassButton;
+    private JButton deleteButton;
 
     private String firstName;
     private String lastName;
@@ -284,9 +285,17 @@ public class StudentFrame extends JFrame implements ActionListener {
         backButton.addActionListener(this);
         GridBagConstraints r = new GridBagConstraints();
         r.insets = new Insets(50,10,10,10);
-        r.gridx = 1;
+        r.gridx = 0;
         r.gridy = 8;
         this.add(backButton, r);
+
+        deleteButton = new JButton("Delete");
+        deleteButton.addActionListener(this);
+        GridBagConstraints s = new GridBagConstraints();
+        s.insets = new Insets(50,10,10,10);
+        s.gridx = 1;
+        s.gridy = 8;
+        this.add(deleteButton,s);
     }
 
     @Override
@@ -329,8 +338,17 @@ public class StudentFrame extends JFrame implements ActionListener {
             System.out.println("update class button in student frame");
             showUpdateDialog("Choose class ",6);
         }
+        if (e.getSource()==deleteButton){
+            System.out.println("delete class button in student frame");
+            JPanel jPanel = new JPanel();
+            int result = JOptionPane.showConfirmDialog(null, jPanel, "Are you sure you want to delete this student?", JOptionPane.OK_CANCEL_OPTION);
 
-
+            if (result == JOptionPane.CANCEL_OPTION) return;
+            else {
+                myFrame.deleteRow(0,String.valueOf(selectedStudentId));
+                dispose();
+            }
+        }
     }
 
     private void showUpdateDialog(String text, int i){

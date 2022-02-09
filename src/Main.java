@@ -12,14 +12,17 @@ public class Main {
     public static void main(String[] args) {
         Main main = new Main();
 
+        /*
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+         */
+
         //main.showStudents();
-        main.showClasses();
+        //main.showClasses();
         //main.findStudent("Daniell","Pawleta");
         //main.addStudent("Mateuszek","Kawulok", "Zory",474852154,"1990-04-11",845697412,"2a");
     }
@@ -799,4 +802,39 @@ public class Main {
         }
         return classId;
     }
+
+    protected void deleteRow(int i,String rowId){
+        //i stands for table name from which row will be deleted
+        // 0 - student table
+        // 1 - class table
+        // 2 - teacher table
+        int result = 0;
+
+        String tableName="";
+        switch (i) {
+            case 0:
+                tableName = "`students`";
+                break;
+            case 1:
+                tableName = "`class`";
+                break;
+            case 2:
+                tableName = "`teacher`";
+                break;
+        }
+
+        String query = "DELETE FROM `class_journal`." + tableName +
+                " WHERE id =?;";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,rowId);
+            result = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("deleted rows from " + tableName + " :" + result);
+    }
+
+
 }
