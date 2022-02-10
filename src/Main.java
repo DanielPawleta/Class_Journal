@@ -476,8 +476,7 @@ public class Main {
         //2 - city
         //3 - phone number
         //4 - date of birth
-        //5 - parents phone number
-        //6 - class
+        //5 -
 
         String columnName="";
         switch (i) {
@@ -841,6 +840,30 @@ public class Main {
             e.printStackTrace();
         }
         return nameAndLastName;
+    }
+
+    public String getClassNameByClassId(int classId) {
+        System.out.println("get class name for id: " + classId);
+        ResultSet resultSet;
+        String className = "no results";
+
+        String query = "SELECT class_name FROM class " +
+                "WHERE id = "+
+                "?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, String.valueOf(classId));
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                className = resultSet.getString("class_name");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return className;
     }
 
     protected String getClassIdByClassName(String classAttendingName) {

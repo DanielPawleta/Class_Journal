@@ -13,11 +13,11 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.Vector;
 
-public class StudentFrame extends JFrame implements ActionListener {
-    private Vector<Vector<String>> dataRowStudent;
+public class TeacherFrame extends JFrame implements ActionListener {
+    private Vector<Vector<String>> dataRowTeacher;
     private MyFrame myFrame;
-    private int selectedStudentId;
-    private int selectedStudentIdInDataRow;
+    private int selectedTeacherId;
+    private int selectedTeacherIdInDataRow;
     private Insets insets = new Insets(10,10,10,10);
 
     private JButton backButton;
@@ -26,38 +26,32 @@ public class StudentFrame extends JFrame implements ActionListener {
     private JButton updateCityButton;
     private JButton updatePhoneNumberButton;
     private JButton updateDateOfBirthButton;
-    private JButton updateParentsPhoneNumberButton;
-    private JButton updateClassButton;
+    private JButton updateSupervisingClassButton;
     private JButton deleteButton;
 
     private String firstName;
     private String lastName;
     private String city;
     private String phoneNumber;
-    private String parentsPhoneNumber;
     private JDatePickerImpl datePicker;
     private String dateOfBirth;
+    private String supervisingClass;
 
     private JLabel firstNameTextField;
     private JLabel lastNameTextField;
     private JLabel cityTextField;
     private JLabel phoneNumberTextField;
     private JLabel dateOfBirthTextField;
-    private JLabel parentsPhoneNumberTextField;
-    private JLabel classTextField;
+    private JLabel supervisingClassTextField;
 
-    private int phoneNumberInt;
-    private int parentsPhoneNumberInt;
-
-
-    public StudentFrame(MyFrame myFrame, Vector<Vector<String>> dataRowStudent){
+    public TeacherFrame(MyFrame myFrame, Vector<Vector<String>> dataRowTeacher){
         //fired from main when there is only one search result
         this.myFrame = myFrame;
-        this.dataRowStudent = dataRowStudent;
-        this.selectedStudentIdInDataRow =0;
+        this.dataRowTeacher = dataRowTeacher;
+        this.selectedTeacherIdInDataRow =0;
 
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.setTitle("Student");
+        this.setTitle("Teacher");
         this.setLayout(new GridBagLayout());
         this.initializeTitleLabel();
         this.initializeLabels();
@@ -70,14 +64,14 @@ public class StudentFrame extends JFrame implements ActionListener {
         this.setResizable(false);
     }
 
-    public StudentFrame(MyFrame myFrame, Vector<Vector<String>> dataRowStudent, int selectedStudentIdInDataRow) {
+    public TeacherFrame(MyFrame myFrame, Vector<Vector<String>> dataRowTeacher, int selectedTeacherIdInDataRow) {
         //fired from choose student frame when there are multi search results
-        this(myFrame, dataRowStudent);
-        this.selectedStudentIdInDataRow = selectedStudentIdInDataRow;
+        this(myFrame, dataRowTeacher);
+        this.selectedTeacherIdInDataRow = selectedTeacherIdInDataRow;
     }
 
     private void initializeTitleLabel() {
-        JLabel titleLabel = new JLabel("Student");
+        JLabel titleLabel = new JLabel("Teacher");
         titleLabel.setFont(new Font("MV Boli", Font.PLAIN, 30));
         GridBagConstraints a = new GridBagConstraints();
         a.insets = new Insets(50,50,50,50);
@@ -128,16 +122,8 @@ public class StudentFrame extends JFrame implements ActionListener {
             k.gridy = 5;
             this.add(dateOfBirthLabel, k);
 
-            //parents phone number
-            JLabel parentsPhoneNumberLabel = new JLabel("Parents phone number: ");
-            GridBagConstraints m = new GridBagConstraints();
-            m.insets = insets;
-            m.gridx = 0;
-            m.gridy = 6;
-            this.add(parentsPhoneNumberLabel, m);
-
-            //class
-            JLabel classLabel = new JLabel("Class: ");
+            //supervising class
+            JLabel classLabel = new JLabel("Supervising class: ");
             GridBagConstraints o = new GridBagConstraints();
             o.insets = insets;
             o.gridx = 0;
@@ -149,8 +135,8 @@ public class StudentFrame extends JFrame implements ActionListener {
         //border for all text fields
         Border blackline = BorderFactory.createLineBorder(Color.black);
 
-        selectedStudentId = Integer.parseInt(dataRowStudent.get(selectedStudentIdInDataRow).get(0));
-        firstName = dataRowStudent.get(selectedStudentIdInDataRow).get(1);
+        selectedTeacherId = Integer.parseInt(dataRowTeacher.get(selectedTeacherIdInDataRow).get(0));
+        firstName = dataRowTeacher.get(selectedTeacherIdInDataRow).get(1);
         firstNameTextField = new JLabel(firstName);
         firstNameTextField.setBorder(blackline);
         firstNameTextField.setPreferredSize(new Dimension(150,20));
@@ -160,7 +146,7 @@ public class StudentFrame extends JFrame implements ActionListener {
         c.gridy = 1;
         this.add(firstNameTextField, c);
 
-        lastName = dataRowStudent.get(selectedStudentIdInDataRow).get(2);
+        lastName = dataRowTeacher.get(selectedTeacherIdInDataRow).get(2);
         lastNameTextField = new JLabel(lastName);
         lastNameTextField.setBorder(blackline);
         lastNameTextField.setPreferredSize(new Dimension(150,20));
@@ -170,7 +156,7 @@ public class StudentFrame extends JFrame implements ActionListener {
         f.gridy = 2;
         this.add(lastNameTextField, f);
 
-        String city = dataRowStudent.get(selectedStudentIdInDataRow).get(3);
+        String city = dataRowTeacher.get(selectedTeacherIdInDataRow).get(3);
         cityTextField = new JLabel(city);
         cityTextField.setBorder(blackline);
         cityTextField.setBorder(blackline);
@@ -181,7 +167,7 @@ public class StudentFrame extends JFrame implements ActionListener {
         h.gridy = 3;
         this.add(cityTextField, h);
 
-        String phoneNumber = dataRowStudent.get(selectedStudentIdInDataRow).get(4);
+        String phoneNumber = dataRowTeacher.get(selectedTeacherIdInDataRow).get(4);
         phoneNumberTextField = new JLabel(phoneNumber);
         phoneNumberTextField.setBorder(blackline);
         phoneNumberTextField.setPreferredSize(new Dimension(150,20));
@@ -191,7 +177,7 @@ public class StudentFrame extends JFrame implements ActionListener {
         j.gridy = 4;
         this.add(phoneNumberTextField, j);
 
-        String dateOfBirth = dataRowStudent.get(selectedStudentIdInDataRow).get(5);
+        String dateOfBirth = dataRowTeacher.get(selectedTeacherIdInDataRow).get(5);
         dateOfBirthTextField = new JLabel(dateOfBirth);
         dateOfBirthTextField.setBorder(blackline);
         dateOfBirthTextField.setPreferredSize(new Dimension(150,20));
@@ -201,25 +187,19 @@ public class StudentFrame extends JFrame implements ActionListener {
         l.gridy = 5;
         this.add(dateOfBirthTextField, l);
 
-        String parentsPhoneNumber = dataRowStudent.get(selectedStudentIdInDataRow).get(6);
-        parentsPhoneNumberTextField = new JLabel(parentsPhoneNumber);
-        parentsPhoneNumberTextField.setBorder(blackline);
-        parentsPhoneNumberTextField.setPreferredSize(new Dimension(150,20));
-        GridBagConstraints n = new GridBagConstraints();
-        n.insets = insets;
-        n.gridx = 1;
-        n.gridy = 6;
-        this.add(parentsPhoneNumberTextField, n);
-
-        String className = dataRowStudent.get(selectedStudentIdInDataRow).get(7);
-        classTextField = new JLabel(className);
-        classTextField.setBorder(blackline);
-        classTextField.setPreferredSize(new Dimension(150,20));
+        String supervisingClassId;
+        if ((supervisingClassId = dataRowTeacher.get(selectedTeacherIdInDataRow).get(6))!=null){
+            supervisingClass = myFrame.getClassNameByClassId(Integer.parseInt(supervisingClassId));
+        }
+        else supervisingClass = "";
+        supervisingClassTextField = new JLabel(supervisingClass);
+        supervisingClassTextField.setBorder(blackline);
+        supervisingClassTextField.setPreferredSize(new Dimension(150,20));
         GridBagConstraints p = new GridBagConstraints();
         p.insets = insets;
         p.gridx = 1;
         p.gridy = 7;
-        this.add(classTextField, p);
+        this.add(supervisingClassTextField, p);
     }
 
     private void initializeUpdateButtons(){
@@ -263,21 +243,13 @@ public class StudentFrame extends JFrame implements ActionListener {
         e.gridy = 5;
         this.add(updateDateOfBirthButton, e);
 
-        updateParentsPhoneNumberButton = new JButton("update");
-        updateParentsPhoneNumberButton.addActionListener(this);
-        GridBagConstraints f = new GridBagConstraints();
-        f.insets = insets;
-        f.gridx = 2;
-        f.gridy = 6;
-        this.add(updateParentsPhoneNumberButton, f);
-
-        updateClassButton = new JButton("update");
-        updateClassButton.addActionListener(this);
+        updateSupervisingClassButton = new JButton("update");
+        updateSupervisingClassButton.addActionListener(this);
         GridBagConstraints g = new GridBagConstraints();
         g.insets = insets;
         g.gridx = 2;
         g.gridy = 7;
-        this.add(updateClassButton, g);
+        this.add(updateSupervisingClassButton, g);
     }
 
     private void initializeButtons() {
@@ -311,41 +283,37 @@ public class StudentFrame extends JFrame implements ActionListener {
             dispose();
         }
         if (e.getSource()== updateFirstNameButton){
-            System.out.println("update first name button in student frame");
+            System.out.println("update first name button in teacher frame");
             showUpdateDialog("New first name: ",0);
         }
         if (e.getSource()==updateLastNameButton){
-            System.out.println("update last name button in student frame");
+            System.out.println("update last name button in teacher frame");
             showUpdateDialog("New last name: ",1);
         }
         if (e.getSource()==updateCityButton){
-            System.out.println("update city button in student frame");
+            System.out.println("update city button in teacher frame");
             showUpdateDialog("New city: ",2);
         }
         if (e.getSource()==updatePhoneNumberButton){
-            System.out.println("update phone number button in student frame");
+            System.out.println("update phone number button in teacher frame");
             showUpdateDialog("New phone number: ",3);
         }
         if (e.getSource()==updateDateOfBirthButton){
-            System.out.println("update date of birth button in student frame");
+            System.out.println("update date of birth button in teacher frame");
             showUpdateDialog("New date of birth: ",4);
         }
-        if (e.getSource()==updateParentsPhoneNumberButton){
-            System.out.println("update parents phone number button in student frame");
-            showUpdateDialog("New parents phone number: ",5);
-        }
-        if (e.getSource()==updateClassButton){
-            System.out.println("update class button in student frame");
-            showUpdateDialog("Choose class ",6);
+        if (e.getSource()== updateSupervisingClassButton){
+            System.out.println("update supervising class button in teacher frame");
+            showUpdateDialog("Choose class ",5);
         }
         if (e.getSource()==deleteButton){
-            System.out.println("delete class button in student frame");
+            System.out.println("delete teacher button in teacher frame");
             JPanel jPanel = new JPanel();
-            int result = JOptionPane.showConfirmDialog(null, jPanel, "Are you sure you want to delete this student?", JOptionPane.OK_CANCEL_OPTION);
+            int result = JOptionPane.showConfirmDialog(null, jPanel, "Are you sure you want to delete this teacher?", JOptionPane.OK_CANCEL_OPTION);
 
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
-                myFrame.deleteRow(0,String.valueOf(selectedStudentId));
+                myFrame.deleteRow(2,String.valueOf(selectedTeacherId));
                 dispose();
             }
         }
@@ -358,10 +326,9 @@ public class StudentFrame extends JFrame implements ActionListener {
         //2 - city
         //3 - phone number
         //4 - date of birth
-        //5 - parents phone number
-        //6 - class
+        //5 - supervising class
 
-        if (i!=4) { //if it's not date of birth update
+        if (i!=4 && i!=5) { //if it's not date of birth and not supervising class update
             JTextField textField = new JTextField(5);
             JPanel jPanel = new JPanel();
             jPanel.add(new JLabel(text));
@@ -372,17 +339,17 @@ public class StudentFrame extends JFrame implements ActionListener {
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
                 String newVaule = textField.getText();
-                if (myFrame.updateTeacher(i, selectedStudentId, newVaule)==1){
+                if (myFrame.updateTeacher(i, selectedTeacherId, newVaule)==1){
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
-                    myFrame.findStudent(selectedStudentId);
+                    myFrame.findStudent(selectedTeacherId);
                     System.out.println("student updated");
                 }
                 else System.out.println("Something went wrong when updating student");
             }
         }
 
-        else { //it is date of birth update
+        else if (i==4) { //it is date of birth update
             JPanel jPanel = new JPanel();
             jPanel.add(new JLabel(text));
 
@@ -405,14 +372,19 @@ public class StudentFrame extends JFrame implements ActionListener {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String newValue = simpleDateFormat.format(date);
                 System.out.println("new date as string: " + newValue);
-                if(myFrame.updateTeacher(i, selectedStudentId, newValue)==1) {
+                if(myFrame.updateTeacher(i, selectedTeacherId, newValue)==1) {
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
-                    myFrame.findStudent(selectedStudentId);
-                    System.out.println("student updated");
+                    myFrame.findStudent(selectedTeacherId);
+                    System.out.println("teacher updated");
                 }
-                else System.out.println("Something went wrong when updating student");
+                else System.out.println("Something went wrong when updating teacher");
             }
+        }
+
+        else { //it is supervising class update
+
+
         }
     }
 }

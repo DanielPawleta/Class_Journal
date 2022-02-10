@@ -289,7 +289,7 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.findStudent(selectedStudentId);
     }
 
-    protected int updateStudent(int i, int selectedStudentId, String newValue) {
+    protected int updateTeacher(int i, int selectedStudentId, String newValue) {
         return main.updateStudent(i,selectedStudentId,newValue);
     }
 
@@ -327,6 +327,10 @@ public class MyFrame extends JFrame implements ActionListener {
 
     public String getStudentNameAndLastName(int studentId) {
         return main.getStudentNameAndLastName(studentId);
+    }
+
+    public String getClassNameByClassId(int classId) {
+        return main.getClassNameByClassId(classId);
     }
 
     public String getTeacherNameAndLastName(int teacherId) {
