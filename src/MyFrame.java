@@ -19,6 +19,9 @@ public class MyFrame extends JFrame implements ActionListener {
     private JButton newStudentButton;
     private JButton findStudentButton;
 
+    private JButton newTeacherButton;
+    private JButton findTeacherButton;
+
     private JButton newClassButton;
     private JButton findClassButton;
 
@@ -115,6 +118,7 @@ public class MyFrame extends JFrame implements ActionListener {
 
         studentsTab = new JPanel();
         studentsTab.setLayout(new BoxLayout(studentsTab, BoxLayout.Y_AXIS));
+
         studentsTab.add(Box.createVerticalGlue());
         newStudentButton = new JButton("New Student");
         newStudentButton.addActionListener(this);
@@ -133,6 +137,20 @@ public class MyFrame extends JFrame implements ActionListener {
         tabbedPane.setEnabledAt(1,false);
 
         teachersTab = new JPanel();
+        teachersTab.setLayout(new BoxLayout(teachersTab, BoxLayout.Y_AXIS));
+        teachersTab.add(Box.createVerticalGlue());
+        newTeacherButton = new JButton("New Teacher");
+        newTeacherButton.addActionListener(this);
+        newTeacherButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        newTeacherButton.setFocusable(false);
+        teachersTab.add(newTeacherButton);
+        teachersTab.add(Box.createVerticalGlue());
+
+        findTeacherButton = new JButton("Find Teacher");
+        findTeacherButton.addActionListener(this);
+        findTeacherButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        teachersTab.add(findTeacherButton);
+        teachersTab.add(Box.createVerticalGlue());
         tabbedPane.addTab("Teachers", teachersTab);
         tabbedPane.setEnabledAt(2,false);
 
@@ -202,6 +220,10 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.addStudent(first_name, last_name, city, phone_number, date_of_birth, parents_phone_number, emptyText);
     }
 
+    protected String addTeacher(String first_name, String last_name, String city, int phone_number, String date_of_birth, String supervising_class){
+        return main.addTeacher(first_name, last_name, city, phone_number, date_of_birth, supervising_class);
+    }
+
 
 
 
@@ -253,13 +275,21 @@ public class MyFrame extends JFrame implements ActionListener {
             System.out.println("new student");
             NewStudentFrame newStudentFrame = new NewStudentFrame(this);
             this.setVisible(false);
-
         }
         if (e.getSource()==findStudentButton){
             System.out.println("find student");
             FindStudentFrame findStudentFrame = new FindStudentFrame(this);
             this.setVisible(false);
-
+        }
+        if (e.getSource()==newTeacherButton){
+            System.out.println("new teacher");
+            NewTeacherFrame newTeacherFrame = new NewTeacherFrame(this);
+            this.setVisible(false);
+        }
+        if (e.getSource()==findTeacherButton){
+            System.out.println("find teacher");
+            FindTeacherFrame findTeacherFrame = new FindTeacherFrame(this);
+            this.setVisible(false);
         }
         if (e.getSource()==newClassButton){
             System.out.println("new class");
@@ -271,9 +301,6 @@ public class MyFrame extends JFrame implements ActionListener {
             FindClassFrame findClassFrame = new FindClassFrame(this);
             this.setVisible(false);
         }
-
-
-
         if (e.getSource()== logOutButton){
             setLoggedAs(0);
             System.out.println("logout");
@@ -296,6 +323,11 @@ public class MyFrame extends JFrame implements ActionListener {
     protected Vector<Vector<String>> findStudentsWithoutClass () {
         return main.findStudentsWithoutClass();
     }
+
+    protected Vector<Vector<String>> findClassWithoutSupervisingTeacher () {
+        return main.findClassWithoutSupervisingTeacher();
+    }
+
 
     protected Vector<Vector<String>> findTeachersWithoutSupervisingClass () {
         return main.findTeachersWithoutSupervisingClass();

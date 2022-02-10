@@ -20,6 +20,27 @@ public class Main {
             e.printStackTrace();
         }
 
+        String query = "SELECT * FROM class " +
+                "WHERE supervising_teacher is null;";
+
+        /*
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Vector<String> classRow = new Vector<>();
+                System.out.println(resultSet.getString("class_name"));
+                classRow.add(resultSet.getString("class_name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+         */
+
 
 
         //main.showStudents();
@@ -112,6 +133,37 @@ public class Main {
         return query;
     }
 
+    protected String addTeacher(String first_name, String last_name, String city, int phone_number, String date_of_birth, String supervising_class){
+
+        int result = 0;
+        Date date_of_birth_as_Date = Date.valueOf(date_of_birth);
+
+        String query = "INSERT INTO `class_journal`.`teachers`" +
+                "(`first_name`" +
+                ",`last_name`" +
+                ",`city`," +
+                "`phone_number`," +
+                "`date_of_birth`," +
+                "`supervising_class`)" +
+                "VALUES (?,?,?,?,?,?);";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,first_name);
+            preparedStatement.setString(2,last_name);
+            preparedStatement.setString(3,city);
+            preparedStatement.setInt(4,phone_number);
+            preparedStatement.setDate(5,date_of_birth_as_Date);
+            preparedStatement.setString(7,supervising_class);
+            result = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("affected rows: " + result);
+        addNewSupervisingTeacherToClass(supervising_class);
+        return query;
+    }
+
     private void addNewStudentToClassOnFirstFreeSlot(String class_attending){
         String latestStudentAdded = null;
 
@@ -138,6 +190,37 @@ public class Main {
             preparedStatement.setString(1, firstFreeSlotNumber);
             preparedStatement.setString(2, latestStudentAdded);
             preparedStatement.setString(3, class_attending);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addNewSupervisingTeacherToClass(String supervising_class){
+        String latestTeacherAdded = null;
+
+        String query = "SELECT MAX(Id) FROM teachers;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                latestTeacherAdded = resultSet.getString("id");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        query = "UPDATE `class_journal`.`class` SET class_supervising"  +
+                " = ? " +
+                "WHERE id = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, latestTeacherAdded);
+            preparedStatement.setString(2, supervising_class);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -292,8 +375,45 @@ public class Main {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        catch (NullPointerException e){
+            dataRowStudent = new Vector<>();
+        }
+
         System.out.println("Found " + count +" students with no class definied");
         return dataRowStudent;
+    }
+
+    protected Vector<Vector<String>> findClassWithoutSupervisingTeacher () {
+        Vector<Vector<String>> dataRowClassWithoutSupervisingTeacher = null;
+        System.out.println("find class with no supervising teacher value selected");
+        ResultSet resultSet;
+        int count=0;
+
+        String query = "SELECT * FROM class " +
+                "WHERE supervising_teacher is null;";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+
+            resultSet = preparedStatement.executeQuery();
+
+            dataRowClassWithoutSupervisingTeacher = new Vector<>();
+
+            while (resultSet.next()) {
+                count++;
+                Vector<String> classRow = new Vector<>();
+                classRow.add(resultSet.getString("class_name"));
+                dataRowClassWithoutSupervisingTeacher.add(classRow);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        catch (NullPointerException e){
+            dataRowClassWithoutSupervisingTeacher = new Vector<>();
+        }
+        System.out.println("Found " + count +" classes with no supervising teacher defined");
+        return dataRowClassWithoutSupervisingTeacher;
     }
 
     protected Vector<Vector<String>> findTeachersWithoutSupervisingClass () {
