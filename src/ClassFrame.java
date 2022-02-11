@@ -368,10 +368,15 @@ public class ClassFrame extends JFrame implements ActionListener {
             jPanel.add(textField);
             int result = JOptionPane.showConfirmDialog(null, jPanel, "Please enter new value", JOptionPane.OK_CANCEL_OPTION);
 
+
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
                 String newVaule = textField.getText();
-                if (myFrame.updateClass(i, selectedClassId, newVaule) == 1) {
+                if (i==0 && !myFrame.checkClassName(newVaule)){
+                    JOptionPane.showMessageDialog(jPanel, "This class name is already in usage", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    return; //if this class name is already in DB
+                }
+                    if (myFrame.updateClass(i, selectedClassId, newVaule) == 1) {
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
                     myFrame.findClass(selectedClassId);

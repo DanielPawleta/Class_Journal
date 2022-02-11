@@ -341,7 +341,8 @@ public class StudentFrame extends JFrame implements ActionListener {
         if (e.getSource()==deleteButton){
             System.out.println("delete class button in student frame");
             JPanel jPanel = new JPanel();
-            int result = JOptionPane.showConfirmDialog(null, jPanel, "Are you sure you want to delete this student?", JOptionPane.OK_CANCEL_OPTION);
+            jPanel.add(new JLabel("Are you sure you want to delete this student?"));
+            int result = JOptionPane.showConfirmDialog(null, jPanel, "Delete", JOptionPane.OK_CANCEL_OPTION);
 
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
@@ -372,7 +373,7 @@ public class StudentFrame extends JFrame implements ActionListener {
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
                 String newVaule = textField.getText();
-                if (myFrame.updateTeacher(i, selectedStudentId, newVaule)==1){
+                if (myFrame.updateStudent(i, selectedStudentId, newVaule)==1){
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
                     myFrame.findStudent(selectedStudentId);
@@ -405,7 +406,7 @@ public class StudentFrame extends JFrame implements ActionListener {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String newValue = simpleDateFormat.format(date);
                 System.out.println("new date as string: " + newValue);
-                if(myFrame.updateTeacher(i, selectedStudentId, newValue)==1) {
+                if(myFrame.updateStudent(i, selectedStudentId, newValue)==1) {
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
                     myFrame.findStudent(selectedStudentId);

@@ -30,7 +30,7 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
         this.initializeButtons();
 
         this.setVisible(true);
-        this.setSize(500,600);
+        this.setSize(700,600);
         this.setResizable(false);
         this.pack();
     }
@@ -70,12 +70,13 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
         });
 
         jTable.getColumnModel().getColumn(0).setPreferredWidth(40); //id
-        jTable.getColumnModel().getColumn(1).setPreferredWidth(100); //first name
-        jTable.getColumnModel().getColumn(2).setPreferredWidth(100); //last name
-        jTable.getColumnModel().getColumn(3).setPreferredWidth(100); //city
-        jTable.getColumnModel().getColumn(4).setPreferredWidth(120); //phone number
-        jTable.getColumnModel().getColumn(5).setPreferredWidth(150); //parents phone number
-        jTable.getColumnModel().getColumn(6).setPreferredWidth(40); //class
+        jTable.getColumnModel().getColumn(1).setPreferredWidth(80); //first name
+        jTable.getColumnModel().getColumn(2).setPreferredWidth(90); //last name
+        jTable.getColumnModel().getColumn(3).setPreferredWidth(90); //city
+        jTable.getColumnModel().getColumn(4).setPreferredWidth(100); //phone number
+        jTable.getColumnModel().getColumn(5).setPreferredWidth(80); //date of birth
+        jTable.getColumnModel().getColumn(6).setPreferredWidth(150); //parents phone number
+        jTable.getColumnModel().getColumn(7).setPreferredWidth(40); //class
 
         JScrollPane scrollPane = new JScrollPane(jTable);
         scrollPane.setPreferredSize(new Dimension(675,150));
@@ -97,6 +98,7 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
         columnNames.add("last_name");
         columnNames.add("city");
         columnNames.add("phone_number");
+        columnNames.add("date_of_birth");
         columnNames.add("parents_phone_number");
         columnNames.add("class");
     }
@@ -145,15 +147,8 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
             for (String st : dataRow.get(selectedRow)){
                 System.out.println(st);
             }
-
-
             StudentFrame studentFrame = new StudentFrame(myFrame, dataRow, selectedStudentId);
-
             dispose();
         }
-    }
-
-    public int getSelectedStudentId() {
-        return selectedStudentId;
     }
 }

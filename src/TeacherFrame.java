@@ -14,11 +14,11 @@ import java.util.Properties;
 import java.util.Vector;
 
 public class TeacherFrame extends JFrame implements ActionListener {
-    private Vector<Vector<String>> dataRowTeacher;
-    private MyFrame myFrame;
+    private final Vector<Vector<String>> dataRowTeacher;
+    private final MyFrame myFrame;
     private int selectedTeacherId;
     private int selectedTeacherIdInDataRow;
-    private Insets insets = new Insets(10,10,10,10);
+    private final Insets insets = new Insets(10,10,10,10);
 
     private JButton backButton;
     private JButton updateFirstNameButton;
@@ -65,7 +65,7 @@ public class TeacherFrame extends JFrame implements ActionListener {
     }
 
     public TeacherFrame(MyFrame myFrame, Vector<Vector<String>> dataRowTeacher, int selectedTeacherIdInDataRow) {
-        //fired from choose student frame when there are multi search results
+        //fired from choose teacher frame when there are multi search results
         this(myFrame, dataRowTeacher);
         this.selectedTeacherIdInDataRow = selectedTeacherIdInDataRow;
     }
@@ -309,7 +309,8 @@ public class TeacherFrame extends JFrame implements ActionListener {
         if (e.getSource()==deleteButton){
             System.out.println("delete teacher button in teacher frame");
             JPanel jPanel = new JPanel();
-            int result = JOptionPane.showConfirmDialog(null, jPanel, "Are you sure you want to delete this teacher?", JOptionPane.OK_CANCEL_OPTION);
+            jPanel.add(new JLabel("Are you sure you want to delete this teacher?"));
+            int result = JOptionPane.showConfirmDialog(null, jPanel, "Delete", JOptionPane.OK_CANCEL_OPTION);
 
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
@@ -342,10 +343,10 @@ public class TeacherFrame extends JFrame implements ActionListener {
                 if (myFrame.updateTeacher(i, selectedTeacherId, newVaule)==1){
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
-                    myFrame.findStudent(selectedTeacherId);
+                    myFrame.findTeacher(selectedTeacherId);
                     System.out.println("teacher updated");
                 }
-                else System.out.println("Something went wrong when updating student");
+                else System.out.println("Something went wrong when updating teacher");
             }
         }
 
@@ -375,7 +376,7 @@ public class TeacherFrame extends JFrame implements ActionListener {
                 if(myFrame.updateTeacher(i, selectedTeacherId, newValue)==1) {
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
-                    myFrame.findStudent(selectedTeacherId);
+                    myFrame.findTeacher(selectedTeacherId);
                     System.out.println("teacher updated");
                 }
                 else System.out.println("Something went wrong when updating teacher");

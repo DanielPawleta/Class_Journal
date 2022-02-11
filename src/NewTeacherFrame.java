@@ -218,8 +218,7 @@ public class NewTeacherFrame extends JFrame implements ActionListener {
 
         if      (!firstName.equals("") &&
                 !lastName.equals("") &&
-                !city.equals("")
-                )
+                !city.equals(""))
         {
             try {
                 phoneNumberInt = Integer.parseInt(phoneNumber);

@@ -70,11 +70,12 @@ public class ChooseTeacherFrame extends JFrame implements ActionListener {
         });
 
         jTable.getColumnModel().getColumn(0).setPreferredWidth(40); //id
-        jTable.getColumnModel().getColumn(1).setPreferredWidth(100); //first name
-        jTable.getColumnModel().getColumn(2).setPreferredWidth(100); //last name
-        jTable.getColumnModel().getColumn(3).setPreferredWidth(100); //city
-        jTable.getColumnModel().getColumn(4).setPreferredWidth(120); //phone number
-        jTable.getColumnModel().getColumn(5).setPreferredWidth(40); //supervising class
+        jTable.getColumnModel().getColumn(1).setPreferredWidth(80); //first name
+        jTable.getColumnModel().getColumn(2).setPreferredWidth(90); //last name
+        jTable.getColumnModel().getColumn(3).setPreferredWidth(90); //city
+        jTable.getColumnModel().getColumn(4).setPreferredWidth(100); //phone number
+        jTable.getColumnModel().getColumn(5).setPreferredWidth(80); //date of birth
+        jTable.getColumnModel().getColumn(6).setPreferredWidth(120); //supervising class
 
         JScrollPane scrollPane = new JScrollPane(jTable);
         scrollPane.setPreferredSize(new Dimension(675,150));
@@ -96,6 +97,7 @@ public class ChooseTeacherFrame extends JFrame implements ActionListener {
         columnNames.add("last_name");
         columnNames.add("city");
         columnNames.add("phone_number");
+        columnNames.add("date_of_birth");
         columnNames.add("supervising_class");
     }
 

@@ -1,5 +1,3 @@
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,48 +7,27 @@ import java.util.Vector;
 
 public class MyFrame extends JFrame implements ActionListener {
     private JLabel loggedLabel;
-    private JPanel upPanel;
-    private JPanel downPanel;
-    private JPanel studentsTab;
-    private JPanel teachersTab;
-    private JPanel classesTab;
-    private LoginPanel loginPanel;
+    private JPanel centerPanel;
+    private final Main main;
+    private JTabbedPane tabbedPane;
 
     private JButton newStudentButton;
     private JButton findStudentButton;
-
     private JButton newTeacherButton;
     private JButton findTeacherButton;
-
     private JButton newClassButton;
     private JButton findClassButton;
-
     private JButton logOutButton;
 
-
-
-    private String loginText = "Please log in";
-    private String emptyText = "please update!";
-    private int emptyNumber = 000;
-    private String emptyDate = "1900-01-01";
-
-    private final String PAUSE_BUTTON_TEXT = "Pause";
-    private JButton saveButton;
-    private boolean areButtonsVisible=true;
-    private JPanel leftPanel ;
-    private JPanel rightPanel;
-    private JPanel centerPanel;
-    private final int PANEL_SIZE =30;
-    private int GAP_IN_BORDER_LAYOUT_SIZE =10;
-    private Main main;
-    private JTabbedPane tabbedPane;
+    private final String loginText = "Please log in";
 
     //Constructor
     public MyFrame(Main main) {
         this.main = main;
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("School Database v1.0");
-        this.setLayout(new BorderLayout(GAP_IN_BORDER_LAYOUT_SIZE,GAP_IN_BORDER_LAYOUT_SIZE));
+        int GAP_IN_BORDER_LAYOUT_SIZE = 10;
+        this.setLayout(new BorderLayout(GAP_IN_BORDER_LAYOUT_SIZE, GAP_IN_BORDER_LAYOUT_SIZE));
         this.getContentPane().setBackground(Color.BLACK);
         initializePanels();
         initializeFrontLabel();
@@ -61,10 +38,10 @@ public class MyFrame extends JFrame implements ActionListener {
         this.setResizable(false);
     }
 
-    //Methods
+    //Methods for GUI
     private void initializePanels(){
-        upPanel = new JPanel();
-        downPanel = new JPanel();
+        JPanel upPanel = new JPanel();
+        JPanel downPanel = new JPanel();
         downPanel.setLayout(new GridLayout(1,2));
         loggedLabel = new JLabel(loginText);
         downPanel.add(loggedLabel);
@@ -74,8 +51,8 @@ public class MyFrame extends JFrame implements ActionListener {
         logOutButton.setVisible(false);
         downPanel.add(logOutButton);
 
-        leftPanel = new JPanel();
-        rightPanel = new JPanel();
+        JPanel leftPanel = new JPanel();
+        JPanel rightPanel = new JPanel();
         centerPanel = new JPanel();
 
         upPanel.setBackground(new Color(0x94D914));
@@ -84,6 +61,7 @@ public class MyFrame extends JFrame implements ActionListener {
         rightPanel.setBackground(new Color(0x2E4F07));
         centerPanel.setBackground(new Color(0xA8D0E1));
 
+        int PANEL_SIZE = 30;
         upPanel.setPreferredSize(new Dimension(0, PANEL_SIZE));
         downPanel.setPreferredSize(new Dimension(0, PANEL_SIZE));
         leftPanel.setPreferredSize(new Dimension(PANEL_SIZE,0));
@@ -113,10 +91,10 @@ public class MyFrame extends JFrame implements ActionListener {
 
         tabbedPane = new JTabbedPane();
 
-        loginPanel = new LoginPanel(this);
-        tabbedPane.addTab("Login",loginPanel);
+        LoginPanel loginPanel = new LoginPanel(this);
+        tabbedPane.addTab("Login", loginPanel);
 
-        studentsTab = new JPanel();
+        JPanel studentsTab = new JPanel();
         studentsTab.setLayout(new BoxLayout(studentsTab, BoxLayout.Y_AXIS));
 
         studentsTab.add(Box.createVerticalGlue());
@@ -136,7 +114,7 @@ public class MyFrame extends JFrame implements ActionListener {
         tabbedPane.addTab("Students", studentsTab);
         tabbedPane.setEnabledAt(1,false);
 
-        teachersTab = new JPanel();
+        JPanel teachersTab = new JPanel();
         teachersTab.setLayout(new BoxLayout(teachersTab, BoxLayout.Y_AXIS));
         teachersTab.add(Box.createVerticalGlue());
         newTeacherButton = new JButton("New Teacher");
@@ -154,7 +132,7 @@ public class MyFrame extends JFrame implements ActionListener {
         tabbedPane.addTab("Teachers", teachersTab);
         tabbedPane.setEnabledAt(2,false);
 
-        classesTab = new JPanel();
+        JPanel classesTab = new JPanel();
         classesTab.setLayout(new BoxLayout(classesTab, BoxLayout.Y_AXIS));
         classesTab.add(Box.createVerticalGlue());
         newClassButton = new JButton("New Class");
@@ -212,62 +190,104 @@ public class MyFrame extends JFrame implements ActionListener {
 
     }
 
+
+    //Methods for working with DB table 'students'
     protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number, String class_attending){
         return main.addStudent(first_name, last_name, city, phone_number, date_of_birth, parents_phone_number, class_attending);
     }
 
-    protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number){
-        return main.addStudent(first_name, last_name, city, phone_number, date_of_birth, parents_phone_number, emptyText);
+    protected int findStudent(String firstName, String lastName) {
+        return main.findStudent(firstName,lastName);
     }
 
+    protected int findStudent(int selectedStudentId) {
+        return main.findStudent(selectedStudentId);
+    }
+
+    protected int updateStudent(int i, int selectedStudentId, String newValue) {
+        return main.updateStudent(i,selectedStudentId,newValue);
+    }
+
+    protected Vector<Vector<String>> findStudentsWithoutClass () {
+        return main.findStudentsWithoutClass();
+    }
+
+    public String getStudentNameAndLastName(int studentId) {
+        return main.getStudentNameAndLastName(studentId);
+    }
+
+
+    //Methods for working with DB table 'teachers'
     protected String addTeacher(String first_name, String last_name, String city, int phone_number, String date_of_birth, String supervising_class){
         return main.addTeacher(first_name, last_name, city, phone_number, date_of_birth, supervising_class);
     }
 
-
-
-
-    /*
-    public void initializeDownPanel() {
-        downPanel.setLayout(new GridLayout(1,3,50,10) );
-
-        returnButton = new JButton("Return");
-        pauseButton = new JButton(PAUSE_BUTTON_TEXT);
-        saveButton = new JButton("Save game");
-
-        returnButton.addActionListener(this);
-        pauseButton.addActionListener(this);
-        saveButton.addActionListener(this);
-
-        downPanel.add(returnButton);
-        downPanel.add(pauseButton);
-        downPanel.add(saveButton);
-
-        returnButton.setFocusable(false);
-        pauseButton.setFocusable(false);
-        saveButton.setFocusable(false);
-
-        returnButton.setVisible(false);
-        pauseButton.setVisible(false);
-        saveButton.setVisible(false);
-
-        saveButton.setEnabled(false);
+    protected int findTeacher(String firstName, String lastName) {
+        return main.findTeacher(firstName,lastName);
     }
 
-    public void ableUpAndDownButtonsVisibility(){
-        returnButton.setVisible(true);
-        pauseButton.setVisible(true);
-        saveButton.setVisible(true);
+    protected int findTeacher(int selectedTeacherId) {
+        return main.findTeacher(selectedTeacherId);
     }
 
-    public void disableUpAndDownButtonsVisibility(){
-
-        returnButton.setVisible(false);
-        pauseButton.setVisible(false);
-        saveButton.setVisible(false);
+    protected int updateTeacher(int i, int selectedTeacherId, String newValue) {
+        return main.updateTeacher(i,selectedTeacherId,newValue);
     }
 
-     */
+    public String getTeacherNameAndLastName(int teacherId) {
+        return main.getTeacherNameAndLastName(teacherId);
+    }
+
+    protected Vector<Vector<String>> findTeachersWithoutSupervisingClass () {
+        return main.findTeachersWithoutSupervisingClass();
+    }
+
+
+    //Methods for working with DB table 'class'
+    protected String addClass(String className,int supervisingTeacherId, ArrayList<Integer> studentsId){
+        return main.addClass(className, supervisingTeacherId, studentsId);
+    }
+
+    protected boolean checkClassName(String className){
+        return main.checkClassName(className);
+    }
+
+    protected int findClass(String className) {
+        return main.findClass(className);
+    }
+
+    protected void findClass(int classId) {
+        main.findClass(classId);
+    }
+
+    protected int findClass(boolean classNameKnown, String supervisingTeacher) {
+        return main.findClass(classNameKnown,supervisingTeacher);
+    }
+
+    protected Vector<Vector<String>> findClassWithoutSupervisingTeacher () {
+        return main.findClassWithoutSupervisingTeacher();
+    }
+
+    protected Vector<Vector<String>> findClassWithEmptyStudentPlaces () {
+        return main.findClassWithEmptyStudentPlaces();
+    }
+
+    protected int updateClass(int i, int selectedClassId, String newValue) {
+        return main.updateClass(i,selectedClassId,newValue);
+    }
+
+    public String getClassIdByClassName(String classAttendingName) {
+        return main.getClassIdByClassName(classAttendingName);
+    }
+
+    public String getClassNameByClassId(int classId) {
+        return main.getClassNameByClassId(classId);
+    }
+
+    //Method for all tables in DB
+    protected void deleteRow(int i, String rowId){
+        main.deleteRow(i, rowId);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -306,82 +326,5 @@ public class MyFrame extends JFrame implements ActionListener {
             System.out.println("logout");
 
         }
-    }
-
-    protected int findStudent(String firstName, String lastName) {
-        return main.findStudent(firstName,lastName);
-    }
-
-    protected int findTeacher(String firstName, String lastName) {
-        return main.findTeacher(firstName,lastName);
-    }
-
-    protected int findStudent(int selectedStudentId) {
-        return main.findStudent(selectedStudentId);
-    }
-
-    protected int updateTeacher(int i, int selectedStudentId, String newValue) {
-        return main.updateStudent(i,selectedStudentId,newValue);
-    }
-
-    protected Vector<Vector<String>> findStudentsWithoutClass () {
-        return main.findStudentsWithoutClass();
-    }
-
-    protected Vector<Vector<String>> findClassWithoutSupervisingTeacher () {
-        return main.findClassWithoutSupervisingTeacher();
-    }
-
-
-    protected Vector<Vector<String>> findTeachersWithoutSupervisingClass () {
-        return main.findTeachersWithoutSupervisingClass();
-    }
-
-    protected String addClass(String className,int supervisingTeacherId, ArrayList<Integer> studentsId){
-        return main.addClass(className, supervisingTeacherId, studentsId);
-    }
-
-    protected boolean checkClassName(String className){
-        return main.checkClassName(className);
-    }
-
-    protected int findClass(boolean classNameKnown, String supervisingTeacher) {
-        return main.findClass(classNameKnown,supervisingTeacher);
-    }
-
-    protected int findClass(String className) {
-        return main.findClass(className);
-    }
-
-    protected void findClass(int classId) {
-        main.findClass(classId);
-    }
-
-    protected Vector<Vector<String>> findClassWithEmptyStudentPlaces () {
-        return main.findClassWithEmptyStudentPlaces();
-    }
-
-    public String getStudentNameAndLastName(int studentId) {
-        return main.getStudentNameAndLastName(studentId);
-    }
-
-    public String getClassNameByClassId(int classId) {
-        return main.getClassNameByClassId(classId);
-    }
-
-    public String getTeacherNameAndLastName(int teacherId) {
-        return main.getTeacherNameAndLastName(teacherId);
-    }
-
-    protected int updateClass(int i, int selectedClassId, String newValue) {
-        return main.updateClass(i,selectedClassId,newValue);
-    }
-
-    public String getClassIdByClassName(String classAttendingName) {
-        return main.getClassIdByClassName(classAttendingName);
-    }
-
-    protected void deleteRow(int i, String rowId){
-        main.deleteRow(i, rowId);
     }
 }

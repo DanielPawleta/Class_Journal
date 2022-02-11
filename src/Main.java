@@ -12,14 +12,14 @@ public class Main {
         Main main = new Main();
 
 
-        /*
+
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-         */
+
 /*
         String query = "SELECT * FROM class " +
                 "WHERE supervising_teacher is null;";
@@ -85,6 +85,8 @@ public class Main {
     }
 
     protected boolean checkClassName(String className){
+        //true - this class name is not in DB
+        //flase - this class name is already in DB
         boolean isThisClassNameNotTaken = false;
         try {
             Statement statement = connection.createStatement();
@@ -126,13 +128,18 @@ public class Main {
             preparedStatement.setInt(4,phone_number);
             preparedStatement.setDate(5,date_of_birth_as_Date);
             preparedStatement.setInt(6,parents_phone_number);
-            preparedStatement.setString(7,class_attending);
+            if (class_attending==null){
+                preparedStatement.setNull(7,Types.VARCHAR);
+            }
+            else {
+                preparedStatement.setString(7,class_attending);
+                addNewStudentToClassOnFirstFreeSlot(class_attending);
+            }
             result = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         System.out.println("affected rows: " + result);
-        addNewStudentToClassOnFirstFreeSlot(class_attending);
         return query;
     }
 
@@ -147,7 +154,7 @@ public class Main {
                 ",`city`," +
                 "`phone_number`," +
                 "`date_of_birth`," +
-                "`supervising_class`)" +
+                "`class_supervising`)" +
                 "VALUES (?,?,?,?,?,?);";
 
         try {
@@ -157,13 +164,18 @@ public class Main {
             preparedStatement.setString(3,city);
             preparedStatement.setInt(4,phone_number);
             preparedStatement.setDate(5,date_of_birth_as_Date);
-            preparedStatement.setString(7,supervising_class);
+            if (supervising_class==null){
+                preparedStatement.setNull(6,Types.VARCHAR);
+            }
+            else {
+                preparedStatement.setString(6,supervising_class);
+                addNewSupervisingTeacherToClass(supervising_class);
+            }
             result = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         System.out.println("affected rows: " + result);
-        addNewSupervisingTeacherToClass(supervising_class);
         return query;
     }
 
@@ -317,7 +329,7 @@ public class Main {
                 teacherRow.add(resultSet.getString("city"));
                 teacherRow.add(resultSet.getString("phone_number"));
                 teacherRow.add(resultSet.getString("date_of_birth"));
-                teacherRow.add(resultSet.getString("supervising_class"));
+                teacherRow.add(resultSet.getString("class_supervising"));
                 dataRowTeacher.add(teacherRow);
 
                 System.out.println(resultSet.getString("first_name"));
@@ -382,6 +394,55 @@ public class Main {
 
             else if (dataRowStudent.size()==1){
                 showStudentFrame(dataRowStudent);
+                result=1;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Found rows: " + count);
+        return result;
+    }
+
+    protected int findTeacher(int selectedTeacherId) {
+        System.out.println("find teacher in main with id = " + selectedTeacherId);
+        Vector<Vector<String>> dataRowTeacher;
+        ResultSet resultSet;
+        int result = 9;
+        int count=0;
+
+        String query = "SELECT * FROM teachers " +
+                "WHERE id = ?;";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, String.valueOf(selectedTeacherId));
+
+            resultSet = preparedStatement.executeQuery();
+
+            dataRowTeacher = new Vector<>();
+
+            while (resultSet.next()) {
+                count++;
+                Vector<String> TeacherRow = new Vector<>();
+                TeacherRow.add(resultSet.getString("id"));
+                TeacherRow.add(resultSet.getString("first_name"));
+                TeacherRow.add(resultSet.getString("last_name"));
+                TeacherRow.add(resultSet.getString("city"));
+                TeacherRow.add(resultSet.getString("phone_number"));
+                TeacherRow.add(resultSet.getString("date_of_birth"));
+                TeacherRow.add(resultSet.getString("class_supervising"));
+                dataRowTeacher.add(TeacherRow);
+
+                System.out.println(resultSet.getString("first_name"));
+            }
+
+            if (dataRowTeacher.size()==0){
+                result=0;
+            }
+
+            else if (dataRowTeacher.size()==1){
+                showTeacherFrame(dataRowTeacher);
                 result=1;
             }
 
@@ -644,7 +705,8 @@ public class Main {
         //2 - city
         //3 - phone number
         //4 - date of birth
-        //5 -
+        //5 - parents phone number
+        //6 - class
 
         String columnName="";
         switch (i) {
@@ -692,6 +754,60 @@ public class Main {
         return result;
 
     }
+
+    public int updateTeacher(int i, int selectedTeacherId, String newVaule) {
+        //i stands for column name of value to be updated
+        //0 - first name
+        //1 - last name
+        //2 - city
+        //3 - phone number
+        //4 - date of birth
+        //5 - class_supervising
+
+        String columnName="";
+        switch (i) {
+            case 0:
+                columnName = "`first_name`";
+                break;
+            case 1:
+                columnName = "`last_name`";
+                break;
+            case 2:
+                columnName = "`city`";
+                break;
+            case 3:
+                columnName = "`phone_number`";
+                break;
+            case 4:
+                columnName = "`date_of_birth`";
+                break;
+            case 5:
+                columnName = "`class_supervising`";
+                break;
+        }
+
+        int result = 0;
+        String query = "UPDATE `class_journal`.`teachers` SET " + columnName +
+                " = ? " +
+                "WHERE id = ?;";
+        try {
+            System.out.println(columnName + query + newVaule + selectedTeacherId);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, newVaule);
+            preparedStatement.setString(2, String.valueOf(selectedTeacherId));
+
+            result = preparedStatement.executeUpdate();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("affected rows: " + result);
+        return result;
+
+    }
+
 
     protected String addClass(String className, int supervisingTeacherId, ArrayList<Integer> studentsId){
         int result = 0;
@@ -780,14 +896,11 @@ public class Main {
                 result=0;
             }
 
-            else if (dataRowClass.size()==1){
+            else {
                 showClassFrame();
                 result=1;
             }
 
-            else {
-                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(myFrame, dataRowClass);
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

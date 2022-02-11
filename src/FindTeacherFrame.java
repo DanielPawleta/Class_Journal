@@ -49,7 +49,7 @@ public class FindTeacherFrame extends JFrame implements ActionListener {
             c.gridx = 0;
             c.gridy = 1;
             this.add(firstNameLabel, c);
-            firstNameField = new JTextField(15);
+            firstNameField = new JTextField("Mateusz",15);
             GridBagConstraints d = new GridBagConstraints();
             d.insets = insets;
             d.gridx = 1;
@@ -63,7 +63,7 @@ public class FindTeacherFrame extends JFrame implements ActionListener {
             e.gridx = 0;
             e.gridy = 2;
             this.add(lastNameLabel, e);
-            lastNameField = new JTextField(15);
+            lastNameField = new JTextField("Kawulok",15);
             GridBagConstraints f = new GridBagConstraints();
             f.insets = insets;
             f.gridx = 1;
