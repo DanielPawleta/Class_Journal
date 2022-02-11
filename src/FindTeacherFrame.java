@@ -1,5 +1,3 @@
-import org.jdatepicker.impl.JDatePickerImpl;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,26 +12,14 @@ public class FindTeacherFrame extends JFrame implements ActionListener {
 
     private String firstName;
     private String lastName;
-    private String city;
-    private String phoneNumber;
-    private String parentsPhoneNumber;
-    private JDatePickerImpl datePicker;
-    private String dateOfBirth;
 
     private JTextField firstNameField;
     private JTextField lastNameField;
-    private JTextField cityField;
-    private JTextField phoneNumberField;
-    private JTextField parentsPhoneNumberField;
-
-    private int phoneNumberInt;
-    private int parentsPhoneNumberInt;
-
 
     public FindTeacherFrame(MyFrame myFrame){
         this.myFrame = myFrame;
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.setTitle("Find Student");
+        this.setTitle("Find Teacher");
         this.setLayout(new GridBagLayout());
         this.initializeTitleLabel();
         this.initializeLabels();
@@ -44,10 +30,8 @@ public class FindTeacherFrame extends JFrame implements ActionListener {
         this.setResizable(false);
     }
 
-
-
     private void initializeTitleLabel() {
-        JLabel titleLabel = new JLabel("Find student");
+        JLabel titleLabel = new JLabel("Find teacher");
         titleLabel.setFont(new Font("MV Boli", Font.PLAIN, 30));
         GridBagConstraints b = new GridBagConstraints();
         b.insets = new Insets(50,50,50,50);
@@ -65,7 +49,7 @@ public class FindTeacherFrame extends JFrame implements ActionListener {
             c.gridx = 0;
             c.gridy = 1;
             this.add(firstNameLabel, c);
-            firstNameField = new JTextField("Daniel",15);
+            firstNameField = new JTextField(15);
             GridBagConstraints d = new GridBagConstraints();
             d.insets = insets;
             d.gridx = 1;
@@ -79,7 +63,7 @@ public class FindTeacherFrame extends JFrame implements ActionListener {
             e.gridx = 0;
             e.gridy = 2;
             this.add(lastNameLabel, e);
-            lastNameField = new JTextField("Pawleta123",15);
+            lastNameField = new JTextField(15);
             GridBagConstraints f = new GridBagConstraints();
             f.insets = insets;
             f.gridx = 1;
@@ -96,7 +80,7 @@ public class FindTeacherFrame extends JFrame implements ActionListener {
         g.gridy = 8;
         this.add(backButton, g);
 
-        findButton = new JButton("Find student");
+        findButton = new JButton("Find teacher");
         findButton.addActionListener(this);
         GridBagConstraints h = new GridBagConstraints();
         h.insets = new Insets(50,10,10,10);
@@ -122,7 +106,7 @@ public class FindTeacherFrame extends JFrame implements ActionListener {
             System.out.println("Find button");
 
             if (checkFields()) {
-                int result = myFrame.findStudent(firstName,lastName);
+                int result = myFrame.findTeacher(firstName,lastName);
                 if (result==0) {
                     JOptionPane.showMessageDialog(this,"No results","Info", JOptionPane.WARNING_MESSAGE);
                     return;

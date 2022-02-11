@@ -343,7 +343,7 @@ public class TeacherFrame extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
                     myFrame.findStudent(selectedTeacherId);
-                    System.out.println("student updated");
+                    System.out.println("teacher updated");
                 }
                 else System.out.println("Something went wrong when updating student");
             }

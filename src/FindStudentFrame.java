@@ -15,21 +15,9 @@ public class FindStudentFrame extends JFrame implements ActionListener {
 
     private String firstName;
     private String lastName;
-    private String city;
-    private String phoneNumber;
-    private String parentsPhoneNumber;
-    private JDatePickerImpl datePicker;
-    private String dateOfBirth;
 
     private JTextField firstNameField;
     private JTextField lastNameField;
-    private JTextField cityField;
-    private JTextField phoneNumberField;
-    private JTextField parentsPhoneNumberField;
-
-    private int phoneNumberInt;
-    private int parentsPhoneNumberInt;
-
 
     public FindStudentFrame(MyFrame myFrame){
         this.myFrame = myFrame;
@@ -44,8 +32,6 @@ public class FindStudentFrame extends JFrame implements ActionListener {
         this.setSize(500,600);
         this.setResizable(false);
     }
-
-
 
     private void initializeTitleLabel() {
         JLabel titleLabel = new JLabel("Find student");

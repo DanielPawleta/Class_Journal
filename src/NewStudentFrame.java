@@ -270,7 +270,7 @@ public class NewStudentFrame extends JFrame implements ActionListener {
         classWithFreeSlots = new Vector<>();
 
         Vector<Vector<String>> classWithFreeSlotsVectorOfVectors = myFrame.findClassWithEmptyStudentPlaces();
-        if (classWithFreeSlotsVectorOfVectors.size()!=0){
+        if (classWithFreeSlotsVectorOfVectors!=null &&classWithFreeSlotsVectorOfVectors.size()!=0){
             for (Vector<String> vector : classWithFreeSlotsVectorOfVectors){
                 classWithFreeSlots.add(vector.get(1));
             }

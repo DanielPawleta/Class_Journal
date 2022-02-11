@@ -6,22 +6,25 @@ import java.util.Vector;
 public class Main {
     static Connection connection;
     private MyFrame myFrame;
-    private Vector<Vector<String>> dataRowStudent; //in case of multi results from SQL it's vector of vectors of students
-    private Vector<Vector<String>> dataRowTeacher; //in case of multi results from SQL it's vector of vectors of teachers
     private Vector<Vector<String>> dataRowClass;//in case of multi results from SQL it's vector of vectors of classes
 
     public static void main(String[] args) {
         Main main = new Main();
 
 
+        /*
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+         */
+/*
         String query = "SELECT * FROM class " +
                 "WHERE supervising_teacher is null;";
+
+ */
 
         /*
         try {
@@ -230,6 +233,7 @@ public class Main {
 
     protected int findStudent(String firstName, String lastName) {
         System.out.println("find student in main with first name = " + firstName + " and last name = " + lastName);
+        Vector<Vector<String>> dataRowStudent;
         ResultSet resultSet;
         int result = 9;
         int count=0;
@@ -270,9 +274,7 @@ public class Main {
             }
 
             else if (dataRowStudent.size()==1){
-                //fire show student frame
-                //int studentId = Integer.parseInt(dataRow.get(0).get(0));
-                showStudentFrame();
+                showStudentFrame(dataRowStudent);
                 result=1;
             }
 
@@ -286,8 +288,63 @@ public class Main {
         return result;
     }
 
+    protected int findTeacher(String firstName, String lastName) {
+        System.out.println("find teacher in main with first name = " + firstName + " and last name = " + lastName);
+        Vector<Vector<String>> dataRowTeacher = new Vector<>();
+        ResultSet resultSet;
+        int result = 9;
+        int count=0;
+
+        String query = "SELECT * FROM teachers " +
+                "WHERE first_name = "+
+                "?"+
+                " AND "+
+                "last_name = "+
+                "?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,firstName);
+            preparedStatement.setString(2,lastName);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                count++;
+                Vector<String> teacherRow = new Vector<>();
+                teacherRow.add(resultSet.getString("id"));
+                teacherRow.add(resultSet.getString("first_name"));
+                teacherRow.add(resultSet.getString("last_name"));
+                teacherRow.add(resultSet.getString("city"));
+                teacherRow.add(resultSet.getString("phone_number"));
+                teacherRow.add(resultSet.getString("date_of_birth"));
+                teacherRow.add(resultSet.getString("supervising_class"));
+                dataRowTeacher.add(teacherRow);
+
+                System.out.println(resultSet.getString("first_name"));
+            }
+
+            if (dataRowTeacher.size()==0){
+                result=0;
+            }
+
+            else if (dataRowTeacher.size()==1){
+                showTeacherFrame(dataRowTeacher);
+                result=1;
+            }
+
+            else {
+                ChooseTeacherFrame chooseTeacherFrame = new ChooseTeacherFrame(myFrame, dataRowTeacher);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Found rows: " + count);
+        return result;
+    }
+
     protected int findStudent(int selectedStudentId) {
         System.out.println("find student in main with id = " + selectedStudentId);
+        Vector<Vector<String>> dataRowStudent;
         ResultSet resultSet;
         int result = 9;
         int count=0;
@@ -324,15 +381,10 @@ public class Main {
             }
 
             else if (dataRowStudent.size()==1){
-                //fire show student frame
-                //int studentId = Integer.parseInt(dataRow.get(0).get(0));
-                showStudentFrame();
+                showStudentFrame(dataRowStudent);
                 result=1;
             }
 
-            else {
-                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(myFrame, dataRowStudent);
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -342,6 +394,7 @@ public class Main {
 
     protected Vector<Vector<String>> findStudentsWithoutClass () {
         System.out.println("find student with no class value selectd");
+        Vector<Vector<String>> dataRowStudentsWithoutClass = new Vector<>();
         ResultSet resultSet;
         int count=0;
 
@@ -353,7 +406,7 @@ public class Main {
 
             resultSet = preparedStatement.executeQuery();
 
-            dataRowStudent = new Vector<>();
+            dataRowStudentsWithoutClass = new Vector<>();
 
             while (resultSet.next()) {
                 count++;
@@ -361,30 +414,22 @@ public class Main {
                 studentRow.add(resultSet.getString("id"));
                 studentRow.add(resultSet.getString("first_name"));
                 studentRow.add(resultSet.getString("last_name"));
-                /*
-                studentRow.add(resultSet.getString("city"));
-                studentRow.add(resultSet.getString("phone_number"));
-                studentRow.add(resultSet.getString("date_of_birth"));
-                studentRow.add(resultSet.getString("parents_phone_number"));
-                studentRow.add(resultSet.getString("class"));
-                 */
-                dataRowStudent.add(studentRow);
-
+                dataRowStudentsWithoutClass.add(studentRow);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
         catch (NullPointerException e){
-            dataRowStudent = new Vector<>();
+            dataRowStudentsWithoutClass = new Vector<>();
         }
 
         System.out.println("Found " + count +" students with no class definied");
-        return dataRowStudent;
+        return dataRowStudentsWithoutClass;
     }
 
     protected Vector<Vector<String>> findClassWithoutSupervisingTeacher () {
-        Vector<Vector<String>> dataRowClassWithoutSupervisingTeacher = null;
+        Vector<Vector<String>> dataRowClassWithoutSupervisingTeacher = new Vector<>();
         System.out.println("find class with no supervising teacher value selected");
         ResultSet resultSet;
         int count=0;
@@ -397,8 +442,6 @@ public class Main {
 
             resultSet = preparedStatement.executeQuery();
 
-            dataRowClassWithoutSupervisingTeacher = new Vector<>();
-
             while (resultSet.next()) {
                 count++;
                 Vector<String> classRow = new Vector<>();
@@ -409,8 +452,7 @@ public class Main {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        catch (NullPointerException e){
-            dataRowClassWithoutSupervisingTeacher = new Vector<>();
+        catch (NullPointerException ignored){
         }
         System.out.println("Found " + count +" classes with no supervising teacher defined");
         return dataRowClassWithoutSupervisingTeacher;
@@ -418,6 +460,7 @@ public class Main {
 
     protected Vector<Vector<String>> findTeachersWithoutSupervisingClass () {
         System.out.println("find teachers with no supervising class selected");
+        Vector<Vector<String>> dataRowTeacher = new Vector<>();
         ResultSet resultSet;
         int count=0;
 
@@ -429,20 +472,18 @@ public class Main {
 
             resultSet = preparedStatement.executeQuery();
 
-            dataRowTeacher = new Vector<>();
-
             while (resultSet.next()) {
                 count++;
                 Vector<String> teacherRow = new Vector<>();
                 teacherRow.add(resultSet.getString("id"));
                 teacherRow.add(resultSet.getString("first_name"));
                 teacherRow.add(resultSet.getString("last_name"));
-                dataRowStudent.add(teacherRow);
-
+                dataRowTeacher.add(teacherRow);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (NullPointerException ignored){
         }
         System.out.println("Found " + count +" teachers with no class supervising definied");
         return dataRowTeacher;
@@ -450,6 +491,8 @@ public class Main {
 
     protected Vector<Vector<String>> findClassWithEmptyStudentPlaces () {
         System.out.println("find class with free student slots");
+        Vector<Vector<String>> dataRowClass = new Vector<>();
+
         ResultSet resultSet;
         int count=0;
 
@@ -469,8 +512,6 @@ public class Main {
             PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 
             resultSet = preparedStatement.executeQuery();
-
-            dataRowClass = new Vector<>();
 
             while (resultSet.next()) {
                 count++;
@@ -496,7 +537,9 @@ public class Main {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (NullPointerException ignored) {
         }
+
         System.out.println("Found " + count +" classes with free slots");
         return dataRowClass;
     }
@@ -579,9 +622,14 @@ public class Main {
     }
      */
 
-    protected void showStudentFrame(){
+    protected void showStudentFrame(Vector<Vector<String>> dataRowStudent){
         System.out.println("Show student frame from main");
         StudentFrame studentFrame = new StudentFrame(myFrame, dataRowStudent);
+    }
+
+    protected void showTeacherFrame(Vector<Vector<String>> dataRowTeacher){
+        System.out.println("Show teacher frame from main");
+        TeacherFrame teacherFrame = new TeacherFrame(myFrame, dataRowTeacher);
     }
 
     protected void showClassFrame(){

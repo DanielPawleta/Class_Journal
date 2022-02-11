@@ -312,6 +312,10 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.findStudent(firstName,lastName);
     }
 
+    protected int findTeacher(String firstName, String lastName) {
+        return main.findTeacher(firstName,lastName);
+    }
+
     protected int findStudent(int selectedStudentId) {
         return main.findStudent(selectedStudentId);
     }

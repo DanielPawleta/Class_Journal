@@ -44,7 +44,7 @@ public class FindClassFrame extends JFrame implements ActionListener {
     }
 
     private void initializeLabels() {
-            //first name
+            //class name
             JLabel firstNameLabel = new JLabel("Class Name: ");
             GridBagConstraints c = new GridBagConstraints();
             c.insets = insets;
@@ -58,7 +58,7 @@ public class FindClassFrame extends JFrame implements ActionListener {
             d.gridy = 1;
             this.add(classNameField, d);
 
-            //last name
+            //supervising teacher
             JLabel lastNameLabel = new JLabel("Supervising Teacher: ");
             GridBagConstraints e = new GridBagConstraints();
             e.insets = insets;
@@ -122,8 +122,6 @@ public class FindClassFrame extends JFrame implements ActionListener {
                         return;
                     }
                 }
-
-
                 super.dispose();
             }
         }
