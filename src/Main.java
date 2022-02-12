@@ -741,6 +741,9 @@ public class Main {
             System.out.println(columnName + query + newVaule + selectedStudentId);
 
             PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            if (i==6){
+                newVaule = getClassIdByClassName(newVaule);
+            }
             preparedStatement.setString(1, newVaule);
             preparedStatement.setString(2, String.valueOf(selectedStudentId));
 
