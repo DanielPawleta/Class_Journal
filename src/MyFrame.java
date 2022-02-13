@@ -13,10 +13,13 @@ public class MyFrame extends JFrame implements ActionListener {
 
     private JButton newStudentButton;
     private JButton findStudentButton;
+    private JButton showAllStudentButton;
     private JButton newTeacherButton;
     private JButton findTeacherButton;
+    private JButton showAllTeacherButton;
     private JButton newClassButton;
     private JButton findClassButton;
+    private JButton showAllClassButton;
     private JButton logOutButton;
 
     private final String loginText = "Please log in";
@@ -111,6 +114,12 @@ public class MyFrame extends JFrame implements ActionListener {
         studentsTab.add(findStudentButton);
         studentsTab.add(Box.createVerticalGlue());
 
+        showAllStudentButton = new JButton("Show all students");
+        showAllStudentButton.addActionListener(this);
+        showAllStudentButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        studentsTab.add(showAllStudentButton);
+        studentsTab.add(Box.createVerticalGlue());
+
         tabbedPane.addTab("Students", studentsTab);
         tabbedPane.setEnabledAt(1,false);
 
@@ -132,6 +141,12 @@ public class MyFrame extends JFrame implements ActionListener {
         tabbedPane.addTab("Teachers", teachersTab);
         tabbedPane.setEnabledAt(2,false);
 
+        showAllTeacherButton = new JButton("Show all teachers");
+        showAllTeacherButton.addActionListener(this);
+        showAllTeacherButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        teachersTab.add(showAllTeacherButton);
+        teachersTab.add(Box.createVerticalGlue());
+
         JPanel classesTab = new JPanel();
         classesTab.setLayout(new BoxLayout(classesTab, BoxLayout.Y_AXIS));
         classesTab.add(Box.createVerticalGlue());
@@ -149,6 +164,12 @@ public class MyFrame extends JFrame implements ActionListener {
         classesTab.add(Box.createVerticalGlue());
         tabbedPane.addTab("Classes", classesTab);
         tabbedPane.setEnabledAt(3,false);
+
+        showAllClassButton = new JButton("Show all classes");
+        showAllClassButton.addActionListener(this);
+        showAllClassButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        classesTab.add(showAllClassButton);
+        classesTab.add(Box.createVerticalGlue());
 
         JPanel statisticsTab = new JPanel();
         tabbedPane.addTab("Statistics",statisticsTab);
@@ -190,6 +211,61 @@ public class MyFrame extends JFrame implements ActionListener {
 
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource()==newStudentButton){
+            System.out.println("new student");
+            NewStudentFrame newStudentFrame = new NewStudentFrame(this);
+            this.setVisible(false);
+        }
+        if (e.getSource()==findStudentButton){
+            System.out.println("find student");
+            FindStudentFrame findStudentFrame = new FindStudentFrame(this);
+            this.setVisible(false);
+        }
+        if (e.getSource()==showAllStudentButton){
+            Vector<Vector<String>> allStudents = this.findAllStudent();
+            if (allStudents.size()==0) JOptionPane.showMessageDialog(this,"No students found");
+            else {
+                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(this,allStudents);
+                this.setVisible(false);
+            }
+        }
+        if (e.getSource()==newTeacherButton){
+            System.out.println("new teacher");
+            NewTeacherFrame newTeacherFrame = new NewTeacherFrame(this);
+            this.setVisible(false);
+        }
+        if (e.getSource()==findTeacherButton){
+            System.out.println("find teacher");
+            FindTeacherFrame findTeacherFrame = new FindTeacherFrame(this);
+            this.setVisible(false);
+        }
+        if (e.getSource()==showAllTeacherButton){
+            Vector<Vector<String>> allTeachers = this.findAllTeacher();
+            if (allTeachers.size()==0) JOptionPane.showMessageDialog(this,"No teachers found");
+            else {
+                ChooseTeacherFrame chooseTeacherFrame = new ChooseTeacherFrame(this,allTeachers);
+                this.setVisible(false);
+            }
+        }
+        if (e.getSource()==newClassButton){
+            System.out.println("new class");
+            NewClassFrame newClassFrame = new NewClassFrame(this);
+            this.setVisible(false);
+        }
+        if (e.getSource()==findClassButton){
+            System.out.println("find class");
+            FindClassFrame findClassFrame = new FindClassFrame(this);
+            this.setVisible(false);
+        }
+        if (e.getSource()== logOutButton){
+            setLoggedAs(0);
+            System.out.println("logout");
+
+        }
+    }
+
 
     //Methods for working with DB table 'students'
     protected String addStudent(String first_name, String last_name, String city, int phone_number, String date_of_birth, int parents_phone_number, String class_attending){
@@ -216,6 +292,11 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.getStudentNameAndLastName(studentId);
     }
 
+    protected Vector<Vector<String>> findAllStudent() {
+        return main.findAllStudent();
+    }
+
+
 
     //Methods for working with DB table 'teachers'
     protected String addTeacher(String first_name, String last_name, String city, int phone_number, String date_of_birth, String supervising_class){
@@ -240,6 +321,10 @@ public class MyFrame extends JFrame implements ActionListener {
 
     protected Vector<Vector<String>> findTeachersWithoutSupervisingClass () {
         return main.findTeachersWithoutSupervisingClass();
+    }
+
+    protected Vector<Vector<String>> findAllTeacher() {
+        return main.findAllTeacher();
     }
 
 
@@ -284,47 +369,13 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.getClassNameByClassId(classId);
     }
 
+    protected void addStudentToClassOnFirstFreeSlot(String studentId, String class_attending){
+        main.addStudentToClassOnFirstFreeSlot(studentId, class_attending);
+    }
+
     //Method for all tables in DB
     protected void deleteRow(int i, String rowId){
         main.deleteRow(i, rowId);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource()==newStudentButton){
-            System.out.println("new student");
-            NewStudentFrame newStudentFrame = new NewStudentFrame(this);
-            this.setVisible(false);
-        }
-        if (e.getSource()==findStudentButton){
-            System.out.println("find student");
-            FindStudentFrame findStudentFrame = new FindStudentFrame(this);
-            this.setVisible(false);
-        }
-        if (e.getSource()==newTeacherButton){
-            System.out.println("new teacher");
-            NewTeacherFrame newTeacherFrame = new NewTeacherFrame(this);
-            this.setVisible(false);
-        }
-        if (e.getSource()==findTeacherButton){
-            System.out.println("find teacher");
-            FindTeacherFrame findTeacherFrame = new FindTeacherFrame(this);
-            this.setVisible(false);
-        }
-        if (e.getSource()==newClassButton){
-            System.out.println("new class");
-            NewClassFrame newClassFrame = new NewClassFrame(this);
-            this.setVisible(false);
-        }
-        if (e.getSource()==findClassButton){
-            System.out.println("find class");
-            FindClassFrame findClassFrame = new FindClassFrame(this);
-            this.setVisible(false);
-        }
-        if (e.getSource()== logOutButton){
-            setLoggedAs(0);
-            System.out.println("logout");
-
-        }
-    }
 }

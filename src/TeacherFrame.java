@@ -14,8 +14,8 @@ import java.util.Properties;
 import java.util.Vector;
 
 public class TeacherFrame extends JFrame implements ActionListener {
-    private final Vector<Vector<String>> dataRowTeacher;
-    private final MyFrame myFrame;
+    private Vector<Vector<String>> dataRowTeacher;
+    private MyFrame myFrame;
     private int selectedTeacherId;
     private int selectedTeacherIdInDataRow;
     private final Insets insets = new Insets(10,10,10,10);
@@ -46,28 +46,35 @@ public class TeacherFrame extends JFrame implements ActionListener {
 
     public TeacherFrame(MyFrame myFrame, Vector<Vector<String>> dataRowTeacher){
         //fired from main when there is only one search result
+        this();
         this.myFrame = myFrame;
         this.dataRowTeacher = dataRowTeacher;
         this.selectedTeacherIdInDataRow =0;
+        this.initializeTextFields();
+    }
 
+    public TeacherFrame(MyFrame myFrame, Vector<Vector<String>> dataRowTeacher, int selectedTeacherIdInDataRow) {
+        //fired from choose teacher frame when there are multi search results
+        this();
+        this.myFrame = myFrame;
+        this.dataRowTeacher = dataRowTeacher;
+        this.selectedTeacherIdInDataRow = selectedTeacherIdInDataRow;
+        this.initializeTextFields();
+    }
+
+    public TeacherFrame(){
+        //default constructor
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setTitle("Teacher");
         this.setLayout(new GridBagLayout());
         this.initializeTitleLabel();
         this.initializeLabels();
-        this.initializeTextFields();
         this.initializeUpdateButtons();
         this.initializeButtons();
 
         this.setVisible(true);
         this.setSize(500,600);
         this.setResizable(false);
-    }
-
-    public TeacherFrame(MyFrame myFrame, Vector<Vector<String>> dataRowTeacher, int selectedTeacherIdInDataRow) {
-        //fired from choose teacher frame when there are multi search results
-        this(myFrame, dataRowTeacher);
-        this.selectedTeacherIdInDataRow = selectedTeacherIdInDataRow;
     }
 
     private void initializeTitleLabel() {
@@ -329,6 +336,8 @@ public class TeacherFrame extends JFrame implements ActionListener {
         //4 - date of birth
         //5 - supervising class
 
+
+
         if (i!=4 && i!=5) { //if it's not date of birth and not supervising class update
             JTextField textField = new JTextField(5);
             JPanel jPanel = new JPanel();
@@ -384,8 +393,39 @@ public class TeacherFrame extends JFrame implements ActionListener {
         }
 
         else { //it is supervising class update
+            Vector<String> classNames = new Vector<>();
+            Vector<Vector<String>> classesWithoutSupervisingTeacher = myFrame.findClassWithoutSupervisingTeacher();
+            if (classesWithoutSupervisingTeacher.size()!=0){
+                for (Vector<String> classVector : classesWithoutSupervisingTeacher){
+                    classNames.add(classVector.get(0));
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "No class without supervising teacher found", "Info", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
 
+            JPanel jPanel = new JPanel();
+            jPanel.add(new JLabel(text));
+            JComboBox<String> classNamesComboBox = new JComboBox<>(classNames);
+            classNamesComboBox.setSelectedIndex(-1);
+            jPanel.add(classNamesComboBox);
 
+            int result = JOptionPane.showConfirmDialog(null, jPanel, "Please select class", JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.CANCEL_OPTION) return;
+            else {
+                if (classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex())==null) return;
+                String className = classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex());
+                String classID = myFrame.getClassIdByClassName(className);
+                if (myFrame.updateTeacher(i, selectedTeacherId, classID)==1){
+                    JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
+                    super.dispose();
+                    myFrame.updateClass(1,Integer.parseInt(classID),String.valueOf(selectedTeacherId));
+                    myFrame.findTeacher(selectedTeacherId);
+                    System.out.println("student updated");
+                }
+                else System.out.println("Something went wrong when updating student");
+            }
         }
     }
 }

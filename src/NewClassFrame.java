@@ -47,8 +47,6 @@ public class NewClassFrame extends JFrame implements ActionListener {
 
     }
 
-
-
     private void initializeTitleLabel() {
         JLabel titleLabel = new JLabel("Add new class");
         titleLabel.setFont(new Font("MV Boli", Font.PLAIN, 30));

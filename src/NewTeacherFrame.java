@@ -52,10 +52,6 @@ public class NewTeacherFrame extends JFrame implements ActionListener {
         this.setResizable(false);
     }
 
-
-
-
-
     private void initializeTitleLabel() {
         JLabel titleLabel = new JLabel("Add new teacher");
         titleLabel.setFont(new Font("MV Boli", Font.PLAIN, 30));

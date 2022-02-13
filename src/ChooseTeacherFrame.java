@@ -147,13 +147,10 @@ public class ChooseTeacherFrame extends JFrame implements ActionListener {
             }
 
 
-            TeacherFrame teacherFrame = new TeacherFrame(myFrame, dataRow, selectedTeacherId);
+            TeacherFrame teacherFrame = new TeacherFrame(myFrame, dataRow, selectedRow);
 
             dispose();
         }
     }
 
-    public int getSelectedTeacherId() {
-        return selectedTeacherId;
-    }
 }

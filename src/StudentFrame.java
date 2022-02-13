@@ -306,7 +306,7 @@ public class StudentFrame extends JFrame implements ActionListener {
             System.out.println("back button");
             dispose();
         }
-        if (e.getSource()== updateFirstNameButton){
+        if (e.getSource()==updateFirstNameButton){
             System.out.println("update first name button in student frame");
             showUpdateDialog("New first name: ",0);
         }
@@ -335,7 +335,7 @@ public class StudentFrame extends JFrame implements ActionListener {
             showUpdateDialog("Choose class ",6);
         }
         if (e.getSource()==deleteButton){
-            System.out.println("delete class button in student frame");
+            System.out.println("delete button in student frame");
             JPanel jPanel = new JPanel();
             jPanel.add(new JLabel("Are you sure you want to delete this student?"));
             int result = JOptionPane.showConfirmDialog(null, jPanel, "Delete", JOptionPane.OK_CANCEL_OPTION);
@@ -358,7 +358,7 @@ public class StudentFrame extends JFrame implements ActionListener {
         //5 - parents phone number
         //6 - class
 
-        if (i==6){
+        if (i==6){ //it's class update
             Vector<String> classNames = new Vector<>();
             Vector<Vector<String>> classesWithEmptyStudentPlaces = myFrame.findClassWithEmptyStudentPlaces();
             if (classesWithEmptyStudentPlaces.size()!=0){
@@ -381,10 +381,12 @@ public class StudentFrame extends JFrame implements ActionListener {
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
                 if (classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex())==null) return;
-                String newValue = classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex());
-                if (myFrame.updateStudent(i, selectedStudentId, newValue)==1){
+                String className = classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex());
+                String classId = myFrame.getClassIdByClassName(className);
+                if (myFrame.updateStudent(i, selectedStudentId, classId)==1){
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
+                    myFrame.addStudentToClassOnFirstFreeSlot(String.valueOf(selectedStudentId),classId);
                     myFrame.findStudent(selectedStudentId);
                     System.out.println("student updated");
                 }

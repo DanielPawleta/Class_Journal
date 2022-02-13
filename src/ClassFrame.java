@@ -8,6 +8,7 @@ import java.util.Vector;
 public class ClassFrame extends JFrame implements ActionListener {
     private Vector<Vector<String>> dataRowClass; //in case of multi results from SQL it's vector of vectors of classes
     private Vector<String> studentsWithoutClass;
+    private Vector<String> teachersWithoutSupervisingClass;
     private MyFrame myFrame;
     private int selectedClassId;
     private int selectedClassIdInDataRow;
@@ -21,6 +22,7 @@ public class ClassFrame extends JFrame implements ActionListener {
     private JButton updateDateOfBirthButton;
     private JButton updateParentsPhoneNumberButton;
     private JButton updateClassButton;
+    private JButton deleteButton;
 
     private String className;
     private String supervisingTeacher;
@@ -299,9 +301,17 @@ public class ClassFrame extends JFrame implements ActionListener {
         backButton.addActionListener(this);
         GridBagConstraints r = new GridBagConstraints();
         r.insets = new Insets(50,10,10,10);
-        r.gridx = 1;
+        r.gridx = 0;
         r.gridy = 8;
         this.add(backButton, r);
+
+        deleteButton = new JButton("Delete");
+        deleteButton.addActionListener(this);
+        GridBagConstraints s = new GridBagConstraints();
+        s.insets = new Insets(50,10,10,10);
+        s.gridx = 1;
+        s.gridy = 8;
+        this.add(deleteButton, s);
     }
 
     @Override
@@ -316,11 +326,11 @@ public class ClassFrame extends JFrame implements ActionListener {
             System.out.println("back button");
             dispose();
         }
-        if (e.getSource()== updateClassNameButton){
+        if (e.getSource()==updateClassNameButton){
             System.out.println("update class name button in class frame");
             showUpdateDialog("New class name: ",0);
         }
-        if (e.getSource()== updateSupervisingTeacherButton){
+        if (e.getSource()==updateSupervisingTeacherButton){
             System.out.println("update supervising teacher button in class frame");
             showUpdateDialog("New supervising teacher name: ",1);
         }
@@ -344,7 +354,18 @@ public class ClassFrame extends JFrame implements ActionListener {
             System.out.println("update student 5 button in class frame");
             showUpdateDialog("Student 5: ",6);
         }
+        if (e.getSource()==deleteButton){
+            System.out.println("delete class button in class frame");
+            JPanel jPanel = new JPanel();
+            jPanel.add(new JLabel("Are you sure you want to delete this class?"));
+            int result = JOptionPane.showConfirmDialog(null, jPanel, "Delete", JOptionPane.OK_CANCEL_OPTION);
 
+            if (result == JOptionPane.CANCEL_OPTION) return;
+            else {
+                myFrame.deleteRow(1,String.valueOf(selectedClassId));
+                dispose();
+            }
+        }
 
     }
 
@@ -362,7 +383,7 @@ public class ClassFrame extends JFrame implements ActionListener {
         JPanel jPanel = new JPanel();
         jPanel.add(new JLabel(text));
 
-        if (i == 0 || i == 1) {
+        if (i == 0) {
             // if there's string field to be updated
             JTextField textField = new JTextField(5);
             jPanel.add(textField);
@@ -372,7 +393,7 @@ public class ClassFrame extends JFrame implements ActionListener {
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
                 String newVaule = textField.getText();
-                if (i==0 && !myFrame.checkClassName(newVaule)){
+                if (!myFrame.checkClassName(newVaule)){
                     JOptionPane.showMessageDialog(jPanel, "This class name is already in usage", "Info", JOptionPane.INFORMATION_MESSAGE);
                     return; //if this class name is already in DB
                 }
@@ -383,7 +404,29 @@ public class ClassFrame extends JFrame implements ActionListener {
                     System.out.println("class updated");
                 } else System.out.println("Something went wrong when updating class");
             }
-        } else {
+        } else if (i==1) {
+            // if it's combobox with teachers names
+            initializeTeachersWithoutSupervisingClass();
+            JComboBox<String> teacherComboBox = new JComboBox<>(teachersWithoutSupervisingClass);
+            teacherComboBox.setSelectedIndex(-1);
+            jPanel.add(teacherComboBox);
+            int result = JOptionPane.showConfirmDialog(null, jPanel, "Please choose new supervising teacher", JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.CANCEL_OPTION) return;
+            else {
+                String teacherId;
+                if (teacherComboBox.getItemAt(teacherComboBox.getSelectedIndex()) != null) {
+                    teacherId = teacherComboBox.getItemAt(teacherComboBox.getSelectedIndex()).split(" id : ")[1];
+                    if (myFrame.updateClass(i, selectedClassId, teacherId) == 1) {
+                        JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
+                        super.dispose();
+                        myFrame.updateTeacher(5,Integer.parseInt(teacherId),String.valueOf(selectedClassId));
+                        myFrame.findClass(selectedClassId);
+                        System.out.println("class updated");
+                    } else System.out.println("Something went wrong when updating class");
+                }
+            }
+
+        }else {
             //if it's combobox with students names
             initializeStudentsWithoutClassVector();
             JComboBox<String> studentComboBox = new JComboBox<>(studentsWithoutClass);
@@ -398,6 +441,7 @@ public class ClassFrame extends JFrame implements ActionListener {
                     if (myFrame.updateClass(i, selectedClassId, studentId) == 1) {
                         JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                         super.dispose();
+                        myFrame.updateStudent(6,Integer.parseInt(studentId),String.valueOf(selectedClassId));
                         myFrame.findClass(selectedClassId);
                         System.out.println("class updated");
                     } else System.out.println("Something went wrong when updating class");
@@ -406,9 +450,21 @@ public class ClassFrame extends JFrame implements ActionListener {
         }
     }
 
+    private void initializeTeachersWithoutSupervisingClass() {
+        teachersWithoutSupervisingClass = new Vector<>();
+        Vector<Vector<String>> teachersWithoutSupervisingClassVectorOfVectors = myFrame.findTeachersWithoutSupervisingClass();
+        if (teachersWithoutSupervisingClassVectorOfVectors.size()!=0){
+            for (Vector<String> vector : teachersWithoutSupervisingClassVectorOfVectors){
+                int id = Integer.parseInt(vector.get(0));
+                String firstName = vector.get(1);
+                String lastName = vector.get(2);
+                teachersWithoutSupervisingClass.add(firstName + " " + lastName + " id : " + id);
+            }
+        }
+    }
+
     private void initializeStudentsWithoutClassVector(){
         studentsWithoutClass = new Vector<>();
-
         Vector<Vector<String>> studentsWithoutClassVectorOfVectors = myFrame.findStudentsWithoutClass();
         if (studentsWithoutClassVectorOfVectors.size()!=0){
             for (Vector<String> vector : studentsWithoutClassVectorOfVectors){

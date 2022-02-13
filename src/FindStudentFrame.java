@@ -66,7 +66,7 @@ public class FindStudentFrame extends JFrame implements ActionListener {
             e.gridx = 0;
             e.gridy = 2;
             this.add(lastNameLabel, e);
-            lastNameField = new JTextField("Pawleta123",15);
+            lastNameField = new JTextField("Pawleta",15);
             GridBagConstraints f = new GridBagConstraints();
             f.insets = insets;
             f.gridx = 1;
