@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +11,8 @@ public class MyFrame extends JFrame implements ActionListener {
     private JPanel centerPanel;
     private final Main main;
     private JTabbedPane tabbedPane;
+    private JPanel statisticsTab;
+    private JLabel studentsNotAssignedToClassNumberLabel;
 
     private JButton newStudentButton;
     private JButton findStudentButton;
@@ -20,7 +23,12 @@ public class MyFrame extends JFrame implements ActionListener {
     private JButton newClassButton;
     private JButton findClassButton;
     private JButton showAllClassButton;
+    private JButton showStudentsNotAssignedToClassButton;
     private JButton logOutButton;
+
+    private final Insets insets = new Insets(10,10,10,10);
+    private Border blackline = BorderFactory.createLineBorder(Color.black);
+
 
     private final String loginText = "Please log in";
 
@@ -34,10 +42,11 @@ public class MyFrame extends JFrame implements ActionListener {
         this.getContentPane().setBackground(Color.BLACK);
         initializePanels();
         initializeFrontLabel();
+        initializeNumbersFromDB();
 
         this.ableAllTabs();
         this.setVisible(true);
-        this.setSize(500,500);
+        this.setSize(550,500);
         this.setResizable(false);
     }
 
@@ -171,10 +180,133 @@ public class MyFrame extends JFrame implements ActionListener {
         classesTab.add(showAllClassButton);
         classesTab.add(Box.createVerticalGlue());
 
-        JPanel statisticsTab = new JPanel();
+        statisticsTab = new JPanel();
+        statisticsTab.setLayout(new GridBagLayout());
+
+        JLabel studentsLabel = new JLabel("Students: ");
+        GridBagConstraints a = new GridBagConstraints();
+        a.insets = insets;
+        a.gridx = 0;
+        a.gridy = 0;
+        statisticsTab.add(studentsLabel, a);
+
+        JLabel teachersLabel = new JLabel("Teachers: ");
+        GridBagConstraints b = new GridBagConstraints();
+        b.insets = insets;
+        b.gridx = 0;
+        b.gridy = 1;
+        statisticsTab.add(teachersLabel, b);
+
+        JLabel classesLabel = new JLabel("Classes: ");
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = insets;
+        c.gridx = 0;
+        c.gridy = 2;
+        statisticsTab.add(classesLabel, c);
+
+        int studentsNumber = main.findAllStudent().size();
+        JLabel studentsNumberLabel = new JLabel(String.valueOf(studentsNumber));
+        studentsNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        studentsNumberLabel.setBorder(blackline);
+        studentsNumberLabel.setPreferredSize(new Dimension(30,20));
+        GridBagConstraints d = new GridBagConstraints();
+        d.insets = insets;
+        d.gridx = 1;
+        d.gridy = 0;
+        statisticsTab.add(studentsNumberLabel, d);
+
+        int teachersNumber = main.findAllTeacher().size();
+        JLabel teachersNumberLabel = new JLabel(String.valueOf(teachersNumber));
+        teachersNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        teachersNumberLabel.setBorder(blackline);
+        teachersNumberLabel.setPreferredSize(new Dimension(30,20));
+        GridBagConstraints e = new GridBagConstraints();
+        e.insets = insets;
+        e.gridx = 1;
+        e.gridy = 1;
+        statisticsTab.add(teachersNumberLabel, e);
+
+        int classesNumber = main.findAllClass().size();
+        JLabel classesNumberLabel = new JLabel(String.valueOf(classesNumber));
+        classesNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        classesNumberLabel.setBorder(blackline);
+        classesNumberLabel.setPreferredSize(new Dimension(30,20));
+        GridBagConstraints f = new GridBagConstraints();
+        f.insets = insets;
+        f.gridx = 1;
+        f.gridy = 2;
+        statisticsTab.add(classesNumberLabel, f);
+
+        JLabel studentsNotAssignedToClassLabel = new JLabel("Students not assigned to class: ");
+        studentsNotAssignedToClassLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        GridBagConstraints g = new GridBagConstraints();
+        g.insets = insets;
+        g.gridx = 2;
+        g.gridy = 0;
+        statisticsTab.add(studentsNotAssignedToClassLabel, g);
+
+        JLabel teachersWithoutSupervisingClassLabel = new JLabel("Teachers without supervising class: ");
+        teachersWithoutSupervisingClassLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        GridBagConstraints h = new GridBagConstraints();
+        h.insets = insets;
+        h.gridx = 2;
+        h.gridy = 1;
+        statisticsTab.add(teachersWithoutSupervisingClassLabel, h);
+
+        JLabel freeSlotsInClassesLabel = new JLabel("Number of free slots in classes: ");
+        freeSlotsInClassesLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        GridBagConstraints i = new GridBagConstraints();
+        i.insets = insets;
+        i.gridx = 2;
+        i.gridy = 2;
+        statisticsTab.add(freeSlotsInClassesLabel, i);
+
+        showStudentsNotAssignedToClassButton = new JButton("Show");
+        showStudentsNotAssignedToClassButton.addActionListener(this);
+        GridBagConstraints m = new GridBagConstraints();
+        m.insets = insets;
+        m.gridx = 4;
+        m.gridy = 0;
+        statisticsTab.add(showStudentsNotAssignedToClassButton, m);
+
         tabbedPane.addTab("Statistics",statisticsTab);
 
         centerPanel.add(tabbedPane);
+    }
+
+    private void initializeNumbersFromDB(){
+        int studentsNotAssignedToClassNumber = main.findStudentsWithoutClass().size();
+        studentsNotAssignedToClassNumberLabel = new JLabel(String.valueOf(studentsNotAssignedToClassNumber));
+        studentsNotAssignedToClassNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        studentsNotAssignedToClassNumberLabel.setBorder(blackline);
+        studentsNotAssignedToClassNumberLabel.setPreferredSize(new Dimension(30,20));
+        GridBagConstraints j = new GridBagConstraints();
+        j.insets = insets;
+        j.gridx = 3;
+        j.gridy = 0;
+        statisticsTab.add(studentsNotAssignedToClassNumberLabel, j);
+
+        int teachersWithoutSupervisingClassNumber = main.findTeachersWithoutSupervisingClass().size();
+        JLabel teachersWithoutSupervisingClassNumberLabel = new JLabel(String.valueOf(teachersWithoutSupervisingClassNumber));
+        teachersWithoutSupervisingClassNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        teachersWithoutSupervisingClassNumberLabel.setBorder(blackline);
+        teachersWithoutSupervisingClassNumberLabel.setPreferredSize(new Dimension(30,20));
+        GridBagConstraints k = new GridBagConstraints();
+        k.insets = insets;
+        k.gridx = 3;
+        k.gridy = 1;
+        statisticsTab.add(teachersWithoutSupervisingClassNumberLabel, k);
+
+        int freeStudentSlotsInAllClassesNumber = main.countFreeStudentSlotsInAllClasses();
+        JLabel freeStudentSlotsInAllClassesNumberLabel = new JLabel(String.valueOf(freeStudentSlotsInAllClassesNumber));
+        freeStudentSlotsInAllClassesNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        freeStudentSlotsInAllClassesNumberLabel.setBorder(blackline);
+        freeStudentSlotsInAllClassesNumberLabel.setPreferredSize(new Dimension(30,20));
+        GridBagConstraints l = new GridBagConstraints();
+        l.insets = insets;
+        l.gridx = 3;
+        l.gridy = 2;
+        statisticsTab.add(freeStudentSlotsInAllClassesNumberLabel, l);
     }
 
     private void disableAllTabs(){
@@ -209,6 +341,14 @@ public class MyFrame extends JFrame implements ActionListener {
             tabbedPane.setSelectedIndex(1);
         }
 
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        System.out.println("a");
+        statisticsTab.remove(studentsNotAssignedToClassNumberLabel);
+        initializeNumbersFromDB();
+        super.setVisible(b);
     }
 
     @Override
@@ -259,6 +399,23 @@ public class MyFrame extends JFrame implements ActionListener {
             FindClassFrame findClassFrame = new FindClassFrame(this);
             this.setVisible(false);
         }
+        if (e.getSource()==showAllClassButton){
+            Vector<Vector<String>> allClasses = this.findAllClass();
+            if (allClasses.size()==0) JOptionPane.showMessageDialog(this,"No class found");
+            else {
+                ChooseClassFrame chooseClassFrame = new ChooseClassFrame(this,allClasses);
+                this.setVisible(false);
+            }
+        }
+        if (e.getSource()==showStudentsNotAssignedToClassButton){
+            Vector<Vector<String>> studentsWithoutClass = this.findStudentsWithoutClass();
+            if (studentsWithoutClass.size()==0) JOptionPane.showMessageDialog(this,"No students to show");
+            else {
+                ChooseStudentFrame chooseStudentFrame = new ChooseStudentFrame(this,studentsWithoutClass);
+                this.setVisible(false);
+            }
+        }
+
         if (e.getSource()== logOutButton){
             setLoggedAs(0);
             System.out.println("logout");
@@ -371,6 +528,10 @@ public class MyFrame extends JFrame implements ActionListener {
 
     protected void addStudentToClassOnFirstFreeSlot(String studentId, String class_attending){
         main.addStudentToClassOnFirstFreeSlot(studentId, class_attending);
+    }
+
+    protected Vector<Vector<String>> findAllClass() {
+        return main.findAllClass();
     }
 
     //Method for all tables in DB

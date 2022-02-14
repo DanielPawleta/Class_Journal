@@ -9,49 +9,13 @@ public class Main {
     private Vector<Vector<String>> dataRowClass;//in case of multi results from SQL it's vector of vectors of classes
 
     public static void main(String[] args) {
-        Main main = new Main();
-
-
-
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        new Main();
 
-        //main.findFirstFreeSlotInClass(String.valueOf(20));
-
-
-/*
-        String query = "SELECT * FROM class " +
-                "WHERE supervising_teacher is null;";
-
- */
-
-        /*
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                Vector<String> classRow = new Vector<>();
-                System.out.println(resultSet.getString("class_name"));
-                classRow.add(resultSet.getString("class_name"));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-         */
-
-
-
-        //main.showStudents();
-        //main.showClasses();
-        //main.findStudent("Daniell","Pawleta");
-        //main.addStudent("Mateuszek","Kawulok", "Zory",474852154,"1990-04-11",845697412,"2a");
     }
 
     public Main() {
@@ -257,6 +221,11 @@ public class Main {
                 studentRow.add(resultSet.getString("id"));
                 studentRow.add(resultSet.getString("first_name"));
                 studentRow.add(resultSet.getString("last_name"));
+                studentRow.add(resultSet.getString("city"));
+                studentRow.add(resultSet.getString("phone_number"));
+                studentRow.add(resultSet.getString("date_of_birth"));
+                studentRow.add(resultSet.getString("parents_phone_number"));
+                studentRow.add(resultSet.getString("class"));
                 dataRowStudentsWithoutClass.add(studentRow);
             }
 
@@ -1250,6 +1219,63 @@ public class Main {
         }
         return latestClassId;
     }
+
+    protected Vector<Vector<String>> findAllClass () {
+        System.out.println("find all class");
+        Vector<Vector<String>> dataRowAllClasses = new Vector<>();
+        ResultSet resultSet;
+        int count=0;
+
+        String query = "SELECT * FROM class;";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+
+            resultSet = preparedStatement.executeQuery();
+
+            dataRowAllClasses = new Vector<>();
+
+            while (resultSet.next()) {
+                count++;
+                Vector<String> classRow = new Vector<>();
+                classRow.add(resultSet.getString("id"));
+                classRow.add(resultSet.getString("class_name"));
+                classRow.add(resultSet.getString("supervising_teacher"));
+                classRow.add(resultSet.getString("student_1"));
+                classRow.add(resultSet.getString("student_2"));
+                classRow.add(resultSet.getString("student_3"));
+                classRow.add(resultSet.getString("student_4"));
+                classRow.add(resultSet.getString("student_5"));
+                classRow.add(resultSet.getString("student_6"));
+                classRow.add(resultSet.getString("student_7"));
+                classRow.add(resultSet.getString("student_8"));
+                classRow.add(resultSet.getString("student_9"));
+                classRow.add(resultSet.getString("student_10"));
+                dataRowAllClasses.add(classRow);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        catch (NullPointerException e){
+            dataRowAllClasses = new Vector<>();
+        }
+
+        System.out.println("Found " + count +" classes");
+        return dataRowAllClasses;
+    }
+
+    protected int countFreeStudentSlotsInAllClasses(){
+        int result=0;
+        Vector<Vector<String>> dataRowAllClasses = this.findAllClass();
+        for (Vector<String> classRow : dataRowAllClasses){
+            for (int i=3;i<13;i++){
+                if (classRow.get(i)==null) result++;
+            }
+        }
+        return result;
+    }
+
 
     //Method for all tables in DB
     protected void deleteRow(int i,String rowId){

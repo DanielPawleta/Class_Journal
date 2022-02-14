@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 public class ChooseClassFrame extends JFrame implements ActionListener {
-    private int selectedStudentId;
+    private int selectedClassId;
     private MyFrame myFrame;
 
     private Vector<Vector<String>> dataRow;
@@ -36,7 +36,7 @@ public class ChooseClassFrame extends JFrame implements ActionListener {
     }
 
     private void initializeTitleLabel() {
-        JLabel titleLabel = new JLabel("Choose student");
+        JLabel titleLabel = new JLabel("Choose class");
         titleLabel.setFont(new Font("MV Boli", Font.PLAIN, 30));
         GridBagConstraints b = new GridBagConstraints();
         b.insets = new Insets(50,50,50,50);
@@ -70,12 +70,18 @@ public class ChooseClassFrame extends JFrame implements ActionListener {
         });
 
         jTable.getColumnModel().getColumn(0).setPreferredWidth(40); //id
-        jTable.getColumnModel().getColumn(1).setPreferredWidth(100); //first name
-        jTable.getColumnModel().getColumn(2).setPreferredWidth(100); //last name
-        jTable.getColumnModel().getColumn(3).setPreferredWidth(100); //city
-        jTable.getColumnModel().getColumn(4).setPreferredWidth(120); //phone number
-        jTable.getColumnModel().getColumn(5).setPreferredWidth(150); //parents phone number
-        jTable.getColumnModel().getColumn(6).setPreferredWidth(40); //class
+        jTable.getColumnModel().getColumn(1).setPreferredWidth(100); //class name
+        jTable.getColumnModel().getColumn(2).setPreferredWidth(130); //supervising teacher
+        jTable.getColumnModel().getColumn(3).setPreferredWidth(70); //student 1
+        jTable.getColumnModel().getColumn(4).setPreferredWidth(70); //student 2
+        jTable.getColumnModel().getColumn(5).setPreferredWidth(70); //student 3
+        jTable.getColumnModel().getColumn(6).setPreferredWidth(70); //student 4
+        jTable.getColumnModel().getColumn(7).setPreferredWidth(70); //student 5
+        jTable.getColumnModel().getColumn(8).setPreferredWidth(70); //student 6
+        jTable.getColumnModel().getColumn(9).setPreferredWidth(70); //student 7
+        jTable.getColumnModel().getColumn(10).setPreferredWidth(70); //student 8
+        jTable.getColumnModel().getColumn(11).setPreferredWidth(70); //student 9
+        jTable.getColumnModel().getColumn(12).setPreferredWidth(70); //student 10
 
         JScrollPane scrollPane = new JScrollPane(jTable);
         scrollPane.setPreferredSize(new Dimension(675,150));
@@ -93,12 +99,18 @@ public class ChooseClassFrame extends JFrame implements ActionListener {
     private void initializeColumnNamesRow() {
         columnNames = new Vector<>();
         columnNames.add("id");
-        columnNames.add("first_name");
-        columnNames.add("last_name");
-        columnNames.add("city");
-        columnNames.add("phone_number");
-        columnNames.add("parents_phone_number");
-        columnNames.add("class");
+        columnNames.add("class_name");
+        columnNames.add("supervising_teacher");
+        columnNames.add("student_1");
+        columnNames.add("student_2");
+        columnNames.add("student_3");
+        columnNames.add("student_4");
+        columnNames.add("student_5");
+        columnNames.add("student_6");
+        columnNames.add("student_7");
+        columnNames.add("student_8");
+        columnNames.add("student_9");
+        columnNames.add("student_10");
     }
 
     private void initializeButtons() {
@@ -130,29 +142,26 @@ public class ChooseClassFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             System.out.println("back button");
+            myFrame.setVisible(true);
             dispose();
         }
 
         if (e.getSource() == selectButton) {
             System.out.println("Select button");
             int selectedRow = jTable.getSelectedRow();
-            selectedStudentId = Integer.parseInt(String.valueOf(jTable.getValueAt(selectedRow, 0)));
-            System.out.println("Selected id: " + selectedStudentId);
+            selectedClassId = Integer.parseInt(String.valueOf(jTable.getValueAt(selectedRow, 0)));
+            System.out.println("Selected id: " + selectedClassId);
 
-            System.out.println("Show student frame from choose student frame");
+            System.out.println("Show class frame from choose class frame");
 
             for (String st : dataRow.get(selectedRow)){
                 System.out.println(st);
             }
 
 
-            StudentFrame studentFrame = new StudentFrame(myFrame, dataRow, selectedStudentId);
+            ClassFrame classFrame = new ClassFrame(myFrame, dataRow, selectedClassId);
 
             dispose();
         }
-    }
-
-    public int getSelectedStudentId() {
-        return selectedStudentId;
     }
 }
