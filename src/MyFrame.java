@@ -13,6 +13,8 @@ public class MyFrame extends JFrame implements ActionListener {
     private JTabbedPane tabbedPane;
     private JPanel statisticsTab;
     private JLabel studentsNotAssignedToClassNumberLabel;
+    private JLabel teachersWithoutSupervisingClassNumberLabel;
+    private JLabel freeStudentSlotsInAllClassesNumberLabel;
 
     private JButton newStudentButton;
     private JButton findStudentButton;
@@ -24,6 +26,8 @@ public class MyFrame extends JFrame implements ActionListener {
     private JButton findClassButton;
     private JButton showAllClassButton;
     private JButton showStudentsNotAssignedToClassButton;
+    private JButton showTeachersWithoutSupervisingClassButton;
+    private JButton showClassesWithFreeStudentSlotsButton;
     private JButton logOutButton;
 
     private final Insets insets = new Insets(10,10,10,10);
@@ -269,6 +273,22 @@ public class MyFrame extends JFrame implements ActionListener {
         m.gridy = 0;
         statisticsTab.add(showStudentsNotAssignedToClassButton, m);
 
+        showTeachersWithoutSupervisingClassButton = new JButton("Show");
+        showTeachersWithoutSupervisingClassButton.addActionListener(this);
+        GridBagConstraints n = new GridBagConstraints();
+        n.insets = insets;
+        n.gridx = 4;
+        n.gridy = 1;
+        statisticsTab.add(showTeachersWithoutSupervisingClassButton, n);
+
+        showClassesWithFreeStudentSlotsButton = new JButton("Show");
+        showClassesWithFreeStudentSlotsButton.addActionListener(this);
+        GridBagConstraints o = new GridBagConstraints();
+        o.insets = insets;
+        o.gridx = 4;
+        o.gridy = 2;
+        statisticsTab.add(showClassesWithFreeStudentSlotsButton, o);
+
         tabbedPane.addTab("Statistics",statisticsTab);
 
         centerPanel.add(tabbedPane);
@@ -287,7 +307,7 @@ public class MyFrame extends JFrame implements ActionListener {
         statisticsTab.add(studentsNotAssignedToClassNumberLabel, j);
 
         int teachersWithoutSupervisingClassNumber = main.findTeachersWithoutSupervisingClass().size();
-        JLabel teachersWithoutSupervisingClassNumberLabel = new JLabel(String.valueOf(teachersWithoutSupervisingClassNumber));
+        teachersWithoutSupervisingClassNumberLabel = new JLabel(String.valueOf(teachersWithoutSupervisingClassNumber));
         teachersWithoutSupervisingClassNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         teachersWithoutSupervisingClassNumberLabel.setBorder(blackline);
         teachersWithoutSupervisingClassNumberLabel.setPreferredSize(new Dimension(30,20));
@@ -298,7 +318,7 @@ public class MyFrame extends JFrame implements ActionListener {
         statisticsTab.add(teachersWithoutSupervisingClassNumberLabel, k);
 
         int freeStudentSlotsInAllClassesNumber = main.countFreeStudentSlotsInAllClasses();
-        JLabel freeStudentSlotsInAllClassesNumberLabel = new JLabel(String.valueOf(freeStudentSlotsInAllClassesNumber));
+        freeStudentSlotsInAllClassesNumberLabel = new JLabel(String.valueOf(freeStudentSlotsInAllClassesNumber));
         freeStudentSlotsInAllClassesNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         freeStudentSlotsInAllClassesNumberLabel.setBorder(blackline);
         freeStudentSlotsInAllClassesNumberLabel.setPreferredSize(new Dimension(30,20));
@@ -345,8 +365,9 @@ public class MyFrame extends JFrame implements ActionListener {
 
     @Override
     public void setVisible(boolean b) {
-        System.out.println("a");
         statisticsTab.remove(studentsNotAssignedToClassNumberLabel);
+        statisticsTab.remove(teachersWithoutSupervisingClassNumberLabel);
+        statisticsTab.remove(freeStudentSlotsInAllClassesNumberLabel);
         initializeNumbersFromDB();
         super.setVisible(b);
     }
@@ -415,7 +436,22 @@ public class MyFrame extends JFrame implements ActionListener {
                 this.setVisible(false);
             }
         }
-
+        if (e.getSource()== showTeachersWithoutSupervisingClassButton){
+            Vector<Vector<String>> teachersWithoutSupervisingClass = this.findTeachersWithoutSupervisingClass();
+            if (teachersWithoutSupervisingClass.size()==0) JOptionPane.showMessageDialog(this,"No teachers to show");
+            else {
+                ChooseTeacherFrame chooseTeacherFrame = new ChooseTeacherFrame(this,teachersWithoutSupervisingClass);
+                this.setVisible(false);
+            }
+        }
+        if (e.getSource()== showClassesWithFreeStudentSlotsButton){
+            Vector<Vector<String>> classWithEmptyStudentPlaces = this.findClassWithEmptyStudentPlaces();
+            if (classWithEmptyStudentPlaces.size()==0) JOptionPane.showMessageDialog(this,"No classes to show");
+            else {
+                ChooseClassFrame chooseClassFrame = new ChooseClassFrame(this,classWithEmptyStudentPlaces);
+                this.setVisible(false);
+            }
+        }
         if (e.getSource()== logOutButton){
             setLoggedAs(0);
             System.out.println("logout");
@@ -452,7 +488,6 @@ public class MyFrame extends JFrame implements ActionListener {
     protected Vector<Vector<String>> findAllStudent() {
         return main.findAllStudent();
     }
-
 
 
     //Methods for working with DB table 'teachers'
@@ -538,5 +573,4 @@ public class MyFrame extends JFrame implements ActionListener {
     protected void deleteRow(int i, String rowId){
         main.deleteRow(i, rowId);
     }
-
 }

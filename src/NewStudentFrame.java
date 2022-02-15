@@ -40,7 +40,6 @@ public class NewStudentFrame extends JFrame implements ActionListener {
     private Vector<String> classWithFreeSlots;
     private JComboBox<String> classComboBox;
 
-
     public NewStudentFrame(MyFrame myFrame){
         this.myFrame = myFrame;
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -55,10 +54,6 @@ public class NewStudentFrame extends JFrame implements ActionListener {
         this.setSize(500,600);
         this.setResizable(false);
     }
-
-
-
-
 
     private void initializeTitleLabel() {
         JLabel titleLabel = new JLabel("Add new student");
