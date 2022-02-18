@@ -290,6 +290,7 @@ public class MyFrame extends JFrame implements ActionListener {
         statisticsTab.add(showClassesWithFreeStudentSlotsButton, o);
 
         tabbedPane.addTab("Statistics",statisticsTab);
+        tabbedPane.setEnabledAt(4,false);
 
         centerPanel.add(tabbedPane);
     }
@@ -333,31 +334,52 @@ public class MyFrame extends JFrame implements ActionListener {
         tabbedPane.setEnabledAt(1,false);
         tabbedPane.setEnabledAt(2,false);
         tabbedPane.setEnabledAt(3,false);
+        tabbedPane.setEnabledAt(4,false);
     }
 
     private void ableAllTabs(){
         tabbedPane.setEnabledAt(1,true);
         tabbedPane.setEnabledAt(2,true);
         tabbedPane.setEnabledAt(3,true);
+        tabbedPane.setEnabledAt(4,true);
     }
 
     protected void setLoggedAs(int loggedNumber){
         // 0 - logged out
-        // 1 - student
-        // 2 - teacher
+        // 1 - teacher
+        // 2 - principal
         // 3 - admin
         if (loggedNumber == 0){
             loggedLabel.setText(loginText);
             logOutButton.setVisible(false);
             disableAllTabs();
-            tabbedPane.setEnabledAt(0,true);
+            tabbedPane.setEnabledAt(0,true); //login tab
             tabbedPane.setSelectedIndex(0);
         }
         else if (loggedNumber == 1){
-            loggedLabel.setText("You are logged as Student");
+            loggedLabel.setText("You are logged as Teacher");
             logOutButton.setVisible(true);
-            tabbedPane.setEnabledAt(1,true);
-            tabbedPane.setEnabledAt(0,false);
+            tabbedPane.setEnabledAt(0,false); //login tab
+            tabbedPane.setEnabledAt(1,true); //student tab
+            tabbedPane.setSelectedIndex(1);
+        }
+        else if (loggedNumber == 2){
+            loggedLabel.setText("You are logged as Principal");
+            logOutButton.setVisible(true);
+            tabbedPane.setEnabledAt(0,false); //login tab
+            tabbedPane.setEnabledAt(1,true); //student tab
+            tabbedPane.setEnabledAt(2,true); //teacher tab
+            tabbedPane.setEnabledAt(3,true); //class tab
+            tabbedPane.setSelectedIndex(1);
+        }
+        else if (loggedNumber == 3){
+            loggedLabel.setText("You are logged as Admin");
+            logOutButton.setVisible(true);
+            tabbedPane.setEnabledAt(0,false); //login tab
+            tabbedPane.setEnabledAt(1,true); //student tab
+            tabbedPane.setEnabledAt(2,true); //teacher tab
+            tabbedPane.setEnabledAt(3,true); //class tab
+            tabbedPane.setEnabledAt(4,true); //statistics tab
             tabbedPane.setSelectedIndex(1);
         }
 

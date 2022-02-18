@@ -29,7 +29,7 @@ public class FindStudentFrame extends JFrame implements ActionListener {
         this.initializeButtons();
 
         this.setVisible(true);
-        this.setSize(500,600);
+        this.setSize(500,400);
         this.setResizable(false);
     }
 

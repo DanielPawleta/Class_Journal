@@ -9,11 +9,14 @@ public class Main {
     private Vector<Vector<String>> dataRowClass;//in case of multi results from SQL it's vector of vectors of classes
 
     public static void main(String[] args) {
+        /*
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/class_journal", "root", "password");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+         */
         new Main();
 
     }
