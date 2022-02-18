@@ -31,6 +31,11 @@ public class ClassFrame extends JFrame implements ActionListener {
     private String student3;
     private String student4;
     private String student5;
+    private String student6;
+    private String student7;
+    private String student8;
+    private String student9;
+    private String student10;
 
     private JLabel classNameTextField;
     private JLabel supervisingTeacherTextField;
@@ -39,6 +44,11 @@ public class ClassFrame extends JFrame implements ActionListener {
     private JLabel student3TextField;
     private JLabel student4TextField;
     private JLabel student5TextField;
+    private JLabel student6TextField;
+    private JLabel student7TextField;
+    private JLabel student8TextField;
+    private JLabel student9TextField;
+    private JLabel student10TextField;
 
     public ClassFrame(MyFrame myFrame, Vector<Vector<String>> dataRowClass){
         //fired from main when there is only one search result
@@ -56,7 +66,7 @@ public class ClassFrame extends JFrame implements ActionListener {
         this.initializeButtons();
 
         this.setVisible(true);
-        this.setSize(500,600);
+        this.setSize(500,700);
         this.setResizable(false);
     }
 
@@ -70,7 +80,7 @@ public class ClassFrame extends JFrame implements ActionListener {
         JLabel titleLabel = new JLabel("Class");
         titleLabel.setFont(new Font("MV Boli", Font.PLAIN, 30));
         GridBagConstraints a = new GridBagConstraints();
-        a.insets = new Insets(50,50,50,50);
+        a.insets = new Insets(20,50,20,50);
         a.gridwidth=3;
         a.gridx=0;
         a.gridy=0;
@@ -133,6 +143,41 @@ public class ClassFrame extends JFrame implements ActionListener {
             o.gridx = 0;
             o.gridy = 7;
             this.add(student5Label, o);
+
+            JLabel student6Label = new JLabel("Student 6: ");
+            GridBagConstraints r = new GridBagConstraints();
+            r.insets = insets;
+            r.gridx = 0;
+            r.gridy = 8;
+            this.add(student6Label, r);
+
+            JLabel student7Label = new JLabel("Student 7: ");
+            GridBagConstraints s = new GridBagConstraints();
+            s.insets = insets;
+            s.gridx = 0;
+            s.gridy = 9;
+            this.add(student7Label, s);
+
+            JLabel student8Label = new JLabel("Student 8: ");
+            GridBagConstraints t = new GridBagConstraints();
+            t.insets = insets;
+            t.gridx = 0;
+            t.gridy = 10;
+            this.add(student8Label, t);
+
+            JLabel student9Label = new JLabel("Student 9: ");
+            GridBagConstraints u = new GridBagConstraints();
+            u.insets = insets;
+            u.gridx = 0;
+            u.gridy = 11;
+            this.add(student9Label, u);
+
+            JLabel student10Label = new JLabel("Student 10: ");
+            GridBagConstraints w = new GridBagConstraints();
+            w.insets = insets;
+            w.gridx = 0;
+            w.gridy = 12;
+            this.add(student10Label, w);
         }
 
     private void initializeTextFields(){
@@ -236,6 +281,76 @@ public class ClassFrame extends JFrame implements ActionListener {
         p.gridx = 1;
         p.gridy = 7;
         this.add(student5TextField, p);
+
+        String student6Id;
+        if ((student6Id = dataRowClass.get(selectedClassIdInDataRow).get(8))!=null){
+            student6 = myFrame.getStudentNameAndLastName(Integer.parseInt(student6Id));
+        }
+        else student6 = "";
+        student6TextField = new JLabel(student6);
+        student6TextField.setBorder(blackline);
+        student6TextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints y = new GridBagConstraints();
+        y.insets = insets;
+        y.gridx = 1;
+        y.gridy = 8;
+        this.add(student6TextField, y);
+
+        String student7Id;
+        if ((student7Id = dataRowClass.get(selectedClassIdInDataRow).get(9))!=null){
+            student7 = myFrame.getStudentNameAndLastName(Integer.parseInt(student7Id));
+        }
+        else student7 = "";
+        student7TextField = new JLabel(student7);
+        student7TextField.setBorder(blackline);
+        student7TextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints z = new GridBagConstraints();
+        z.insets = insets;
+        z.gridx = 1;
+        z.gridy = 9;
+        this.add(student7TextField, z);
+
+        String student8Id;
+        if ((student8Id = dataRowClass.get(selectedClassIdInDataRow).get(10))!=null){
+            student8 = myFrame.getStudentNameAndLastName(Integer.parseInt(student8Id));
+        }
+        else student8 = "";
+        student8TextField = new JLabel(student8);
+        student8TextField.setBorder(blackline);
+        student8TextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints a1 = new GridBagConstraints();
+        a1.insets = insets;
+        a1.gridx = 1;
+        a1.gridy = 10;
+        this.add(student8TextField, a1);
+
+        String student9Id;
+        if ((student9Id = dataRowClass.get(selectedClassIdInDataRow).get(11))!=null){
+            student9 = myFrame.getStudentNameAndLastName(Integer.parseInt(student9Id));
+        }
+        else student9 = "";
+        student9TextField = new JLabel(student9);
+        student9TextField.setBorder(blackline);
+        student9TextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints a2 = new GridBagConstraints();
+        a2.insets = insets;
+        a2.gridx = 1;
+        a2.gridy = 11;
+        this.add(student9TextField, a2);
+
+        String student10Id;
+        if ((student10Id = dataRowClass.get(selectedClassIdInDataRow).get(12))!=null){
+            student10 = myFrame.getStudentNameAndLastName(Integer.parseInt(student10Id));
+        }
+        else student10 = "";
+        student10TextField = new JLabel(student10);
+        student10TextField.setBorder(blackline);
+        student10TextField.setPreferredSize(new Dimension(150,20));
+        GridBagConstraints a3 = new GridBagConstraints();
+        a3.insets = insets;
+        a3.gridx = 1;
+        a3.gridy = 12;
+        this.add(student10TextField, a3);
     }
 
     private void initializeUpdateButtons(){
@@ -302,7 +417,7 @@ public class ClassFrame extends JFrame implements ActionListener {
         GridBagConstraints r = new GridBagConstraints();
         r.insets = new Insets(50,10,10,10);
         r.gridx = 0;
-        r.gridy = 8;
+        r.gridy = 13;
         this.add(backButton, r);
 
         deleteButton = new JButton("Delete");
@@ -310,7 +425,7 @@ public class ClassFrame extends JFrame implements ActionListener {
         GridBagConstraints s = new GridBagConstraints();
         s.insets = new Insets(50,10,10,10);
         s.gridx = 1;
-        s.gridy = 8;
+        s.gridy = 13;
         this.add(deleteButton, s);
     }
 
