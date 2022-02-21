@@ -17,7 +17,12 @@ public class NewClassFrame extends JFrame implements ActionListener {
     private int student2Id;
     private int student3Id;
     private int student4Id;
-    private int maxNumberOfStudents=10;
+    private int student5Id;
+    private int student6Id;
+    private int student7Id;
+    private int student8Id;
+    private int student9Id;
+    private int student10Id;
 
     private JTextField classNameField;
     private JComboBox<String> supervisingTeacherComboBox;
@@ -25,6 +30,12 @@ public class NewClassFrame extends JFrame implements ActionListener {
     private JComboBox<String> student2ComboBox;
     private JComboBox<String> student3ComboBox;
     private JComboBox<String> student4ComboBox;
+    private JComboBox<String> student5ComboBox;
+    private JComboBox<String> student6ComboBox;
+    private JComboBox<String> student7ComboBox;
+    private JComboBox<String> student8ComboBox;
+    private JComboBox<String> student9ComboBox;
+    private JComboBox<String> student10ComboBox;
 
     private Vector<String> studentsWithoutClass;
     private Vector<String> teachersWithoutSupervisingClass;
@@ -42,8 +53,8 @@ public class NewClassFrame extends JFrame implements ActionListener {
         this.initializeButtons();
 
         this.setVisible(true);
-        this.setSize(500,600);
-        this.setResizable(false);
+        this.setSize(500,800);
+        this.setResizable(true);
 
     }
 
@@ -51,7 +62,7 @@ public class NewClassFrame extends JFrame implements ActionListener {
         JLabel titleLabel = new JLabel("Add new class");
         titleLabel.setFont(new Font("MV Boli", Font.PLAIN, 30));
         GridBagConstraints a = new GridBagConstraints();
-        a.insets = new Insets(50,50,50,50);
+        a.insets = new Insets(0,50,10,50);
         a.gridwidth=2;
         a.gridx=0;
         a.gridy=0;
@@ -147,23 +158,113 @@ public class NewClassFrame extends JFrame implements ActionListener {
             m.gridx = 1;
             m.gridy = 7;
             this.add(student4ComboBox, m);
+
+        //student 5
+        JLabel student5Label = new JLabel("Student 5:  ");
+        GridBagConstraints n = new GridBagConstraints();
+        n.insets = insets;
+        n.gridx = 0;
+        n.gridy = 8;
+        this.add(student5Label, n);
+        student5ComboBox = new JComboBox<>(studentsWithoutClass);
+        student5ComboBox.setSelectedIndex(-1);
+        GridBagConstraints r = new GridBagConstraints();
+        r.insets = insets;
+        r.gridx = 1;
+        r.gridy = 8;
+        this.add(student5ComboBox, r);
+
+        //student 6
+        JLabel student6Label = new JLabel("Student 6:  ");
+        GridBagConstraints s = new GridBagConstraints();
+        s.insets = insets;
+        s.gridx = 0;
+        s.gridy = 9;
+        this.add(student6Label, s);
+        student6ComboBox = new JComboBox<>(studentsWithoutClass);
+        student6ComboBox.setSelectedIndex(-1);
+        GridBagConstraints t = new GridBagConstraints();
+        t.insets = insets;
+        t.gridx = 1;
+        t.gridy = 9;
+        this.add(student6ComboBox, t);
+
+        //student 7
+        JLabel student7Label = new JLabel("Student 7:  ");
+        GridBagConstraints u = new GridBagConstraints();
+        u.insets = insets;
+        u.gridx = 0;
+        u.gridy = 10;
+        this.add(student7Label, u);
+        student7ComboBox = new JComboBox<>(studentsWithoutClass);
+        student7ComboBox.setSelectedIndex(-1);
+        GridBagConstraints w = new GridBagConstraints();
+        w.insets = insets;
+        w.gridx = 1;
+        w.gridy = 10;
+        this.add(student7ComboBox, w);
+
+        //student 8
+        JLabel student8Label = new JLabel("Student 8:  ");
+        GridBagConstraints y = new GridBagConstraints();
+        y.insets = insets;
+        y.gridx = 0;
+        y.gridy = 11;
+        this.add(student8Label, y);
+        student8ComboBox = new JComboBox<>(studentsWithoutClass);
+        student8ComboBox.setSelectedIndex(-1);
+        GridBagConstraints z = new GridBagConstraints();
+        z.insets = insets;
+        z.gridx = 1;
+        z.gridy = 11;
+        this.add(student8ComboBox, z);
+
+        //student 9
+        JLabel student9Label = new JLabel("Student 9:  ");
+        GridBagConstraints a1 = new GridBagConstraints();
+        a1.insets = insets;
+        a1.gridx = 0;
+        a1.gridy = 12;
+        this.add(student9Label, a1);
+        student9ComboBox = new JComboBox<>(studentsWithoutClass);
+        student9ComboBox.setSelectedIndex(-1);
+        GridBagConstraints a2 = new GridBagConstraints();
+        a2.insets = insets;
+        a2.gridx = 1;
+        a2.gridy = 12;
+        this.add(student9ComboBox, a2);
+
+        //student 10
+        JLabel student10Label = new JLabel("Student 10:  ");
+        GridBagConstraints a3 = new GridBagConstraints();
+        a3.insets = insets;
+        a3.gridx = 0;
+        a3.gridy = 13;
+        this.add(student10Label, a3);
+        student10ComboBox = new JComboBox<>(studentsWithoutClass);
+        student10ComboBox.setSelectedIndex(-1);
+        GridBagConstraints a4 = new GridBagConstraints();
+        a4.insets = insets;
+        a4.gridx = 1;
+        a4.gridy = 13;
+        this.add(student10ComboBox, a4);
         }
 
     private void initializeButtons() {
         backButton = new JButton("Back");
         backButton.addActionListener(this);
         GridBagConstraints r = new GridBagConstraints();
-        r.insets = new Insets(50,10,10,10);
+        r.insets = new Insets(20,10,10,10);
         r.gridx = 0;
-        r.gridy = 8;
+        r.gridy = 14;
         this.add(backButton, r);
 
         addButton = new JButton("Add class");
         addButton.addActionListener(this);
         GridBagConstraints s = new GridBagConstraints();
-        s.insets = new Insets(50,10,10,10);
+        s.insets = new Insets(20,10,10,10);
         s.gridx = 1;
-        s.gridy = 8;
+        s.gridy = 14;
         this.add(addButton, s);
     }
 
@@ -222,6 +323,42 @@ public class NewClassFrame extends JFrame implements ActionListener {
         if (student4ComboBox.getItemAt(student4ComboBox.getSelectedIndex())!=null) {
             student4Id = Integer.parseInt(student4ComboBox.getItemAt(student4ComboBox.getSelectedIndex()).split(" id : ")[1]);
             studentsId.add(student4Id);
+        }
+        else studentsId.add(-1);
+
+        if (student5ComboBox.getItemAt(student5ComboBox.getSelectedIndex())!=null) {
+            student5Id = Integer.parseInt(student5ComboBox.getItemAt(student5ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student5Id);
+        }
+        else studentsId.add(-1);
+
+        if (student6ComboBox.getItemAt(student6ComboBox.getSelectedIndex())!=null) {
+            student6Id = Integer.parseInt(student6ComboBox.getItemAt(student6ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student6Id);
+        }
+        else studentsId.add(-1);
+
+        if (student7ComboBox.getItemAt(student7ComboBox.getSelectedIndex())!=null) {
+            student7Id = Integer.parseInt(student7ComboBox.getItemAt(student7ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student7Id);
+        }
+        else studentsId.add(-1);
+
+        if (student8ComboBox.getItemAt(student8ComboBox.getSelectedIndex())!=null) {
+            student8Id = Integer.parseInt(student8ComboBox.getItemAt(student8ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student8Id);
+        }
+        else studentsId.add(-1);
+
+        if (student9ComboBox.getItemAt(student9ComboBox.getSelectedIndex())!=null) {
+            student9Id = Integer.parseInt(student9ComboBox.getItemAt(student9ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student9Id);
+        }
+        else studentsId.add(-1);
+
+        if (student10ComboBox.getItemAt(student10ComboBox.getSelectedIndex())!=null) {
+            student10Id = Integer.parseInt(student10ComboBox.getItemAt(student10ComboBox.getSelectedIndex()).split(" id : ")[1]);
+            studentsId.add(student10Id);
         }
         else studentsId.add(-1);
 

@@ -202,9 +202,10 @@ public class StudentFrame extends JFrame implements ActionListener {
         n.gridy = 6;
         this.add(parentsPhoneNumberTextField, n);
 
+
         String className;
         if (dataRowStudent.get(selectedStudentIdInDataRow).get(7)!=null) {
-            className = myFrame.getClassNameByClassId(Integer.parseInt(dataRowStudent.get(selectedStudentIdInDataRow).get(7)));
+            className = dataRowStudent.get(selectedStudentIdInDataRow).get(7);
         }
         else className = "";
         JLabel classTextField = new JLabel(className);

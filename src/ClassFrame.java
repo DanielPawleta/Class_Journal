@@ -17,11 +17,16 @@ public class ClassFrame extends JFrame implements ActionListener {
     private JButton backButton;
     private JButton updateClassNameButton;
     private JButton updateSupervisingTeacherButton;
-    private JButton updateCityButton;
-    private JButton updatePhoneNumberButton;
-    private JButton updateDateOfBirthButton;
-    private JButton updateParentsPhoneNumberButton;
-    private JButton updateClassButton;
+    private JButton updateStudent1Button;
+    private JButton updateStudent2Button;
+    private JButton updateStudent3Button;
+    private JButton updateStudent4Button;
+    private JButton updateStudent5Button;
+    private JButton updateStudent6Button;
+    private JButton updateStudent7Button;
+    private JButton updateStudent8Button;
+    private JButton updateStudent9Button;
+    private JButton updateStudent10Button;
     private JButton deleteButton;
 
     private String className;
@@ -66,8 +71,8 @@ public class ClassFrame extends JFrame implements ActionListener {
         this.initializeButtons();
 
         this.setVisible(true);
-        this.setSize(500,700);
-        this.setResizable(false);
+        this.setSize(500,750);
+        this.setResizable(true);
     }
 
     public ClassFrame(MyFrame myFrame, Vector<Vector<String>> dataRowClass, int selectedClassIdInDataRow) {
@@ -370,52 +375,93 @@ public class ClassFrame extends JFrame implements ActionListener {
         b.gridy = 2;
         this.add(updateSupervisingTeacherButton, b);
 
-        updateCityButton = new JButton("update");
-        updateCityButton.addActionListener(this);
+        updateStudent1Button = new JButton("update");
+        updateStudent1Button.addActionListener(this);
         GridBagConstraints c = new GridBagConstraints();
         c.insets = insets;
         c.gridx = 2;
         c.gridy = 3;
-        this.add(updateCityButton, c);
+        this.add(updateStudent1Button, c);
 
-        updatePhoneNumberButton = new JButton("update");
-        updatePhoneNumberButton.addActionListener(this);
+        updateStudent2Button = new JButton("update");
+        updateStudent2Button.addActionListener(this);
         GridBagConstraints d = new GridBagConstraints();
         d.insets = insets;
         d.gridx = 2;
         d.gridy = 4;
-        this.add(updatePhoneNumberButton, d);
+        this.add(updateStudent2Button, d);
 
-        updateDateOfBirthButton = new JButton("update");
-        updateDateOfBirthButton.addActionListener(this);
+        updateStudent3Button = new JButton("update");
+        updateStudent3Button.addActionListener(this);
         GridBagConstraints e = new GridBagConstraints();
         e.insets = insets;
         e.gridx = 2;
         e.gridy = 5;
-        this.add(updateDateOfBirthButton, e);
+        this.add(updateStudent3Button, e);
 
-        updateParentsPhoneNumberButton = new JButton("update");
-        updateParentsPhoneNumberButton.addActionListener(this);
+        updateStudent4Button = new JButton("update");
+        updateStudent4Button.addActionListener(this);
         GridBagConstraints f = new GridBagConstraints();
         f.insets = insets;
         f.gridx = 2;
         f.gridy = 6;
-        this.add(updateParentsPhoneNumberButton, f);
+        this.add(updateStudent4Button, f);
 
-        updateClassButton = new JButton("update");
-        updateClassButton.addActionListener(this);
+        updateStudent5Button = new JButton("update");
+        updateStudent5Button.addActionListener(this);
         GridBagConstraints g = new GridBagConstraints();
         g.insets = insets;
         g.gridx = 2;
         g.gridy = 7;
-        this.add(updateClassButton, g);
+        this.add(updateStudent5Button, g);
+
+        updateStudent6Button = new JButton("update");
+        updateStudent6Button.addActionListener(this);
+        GridBagConstraints h = new GridBagConstraints();
+        h.insets = insets;
+        h.gridx = 2;
+        h.gridy = 8;
+        this.add(updateStudent6Button, h);
+
+        updateStudent7Button = new JButton("update");
+        updateStudent7Button.addActionListener(this);
+        GridBagConstraints i = new GridBagConstraints();
+        i.insets = insets;
+        i.gridx = 2;
+        i.gridy = 9;
+        this.add(updateStudent7Button, i);
+
+        updateStudent8Button = new JButton("update");
+        updateStudent8Button.addActionListener(this);
+        GridBagConstraints j = new GridBagConstraints();
+        j.insets = insets;
+        j.gridx = 2;
+        j.gridy = 10;
+        this.add(updateStudent8Button, j);
+
+        updateStudent9Button = new JButton("update");
+        updateStudent9Button.addActionListener(this);
+        GridBagConstraints k = new GridBagConstraints();
+        k.insets = insets;
+        k.gridx = 2;
+        k.gridy = 11;
+        this.add(updateStudent9Button, k);
+
+        updateStudent10Button = new JButton("update");
+        updateStudent10Button.addActionListener(this);
+        GridBagConstraints l = new GridBagConstraints();
+        l.insets = insets;
+        l.gridx = 2;
+        l.gridy = 12;
+        this.add(updateStudent10Button, l);
+
     }
 
     private void initializeButtons() {
         backButton = new JButton("Back");
         backButton.addActionListener(this);
         GridBagConstraints r = new GridBagConstraints();
-        r.insets = new Insets(50,10,10,10);
+        r.insets = new Insets(20,10,10,10);
         r.gridx = 0;
         r.gridy = 13;
         this.add(backButton, r);
@@ -423,7 +469,7 @@ public class ClassFrame extends JFrame implements ActionListener {
         deleteButton = new JButton("Delete");
         deleteButton.addActionListener(this);
         GridBagConstraints s = new GridBagConstraints();
-        s.insets = new Insets(50,10,10,10);
+        s.insets = new Insets(20,10,10,10);
         s.gridx = 1;
         s.gridy = 13;
         this.add(deleteButton, s);
@@ -449,25 +495,45 @@ public class ClassFrame extends JFrame implements ActionListener {
             System.out.println("update supervising teacher button in class frame");
             showUpdateDialog("New supervising teacher name: ",1);
         }
-        if (e.getSource()==updateCityButton){
+        if (e.getSource()== updateStudent1Button){
             System.out.println("update student 1 button in class frame");
             showUpdateDialog("Student 1: ",2);
         }
-        if (e.getSource()==updatePhoneNumberButton){
+        if (e.getSource()== updateStudent2Button){
             System.out.println("update student 2 button in class frame");
             showUpdateDialog("Student 2: ",3);
         }
-        if (e.getSource()==updateDateOfBirthButton){
+        if (e.getSource()== updateStudent3Button){
             System.out.println("update student 3 button in class frame");
             showUpdateDialog("Student 3: ",4);
         }
-        if (e.getSource()==updateParentsPhoneNumberButton){
+        if (e.getSource()== updateStudent4Button){
             System.out.println("update student 4 button in class frame");
             showUpdateDialog("Student 4: ",5);
         }
-        if (e.getSource()==updateClassButton){
+        if (e.getSource()== updateStudent5Button){
             System.out.println("update student 5 button in class frame");
             showUpdateDialog("Student 5: ",6);
+        }
+        if (e.getSource()== updateStudent6Button){
+            System.out.println("update student 6 button in class frame");
+            showUpdateDialog("Student 6: ",7);
+        }
+        if (e.getSource()== updateStudent7Button){
+            System.out.println("update student 7 button in class frame");
+            showUpdateDialog("Student 7: ",8);
+        }
+        if (e.getSource()== updateStudent8Button){
+            System.out.println("update student 8 button in class frame");
+            showUpdateDialog("Student 8: ",9);
+        }
+        if (e.getSource()== updateStudent9Button){
+            System.out.println("update student 9 button in class frame");
+            showUpdateDialog("Student 9: ",10);
+        }
+        if (e.getSource()== updateStudent10Button){
+            System.out.println("update student 10 button in class frame");
+            showUpdateDialog("Student 10: ",11);
         }
         if (e.getSource()==deleteButton){
             System.out.println("delete class button in class frame");
@@ -493,6 +559,11 @@ public class ClassFrame extends JFrame implements ActionListener {
         //4 - student 3
         //5 - student 4
         //6 - student 5
+        //7 - student 6
+        //8 - student 7
+        //9 - student 8
+        //10 - student 9
+        //11 - student 10
 
 
         JPanel jPanel = new JPanel();

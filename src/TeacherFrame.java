@@ -194,9 +194,10 @@ public class TeacherFrame extends JFrame implements ActionListener {
         l.gridy = 5;
         this.add(dateOfBirthTextField, l);
 
-        String supervisingClassId;
-        if ((supervisingClassId = dataRowTeacher.get(selectedTeacherIdInDataRow).get(6))!=null){
-            supervisingClass = myFrame.getClassNameByClassId(Integer.parseInt(supervisingClassId));
+        String supervisingClass;
+        if (dataRowTeacher.get(selectedTeacherIdInDataRow).get(6)!=null){
+            //supervisingClass = myFrame.getClassNameByClassId(Integer.parseInt(supervisingClassId));
+            supervisingClass = dataRowTeacher.get(selectedTeacherIdInDataRow).get(6);
         }
         else supervisingClass = "";
         supervisingClassTextField = new JLabel(supervisingClass);

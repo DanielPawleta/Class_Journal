@@ -127,7 +127,12 @@ public class Main {
                 studentRow.add(resultSet.getString("phone_number"));
                 studentRow.add(resultSet.getString("date_of_birth"));
                 studentRow.add(resultSet.getString("parents_phone_number"));
-                studentRow.add(resultSet.getString("class"));
+                String className = resultSet.getString("class");
+                if (className!=null){;
+                    className = getClassNameByClassId(Integer.parseInt(className));
+                    System.out.println("class name: " + className);
+                }
+                studentRow.add(className);
                 dataRowStudent.add(studentRow);
 
                 System.out.println(resultSet.getString("first_name"));
@@ -180,7 +185,12 @@ public class Main {
                 studentRow.add(resultSet.getString("phone_number"));
                 studentRow.add(resultSet.getString("date_of_birth"));
                 studentRow.add(resultSet.getString("parents_phone_number"));
-                studentRow.add(resultSet.getString("class"));
+                String className = resultSet.getString("class");
+                if (className!=null){;
+                    className = getClassNameByClassId(Integer.parseInt(className));
+                    System.out.println("class name: " + className);
+                }
+                studentRow.add(className);
                 dataRowStudent.add(studentRow);
 
                 System.out.println(resultSet.getString("first_name"));
@@ -228,7 +238,11 @@ public class Main {
                 studentRow.add(resultSet.getString("phone_number"));
                 studentRow.add(resultSet.getString("date_of_birth"));
                 studentRow.add(resultSet.getString("parents_phone_number"));
-                studentRow.add(resultSet.getString("class"));
+                String className = resultSet.getString("class");
+                if (className!=null){;
+                    className = getClassNameByClassId(Integer.parseInt(className));
+                }
+                studentRow.add(className);
                 dataRowStudentsWithoutClass.add(studentRow);
             }
 
@@ -340,7 +354,7 @@ public class Main {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                latestStudentId = resultSet.getString("id");
+                latestStudentId = resultSet.getString("MAX(Id)");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -373,7 +387,12 @@ public class Main {
                 studentRow.add(resultSet.getString("phone_number"));
                 studentRow.add(resultSet.getString("date_of_birth"));
                 studentRow.add(resultSet.getString("parents_phone_number"));
-                studentRow.add(resultSet.getString("class"));
+                String className = resultSet.getString("class");
+                if (className!=null){;
+                    className = getClassNameByClassId(Integer.parseInt(className));
+                    System.out.println("class name: " + className);
+                }
+                studentRow.add(className);
                 dataRowAllStudents.add(studentRow);
             }
 
@@ -458,7 +477,11 @@ public class Main {
                 teacherRow.add(resultSet.getString("city"));
                 teacherRow.add(resultSet.getString("phone_number"));
                 teacherRow.add(resultSet.getString("date_of_birth"));
-                teacherRow.add(resultSet.getString("class_supervising"));
+                String classSupervisingName = resultSet.getString("class_supervising");
+                if (classSupervisingName!=null){
+                    classSupervisingName = getClassNameByClassId(Integer.parseInt(classSupervisingName));
+                }
+                teacherRow.add(classSupervisingName);
                 dataRowTeacher.add(teacherRow);
 
                 System.out.println(resultSet.getString("first_name"));
@@ -534,15 +557,19 @@ public class Main {
 
             while (resultSet.next()) {
                 count++;
-                Vector<String> TeacherRow = new Vector<>();
-                TeacherRow.add(resultSet.getString("id"));
-                TeacherRow.add(resultSet.getString("first_name"));
-                TeacherRow.add(resultSet.getString("last_name"));
-                TeacherRow.add(resultSet.getString("city"));
-                TeacherRow.add(resultSet.getString("phone_number"));
-                TeacherRow.add(resultSet.getString("date_of_birth"));
-                TeacherRow.add(resultSet.getString("class_supervising"));
-                dataRowTeacher.add(TeacherRow);
+                Vector<String> teacherRow = new Vector<>();
+                teacherRow.add(resultSet.getString("id"));
+                teacherRow.add(resultSet.getString("first_name"));
+                teacherRow.add(resultSet.getString("last_name"));
+                teacherRow.add(resultSet.getString("city"));
+                teacherRow.add(resultSet.getString("phone_number"));
+                teacherRow.add(resultSet.getString("date_of_birth"));
+                String classSupervisingName = resultSet.getString("class_supervising");
+                if (classSupervisingName!=null){
+                    classSupervisingName = getClassNameByClassId(Integer.parseInt(classSupervisingName));
+                }
+                teacherRow.add(classSupervisingName);
+                dataRowTeacher.add(teacherRow);
 
                 System.out.println(resultSet.getString("first_name"));
             }
@@ -675,7 +702,7 @@ public class Main {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                latestTeacherId = resultSet.getString("id");
+                latestTeacherId = resultSet.getString("MAX(id)");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -707,7 +734,11 @@ public class Main {
                 teacherRow.add(resultSet.getString("city"));
                 teacherRow.add(resultSet.getString("phone_number"));
                 teacherRow.add(resultSet.getString("date_of_birth"));
-                teacherRow.add(resultSet.getString("class_supervising"));
+                String classSupervisingName = resultSet.getString("class_supervising");
+                if (classSupervisingName!=null){
+                    classSupervisingName = getClassNameByClassId(Integer.parseInt(classSupervisingName));
+                }
+                teacherRow.add(classSupervisingName);
                 dataRowAllTeachers.add(teacherRow);
             }
 
@@ -1011,7 +1042,7 @@ public class Main {
     }
 
     private void addSupervisingTeacherToClass(String teacherId, String supervising_class){
-        String query = "UPDATE `class_journal`.`class` SET class_supervising"  +
+        String query = "UPDATE `class_journal`.`class` SET supervising_teacher"  +
                 " = ? " +
                 "WHERE id = ?;";
         try {

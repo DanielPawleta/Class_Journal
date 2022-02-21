@@ -52,6 +52,7 @@ public class ChooseStudentFrame extends JFrame implements ActionListener {
 
         jTable = new JTable();
         jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
         DefaultTableModel defaultTableModel = new DefaultTableModel(dataRow,columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
