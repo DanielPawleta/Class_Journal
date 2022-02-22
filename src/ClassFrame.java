@@ -55,11 +55,10 @@ public class ClassFrame extends JFrame implements ActionListener {
     private JLabel student9TextField;
     private JLabel student10TextField;
 
-    public ClassFrame(MyFrame myFrame, Vector<Vector<String>> dataRowClass){
-        //fired from main when there is only one search result
+    public ClassFrame(MyFrame myFrame, Vector<Vector<String>> dataRowClass, int selectedRow){
         this.myFrame = myFrame;
         this.dataRowClass = dataRowClass;
-        this.selectedClassIdInDataRow =0;
+        this.selectedClassIdInDataRow = selectedRow;
 
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setTitle("Class");
@@ -73,12 +72,6 @@ public class ClassFrame extends JFrame implements ActionListener {
         this.setVisible(true);
         this.setSize(500,750);
         this.setResizable(true);
-    }
-
-    public ClassFrame(MyFrame myFrame, Vector<Vector<String>> dataRowClass, int selectedClassIdInDataRow) {
-        //fired from choose student frame when there are multi search results
-        this(myFrame, dataRowClass);
-        this.selectedClassIdInDataRow = selectedClassIdInDataRow;
     }
 
     private void initializeTitleLabel() {

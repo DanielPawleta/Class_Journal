@@ -44,6 +44,7 @@ public class TeacherFrame extends JFrame implements ActionListener {
     private JLabel dateOfBirthTextField;
     private JLabel supervisingClassTextField;
 
+
     public TeacherFrame(MyFrame myFrame, Vector<Vector<String>> dataRowTeacher){
         //fired from main when there is only one search result
         this();
@@ -194,7 +195,7 @@ public class TeacherFrame extends JFrame implements ActionListener {
         l.gridy = 5;
         this.add(dateOfBirthTextField, l);
 
-        String supervisingClass;
+
         if (dataRowTeacher.get(selectedTeacherIdInDataRow).get(6)!=null){
             //supervisingClass = myFrame.getClassNameByClassId(Integer.parseInt(supervisingClassId));
             supervisingClass = dataRowTeacher.get(selectedTeacherIdInDataRow).get(6);
@@ -414,13 +415,16 @@ public class TeacherFrame extends JFrame implements ActionListener {
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
                 if (classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex())==null) return;
-                String className = classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex());
-                String classID = myFrame.getClassIdByClassName(className);
-                myFrame.setNullForSupervisingTeacherValue(classID); //setting null value for old supervised class
-                if (myFrame.updateTeacher(i, selectedTeacherId, classID)==1){
+                String newClassName = classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex());
+                String newClassID = myFrame.getClassIdByClassName(newClassName);
+                if (!supervisingClass.equals("")){
+                    String oldClassId = myFrame.getClassIdByClassName(supervisingClass);
+                    myFrame.setNullForSupervisingTeacherValue(oldClassId); //setting null value for old supervised class
+                }
+                if (myFrame.updateTeacher(i, selectedTeacherId, newClassID)==1){
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
-                    myFrame.updateClass(1,Integer.parseInt(classID),String.valueOf(selectedTeacherId));
+                    myFrame.updateClass(1,Integer.parseInt(newClassID),String.valueOf(selectedTeacherId));
                     myFrame.findTeacher(selectedTeacherId);
                     System.out.println("teacher updated");
                 }

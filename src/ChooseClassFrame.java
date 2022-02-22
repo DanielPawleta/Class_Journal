@@ -12,6 +12,7 @@ public class ChooseClassFrame extends JFrame implements ActionListener {
     private MyFrame myFrame;
 
     private Vector<Vector<String>> dataRow;
+    private Vector<Vector<String>> dataRowChangedIdToNames;
     private Vector<String> columnNames;
     private JTable jTable;
 
@@ -49,10 +50,11 @@ public class ChooseClassFrame extends JFrame implements ActionListener {
 
     private void initializeTab() {
         initializeColumnNamesRow();
+        initializeDataRowChangedIdToNames();
 
         jTable = new JTable();
         jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        DefaultTableModel defaultTableModel = new DefaultTableModel(dataRow,columnNames) {
+        DefaultTableModel defaultTableModel = new DefaultTableModel(dataRowChangedIdToNames,columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -113,6 +115,32 @@ public class ChooseClassFrame extends JFrame implements ActionListener {
         columnNames.add("student_10");
     }
 
+    private void initializeDataRowChangedIdToNames(){
+        dataRowChangedIdToNames = new Vector<>();
+
+        for (Vector<String> row : dataRow){
+            Vector<String> vectorChangedIdToNames = new Vector<>();
+            vectorChangedIdToNames.add(row.get(0));
+            vectorChangedIdToNames.add(row.get(1));
+
+
+            if (row.get(2)!=null){ //supervising_teacher
+                String supervisingTeacherId = row.get(2);
+                vectorChangedIdToNames.add(2,myFrame.getTeacherNameAndLastName(Integer.parseInt(supervisingTeacherId)));
+            }
+            else vectorChangedIdToNames.add(2,null);
+            for (int i=3;i<13;i++){
+                if (row.get(i)!=null){//students
+                    String studentId = row.get(i);
+                    vectorChangedIdToNames.add(i,myFrame.getStudentNameAndLastName(Integer.parseInt(studentId)));
+                }
+                else vectorChangedIdToNames.add(i,null);
+            }
+            dataRowChangedIdToNames.add(vectorChangedIdToNames);
+        }
+
+    }
+
     private void initializeButtons() {
         selectButton = new JButton("Select");
         selectButton.addActionListener(this);
@@ -159,7 +187,7 @@ public class ChooseClassFrame extends JFrame implements ActionListener {
             }
 
 
-            ClassFrame classFrame = new ClassFrame(myFrame, dataRow, selectedClassId);
+            ClassFrame classFrame = new ClassFrame(myFrame, dataRow, selectedRow);
 
             dispose();
         }

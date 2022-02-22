@@ -30,6 +30,7 @@ public class StudentFrame extends JFrame implements ActionListener {
     private JButton updateClassButton;
     private JButton deleteButton;
 
+    private String className;
 
     public StudentFrame(MyFrame myFrame, Vector<Vector<String>> dataRowStudent){
         //fired from main when there is only one search result
@@ -203,7 +204,7 @@ public class StudentFrame extends JFrame implements ActionListener {
         this.add(parentsPhoneNumberTextField, n);
 
 
-        String className;
+
         if (dataRowStudent.get(selectedStudentIdInDataRow).get(7)!=null) {
             className = dataRowStudent.get(selectedStudentIdInDataRow).get(7);
         }
@@ -382,13 +383,17 @@ public class StudentFrame extends JFrame implements ActionListener {
             if (result == JOptionPane.CANCEL_OPTION) return;
             else {
                 if (classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex())==null) return;
-                String className = classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex());
-                String classId = myFrame.getClassIdByClassName(className);
-                myFrame.deleteStudentFromClass(classId,selectedStudentId);
-                if (myFrame.updateStudent(i, selectedStudentId, classId)==1){
+                String newClassName = classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex());
+                String newClassId = myFrame.getClassIdByClassName(newClassName);
+                if (!className.equals("")) {
+                    String oldClassId = myFrame.getClassIdByClassName(className);
+                    myFrame.deleteStudentFromClass(oldClassId,selectedStudentId); //if this
+                }
+                // student was assined to some class delete him form that one
+                if (myFrame.updateStudent(i, selectedStudentId, newClassId)==1){
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
-                    myFrame.addStudentToClassOnFirstFreeSlot(String.valueOf(selectedStudentId),classId);
+                    myFrame.addStudentToClassOnFirstFreeSlot(String.valueOf(selectedStudentId),newClassId);
                     myFrame.findStudent(selectedStudentId);
                     System.out.println("student updated");
                 }

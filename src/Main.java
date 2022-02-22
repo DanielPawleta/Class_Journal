@@ -949,7 +949,7 @@ public class Main {
 
                 dataRowClass.add(classRow);
 
-                System.out.println(resultSet.getString("class_name"));
+                System.out.println(resultSet.getString("supervising_teacher"));
             }
 
             if (dataRowClass.size()==0){
@@ -1077,7 +1077,7 @@ public class Main {
 
     protected void showClassFrame(){
         System.out.println("Show class frame from main");
-        ClassFrame classFrame = new ClassFrame(myFrame, dataRowClass);
+        ClassFrame classFrame = new ClassFrame(myFrame, dataRowClass,0);
     }
 
     private String findFirstFreeSlotInClass (String classId) {
@@ -1330,6 +1330,7 @@ public class Main {
     }
 
     protected void setNullForSupervisingTeacherValue(String classId){
+        System.out.println("set null for teacher in class " + this.getClassNameByClassId(Integer.parseInt(classId)));
         String query = "UPDATE `class_journal`.`class` SET `supervising_teacher`" +
                 " = ? " +
                 "WHERE id = ?;";
@@ -1347,6 +1348,7 @@ public class Main {
     public void deleteStudentFromClass(String classId, int selectedStudentId) {
         //first need to check slot number in class for this student
         String studentSlotNumber;
+        boolean studentFoundInClass = false;
         String query = "SELECT * FROM class " +
                 "WHERE id = "+
                 "?;";
@@ -1367,6 +1369,7 @@ public class Main {
                     columnName = "student_" + i;
                     if (resultSet.getString(columnName).equals(studentId)) {
                         studentSlotNumber = String.valueOf(i);
+                        studentFoundInClass =true;
                         break;
                     }
                 }
@@ -1377,8 +1380,9 @@ public class Main {
         }
 
         //second set null on found student slot number in selected class
-        if (!columnName.contains("[0-9]")) {
-            System.out.println("Error in main.deleteStudentFromClass ");
+        if (!studentFoundInClass) {
+            System.out.println("Error in main.deleteStudentFromClass - student with id: " + selectedStudentId +
+                    " not found in class with id: " + classId);
             return;
         }
 
@@ -1389,6 +1393,8 @@ public class Main {
             PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setNull(1, Types.INTEGER);
             preparedStatement.setString(2, classId);
+
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
