@@ -641,6 +641,10 @@ public class Main {
         return result;
     }
 
+    private void setNullForSupervisingTeacherValue(int selectedTeacherId) {
+        //
+    }
+
     protected void showTeacherFrame(Vector<Vector<String>> dataRowTeacher){
         System.out.println("Show teacher frame from main");
         TeacherFrame teacherFrame = new TeacherFrame(myFrame, dataRowTeacher);
@@ -1000,6 +1004,21 @@ public class Main {
             case 6:
                 columnName = "`student_5`";
                 break;
+            case 7:
+                columnName = "`student_6`";
+                break;
+            case 8:
+                columnName = "`student_7`";
+                break;
+            case 9:
+                columnName = "`student_8`";
+                break;
+            case 10:
+                columnName = "`student_9`";
+                break;
+            case 11:
+                columnName = "`student_10`";
+                break;
         }
 
         int result = 0;
@@ -1310,6 +1329,71 @@ public class Main {
         return result;
     }
 
+    protected void setNullForSupervisingTeacherValue(String classId){
+        String query = "UPDATE `class_journal`.`class` SET `supervising_teacher`" +
+                " = ? " +
+                "WHERE id = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setNull(1, Types.INTEGER);
+            preparedStatement.setString(2, classId);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteStudentFromClass(String classId, int selectedStudentId) {
+        //first need to check slot number in class for this student
+        String studentSlotNumber;
+        String query = "SELECT * FROM class " +
+                "WHERE id = "+
+                "?;";
+
+        ResultSet resultSet;
+        Vector<String> classRow = new Vector<>();
+        String studentId = String.valueOf(selectedStudentId);
+        String columnName="";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, classId);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                for (int i = 1; i <= 10; i++) {
+                    columnName = "student_" + i;
+                    if (resultSet.getString(columnName).equals(studentId)) {
+                        studentSlotNumber = String.valueOf(i);
+                        break;
+                    }
+                }
+            }
+        }
+        catch (SQLException e) {
+             e.printStackTrace();
+        }
+
+        //second set null on found student slot number in selected class
+        if (!columnName.contains("[0-9]")) {
+            System.out.println("Error in main.deleteStudentFromClass ");
+            return;
+        }
+
+        query = "UPDATE `class_journal`.`class` SET " + columnName +
+                " = ? " +
+                "WHERE id = ?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setNull(1, Types.INTEGER);
+            preparedStatement.setString(2, classId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     //Method for all tables in DB
     protected void deleteRow(int i,String rowId){
@@ -1344,4 +1428,6 @@ public class Main {
         }
         System.out.println("deleted rows from " + tableName + " :" + result);
     }
+
+
 }

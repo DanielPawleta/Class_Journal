@@ -597,8 +597,21 @@ public class MyFrame extends JFrame implements ActionListener {
         return main.findAllClass();
     }
 
+    protected void setNullForSupervisingTeacherValue(String classId){
+        // when updating supervising class in teacher table it deletes
+        // old supervising teacher value in class table
+        main.setNullForSupervisingTeacherValue(classId);
+    }
+
+    public void deleteStudentFromClass(String classId, int selectedStudentId) {
+        main.deleteStudentFromClass(classId, selectedStudentId);
+    }
+
+
     //Method for all tables in DB
     protected void deleteRow(int i, String rowId){
         main.deleteRow(i, rowId);
     }
+
+
 }

@@ -384,6 +384,7 @@ public class StudentFrame extends JFrame implements ActionListener {
                 if (classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex())==null) return;
                 String className = classNamesComboBox.getItemAt(classNamesComboBox.getSelectedIndex());
                 String classId = myFrame.getClassIdByClassName(className);
+                myFrame.deleteStudentFromClass(classId,selectedStudentId);
                 if (myFrame.updateStudent(i, selectedStudentId, classId)==1){
                     JOptionPane.showMessageDialog(jPanel, "Update successful!", "Update", JOptionPane.INFORMATION_MESSAGE);
                     super.dispose();
