@@ -763,21 +763,20 @@ public class Main {
     protected String addClass(String className, int supervisingTeacherId, ArrayList<Integer> studentsId){
         int result = 0;
 
-        int student1;
-        int student2;
-
-
         String query = "INSERT INTO `class_journal`.`class`" +
                 "(`class_name`" +
                 ",`supervising_teacher`" +
                 ",`student_1`" +
                 ",`student_2`" +
                 ",`student_3`" +
-                ",`student_4`)" +
-                "VALUES (?,?,?,?,?,?);";
-
-
-
+                ",`student_4`" +
+                ",`student_5`" +
+                ",`student_6`" +
+                ",`student_7`" +
+                ",`student_8`" +
+                ",`student_9`" +
+                ",`student_10`)" +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1,className);
